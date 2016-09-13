@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="0.2">
+	<title xml:lang="ko">슈퍼 캐시</title>
+	<title xml:lang="en">Super Cache</title>
+	<description xml:lang="ko">
+		다양한 캐시를 사용하여 XE 실행 속도를 개선합니다.
+	</description>
+	<description xml:lang="en">
+		Use various caching methods to improve XE execution speed.
+	</description>
+	<version>1.0.0</version>
+	<date>2016-09-16</date>
+	<category>service</category>
+	<author email_address="kijin@kijinsung.com" link="https://github.com/kijin">
+		<name xml:lang="ko">Kijin Sung</name>
+		<name xml:lang="en">Kijin Sung</name>
+	</author>
+</module>

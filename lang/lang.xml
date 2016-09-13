@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lang>
+	<item name="cmd_supercache_module_name">
+		<value xml:lang="ko"><![CDATA[슈퍼 캐시]]></value>
+		<value xml:lang="en"><![CDATA[Super Cache]]></value>
+	</item>
+	<item name="cmd_supercache_config">
+		<value xml:lang="ko"><![CDATA[기본 설정]]></value>
+		<value xml:lang="en"><![CDATA[Basic Settings]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache">
+		<value xml:lang="ko"><![CDATA[페이징 캐시 사용]]></value>
+		<value xml:lang="en"><![CDATA[Paging Cache Enabled]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_help">
+		<value xml:lang="ko"><![CDATA[게시판의 글 수와 페이지 수 등을 캐시하여 불필요한 쿼리를 실행하지 않도록 합니다.]]></value>
+		<value xml:lang="en"><![CDATA[Prevent unnecessary queries by caching the document count and page count of boards.]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_threshold">
+		<value xml:lang="ko"><![CDATA[페이징 캐시 조건]]></value>
+		<value xml:lang="en"><![CDATA[Paging Cache Threshold]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_threshold_help">
+		<value xml:lang="ko"><![CDATA[게시판의 글 수가 위의 숫자보다 많을 때만 페이징 캐시를 사용합니다.]]></value>
+		<value xml:lang="en"><![CDATA[Use paging cache only if a board has more documents than the above threshold.]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_duration">
+		<value xml:lang="ko"><![CDATA[페이징 캐시 기간]]></value>
+		<value xml:lang="en"><![CDATA[Paging Cache Duration]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_duration_help">
+		<value xml:lang="ko"><![CDATA[위의 기간이 지나면 페이징 캐시를 삭제하고 다시 계산합니다. 단위는 '초'입니다.]]></value>
+		<value xml:lang="en"><![CDATA[Invalidate and recalculate the paging cache after the above number of seconds have elapsed.]]></value>
+	</item>
+</lang>
