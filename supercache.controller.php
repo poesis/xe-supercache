@@ -68,7 +68,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Abort if this request is for any page greater than 1.
-		if ($obj->page > $this->_maxSupportedPage)
+		if ($obj->page > $this->_maxSupportedPage && !$config->paging_cache_use_offset)
 		{
 			return;
 		}
@@ -93,6 +93,12 @@ class SuperCacheController extends SuperCache
 		if ($document_count < $config->paging_cache_threshold)
 		{
 			return;
+		}
+		
+		// Add offset to simulate paging.
+		if ($config->paging_cache_use_offset && $args->page > 1)
+		{
+			$args->list_offset = ($args->page - 1) * $args->list_count;
 		}
 		
 		// Get documents and replace the output.
