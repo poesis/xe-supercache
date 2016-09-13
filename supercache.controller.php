@@ -82,7 +82,7 @@ class SuperCacheController extends SuperCache
 		// Abort if there are any other unusual search options.
 		$oDocumentModel = getModel('document');
 		$oDocumentModel->_setSearchOption($obj, $args, $query_id, $use_division);
-		if ($query_id !== 'document.getDocumentList' || $use_division)
+		if ($query_id !== 'document.getDocumentList' || $use_division || (is_array($args->module_srl) && count($args->module_srl) > 1))
 		{
 			return;
 		}
