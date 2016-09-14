@@ -12,7 +12,7 @@ class SuperCacheAdminView extends SuperCache
 	 * Menu definition.
 	 */
 	protected static $_menus = array(
-		'dispSupercacheAdminConfig' => 'cmd_supercache_config',
+		'dispSupercacheAdminConfigPagingCache' => 'cmd_supercache_config_paging_cache',
 	);
 	
 	/**
@@ -35,7 +35,7 @@ class SuperCacheAdminView extends SuperCache
 	/**
 	 * Basic settings page.
 	 */
-	public function dispSuperCacheAdminConfig()
+	public function dispSuperCacheAdminConfigPagingCache()
 	{
 		// Get module configuration.
 		Context::set('sc_config', $config = $this->getConfig());

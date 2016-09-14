@@ -4,9 +4,9 @@
 		<value xml:lang="ko"><![CDATA[슈퍼 캐시]]></value>
 		<value xml:lang="en"><![CDATA[Super Cache]]></value>
 	</item>
-	<item name="cmd_supercache_config">
-		<value xml:lang="ko"><![CDATA[기본 설정]]></value>
-		<value xml:lang="en"><![CDATA[Basic Settings]]></value>
+	<item name="cmd_supercache_config_paging_cache">
+		<value xml:lang="ko"><![CDATA[페이징 캐시]]></value>
+		<value xml:lang="en"><![CDATA[Paging Cache]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_supported">
 		<value xml:lang="ko"><![CDATA[페이징 캐시 지원]]></value>

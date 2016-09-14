@@ -1,10 +1,10 @@
 label.supported {
 	font-weight: bold !important;
-	cursor: text;
+	cursor: text !important;
 	color: #090;
 }
 label.unsupported {
 	font-weight: bold !important;
-	cursor: text;
+	cursor: text !important;
 	color: #f00;
 }

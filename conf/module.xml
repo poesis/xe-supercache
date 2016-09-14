@@ -2,8 +2,8 @@
 <module>
 	<permissions />
 	<actions>
-		<action name="dispSupercacheAdminConfig" type="view" admin_index="true" menu_name="supercache" />
-		<action name="procSupercacheAdminInsertConfig" type="controller" />
+		<action name="dispSupercacheAdminConfigPagingCache" type="view" admin_index="true" menu_name="supercache" />
+		<action name="procSupercacheAdminInsertPagingCache" type="controller" />
 	</actions>
 	<menus>
 		<menu name="supercache" type="all">
