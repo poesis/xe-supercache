@@ -48,6 +48,16 @@
 				</p>
 			</div>
 		</div>
+		
+		<div class="x_control-group">
+			<label class="x_control-label" for="sc_paging_cache_duration">{$lang->cmd_supercache_paging_cache_auto_refresh}</label>
+			<div class="x_controls">
+				<input name="sc_paging_cache_auto_refresh" id="sc_paging_cache_auto_refresh" type="number" value="{intval($sc_config->paging_cache_auto_refresh) ?: 2400}" style="width:100px" />
+				<p class="x_help-block">
+					{$lang->cmd_supercache_paging_cache_auto_refresh_help}
+				</p>
+			</div>
+		</div>
 	
 	</section>
 	

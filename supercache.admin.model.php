@@ -10,6 +10,8 @@ class SuperCacheAdminModel extends SuperCache
 {
 	/**
 	 * Check if the current version of XE supports board list replacement.
+	 * 
+	 * @return int
 	 */
 	public function isBoardListReplacementSupported()
 	{
@@ -25,6 +27,16 @@ class SuperCacheAdminModel extends SuperCache
 			return 2;
 		}
 		
-		return false;
+		return 0;
+	}
+	
+	/**
+	 * Check if the current version of XE supports offset queries.
+	 * 
+	 * @return int
+	 */
+	public function isOffsetQuerySupported()
+	{
+		return 0;
 	}
 }

@@ -27,10 +27,13 @@ class SuperCacheModel extends SuperCache
 		
 		// Check cache.
 		$cache_key = sprintf('document_count:%d:%s', $module_srl, count($category_srl) ? end($category_srl) : 'all');
-		$count = $this->getCache($cache_key, $config->paging_cache_duration);
-		if ($count !== false)
+		if (mt_rand(0, $config->paging_cache_auto_refresh) !== 0)
 		{
-			return intval($count);
+			$count = $this->getCache($cache_key, $config->paging_cache_duration);
+			if ($count !== false)
+			{
+				return intval($count);
+			}
 		}
 		
 		// Get count from DB and store it in cache.

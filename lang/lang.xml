@@ -17,7 +17,7 @@
 		<value xml:lang="en"><![CDATA[Prevent unnecessary queries by caching the document count and page count of boards.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_threshold">
-		<value xml:lang="ko"><![CDATA[페이징 캐시 조건]]></value>
+		<value xml:lang="ko"><![CDATA[페이징 캐시 사용 조건]]></value>
 		<value xml:lang="en"><![CDATA[Paging Cache Threshold]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_threshold_help">
@@ -25,11 +25,19 @@
 		<value xml:lang="en"><![CDATA[Use paging cache only if a board has more documents than the above threshold.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_duration">
-		<value xml:lang="ko"><![CDATA[페이징 캐시 기간]]></value>
+		<value xml:lang="ko"><![CDATA[페이징 캐시 사용 기간]]></value>
 		<value xml:lang="en"><![CDATA[Paging Cache Duration]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_duration_help">
 		<value xml:lang="ko"><![CDATA[위의 기간이 지나면 페이징 캐시를 삭제하고 다시 계산합니다. 단위는 '초'입니다.]]></value>
 		<value xml:lang="en"><![CDATA[Invalidate and recalculate the paging cache after the above number of seconds have elapsed.]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_auto_refresh">
+		<value xml:lang="ko"><![CDATA[페이징 캐시 자동 갱신]]></value>
+		<value xml:lang="en"><![CDATA[Paging Cache Auto Refresh]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_auto_refresh_help">
+		<value xml:lang="ko"><![CDATA[위에서 정한 기간이 지나지 않아도 요청 수가 이 값을 초과하면 캐시를 자동 갱신하여 오차 범위를 줄입니다.]]></value>
+		<value xml:lang="en"><![CDATA[Even if there is time left on the cache, invalidate it after the above number of requests have been served.]]></value>
 	</item>
 </lang>

@@ -21,6 +21,7 @@ class SuperCacheAdminController extends SuperCache
 		$config->paging_cache = $vars->sc_paging_cache === 'Y' ? true : false;
 		$config->paging_cache_threshold = intval($vars->sc_paging_cache_threshold) ?: 1200;
 		$config->paging_cache_duration = intval($vars->sc_paging_cache_duration) ?: 3600;
+		$config->paging_cache_auto_refresh = intval($vars->sc_paging_cache_auto_refresh) ?: 2400;
 		$config->paging_cache_use_offset = false;
 		
 		// Save the new config.
