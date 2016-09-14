@@ -13,7 +13,7 @@ class SuperCacheAdminModel extends SuperCache
 	 * 
 	 * @return int
 	 */
-	public function isBoardListReplacementSupported()
+	public function isListReplacementSupported()
 	{
 		if (version_compare(__XE_VERSION__, '1.8.25', '>='))
 		{
@@ -37,6 +37,18 @@ class SuperCacheAdminModel extends SuperCache
 	 */
 	public function isOffsetQuerySupported()
 	{
+		if (defined('RX_VERSION') && version_compare(RX_VERSION, '1.8.25', '>='))
+		{
+			return 1;
+		}
+		
+		$limit_tag_filename = _XE_PATH_ . 'classes/db/queryparts/limit/Limit.class.php';
+		$limit_tag_checkstr = '$offset';
+		if (file_exists($limit_tag_filename) && strpos(file_get_contents($limit_tag_filename), $limit_tag_checkstr) !== false)
+		{
+			return 2;
+		}
+		
 		return 0;
 	}
 }

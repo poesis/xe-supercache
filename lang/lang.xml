@@ -8,33 +8,61 @@
 		<value xml:lang="ko"><![CDATA[기본 설정]]></value>
 		<value xml:lang="en"><![CDATA[Basic Settings]]></value>
 	</item>
-	<item name="cmd_supercache_paging_cache">
-		<value xml:lang="ko"><![CDATA[페이징 캐시 사용]]></value>
-		<value xml:lang="en"><![CDATA[Paging Cache Enabled]]></value>
+	<item name="cmd_supercache_paging_cache_supported">
+		<value xml:lang="ko"><![CDATA[페이징 캐시 지원]]></value>
+		<value xml:lang="en"><![CDATA[Paging Cache Supported]]></value>
 	</item>
-	<item name="cmd_supercache_paging_cache_help">
+	<item name="cmd_supercache_paging_cache_supported_list_replace">
+		<value xml:lang="ko"><![CDATA[페이징 캐시를 사용할 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Paging cache is supported on this site.]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_supported_list_replace_x">
+		<value xml:lang="ko"><![CDATA[페이징 캐시를 사용할 수 없습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Paging cache is not supported on this site.]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_supported_offset_query">
+		<value xml:lang="ko"><![CDATA[오프셋 쿼리를 사용할 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Offset queries are supported on this site.]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_supported_offset_query_x">
+		<value xml:lang="ko"><![CDATA[오프셋 쿼리를 사용할 수 없습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Offset queries are not supported on this site.]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_use">
+		<value xml:lang="ko"><![CDATA[페이징 캐시 사용]]></value>
+		<value xml:lang="en"><![CDATA[Use Paging Cache]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_use_help">
 		<value xml:lang="ko"><![CDATA[게시판의 글 수와 페이지 수 등을 캐시하여 불필요한 쿼리를 실행하지 않도록 합니다.]]></value>
 		<value xml:lang="en"><![CDATA[Prevent unnecessary queries by caching the document count and page count of boards.]]></value>
 	</item>
+	<item name="cmd_supercache_paging_cache_use_offset_query">
+		<value xml:lang="ko"><![CDATA[오프셋 쿼리 사용]]></value>
+		<value xml:lang="en"><![CDATA[Use Offset Queries]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_use_offset_query_help">
+		<value xml:lang="ko"><![CDATA[모든 페이지 검색에 캐시를 적용합니다. 사용하지 않을 경우 1페이지 검색에만 적용됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[Enable the paging cache on all pages of a board. Without offset queries, it will only be enabled on the first page.]]></value>
+	</item>
 	<item name="cmd_supercache_paging_cache_threshold">
-		<value xml:lang="ko"><![CDATA[페이징 캐시 사용 조건]]></value>
-		<value xml:lang="en"><![CDATA[Paging Cache Threshold]]></value>
+		<value xml:lang="ko"><![CDATA[캐시 사용 조건]]></value>
+		<value xml:lang="en"><![CDATA[Cache Threshold]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_threshold_help">
 		<value xml:lang="ko"><![CDATA[게시판의 글 수가 위의 숫자보다 많을 때만 페이징 캐시를 사용합니다.]]></value>
 		<value xml:lang="en"><![CDATA[Use paging cache only if a board has more documents than the above threshold.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_duration">
-		<value xml:lang="ko"><![CDATA[페이징 캐시 사용 기간]]></value>
-		<value xml:lang="en"><![CDATA[Paging Cache Duration]]></value>
+		<value xml:lang="ko"><![CDATA[캐시 갱신 주기]]></value>
+		<value xml:lang="en"><![CDATA[Cache Expiry]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_duration_help">
 		<value xml:lang="ko"><![CDATA[위의 기간이 지나면 페이징 캐시를 삭제하고 다시 계산합니다. 단위는 '초'입니다.]]></value>
 		<value xml:lang="en"><![CDATA[Invalidate and recalculate the paging cache after the above number of seconds have elapsed.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_auto_refresh">
-		<value xml:lang="ko"><![CDATA[페이징 캐시 자동 갱신]]></value>
-		<value xml:lang="en"><![CDATA[Paging Cache Auto Refresh]]></value>
+		<value xml:lang="ko"><![CDATA[캐시 자동 갱신]]></value>
+		<value xml:lang="en"><![CDATA[Auto-Refresh]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_auto_refresh_help">
 		<value xml:lang="ko"><![CDATA[위에서 정한 기간이 지나지 않아도 요청 수가 이 값을 초과하면 캐시를 자동 갱신하여 오차 범위를 줄입니다.]]></value>

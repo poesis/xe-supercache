@@ -40,6 +40,11 @@ class SuperCacheAdminView extends SuperCache
 		// Get module configuration.
 		Context::set('sc_config', $config = $this->getConfig());
 		
+		// Get system capabilities.
+		$oAdminModel = getAdminModel('supercache');
+		Context::set('sc_list_replace', $oAdminModel->isListReplacementSupported());
+		Context::set('sc_offset_query', $oAdminModel->isOffsetQuerySupported());
+		
 		// Display the config page.
 		$this->setTemplateFile('config');
 	}
