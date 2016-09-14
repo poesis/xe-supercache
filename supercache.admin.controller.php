@@ -38,4 +38,27 @@ class SuperCacheAdminController extends SuperCache
 		// Redirect to the main config page.
 		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispSupercacheAdminConfigPagingCache'));
 	}
+	
+	/**
+	 * Save other settings.
+	 */
+	public function procSuperCacheAdminInsertOther()
+	{
+		// Get current config and user selections.
+		$config = $this->getConfig();
+		$vars = Context::getRequestVars();
+		
+		// Fetch the new config.
+		$config->disable_post_search = $vars->sc_disable_post_search === 'Y' ? true : false;
+		
+		// Save the new config.
+		$output = $this->setConfig($config);
+		if (!$output->toBool())
+		{
+			return $output;
+		}
+		
+		// Redirect to the main config page.
+		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispSupercacheAdminConfigOther'));
+	}
 }

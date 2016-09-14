@@ -68,4 +68,16 @@
 		<value xml:lang="ko"><![CDATA[위에서 정한 기간이 지나지 않아도 요청 수가 이 값을 초과하면 캐시를 자동 갱신하여 오차 범위를 줄입니다.]]></value>
 		<value xml:lang="en"><![CDATA[Even if there is time left on the cache, invalidate it after the above number of requests have been served.]]></value>
 	</item>
+	<item name="cmd_supercache_config_other">
+		<value xml:lang="ko"><![CDATA[기타 설정]]></value>
+		<value xml:lang="en"><![CDATA[Other Settings]]></value>
+	</item>
+	<item name="cmd_supercache_disable_post_search">
+		<value xml:lang="ko"><![CDATA[POST 이중 검색 방지]]></value>
+		<value xml:lang="en"><![CDATA[Prevent Duplicate Search via POST]]></value>
+	</item>
+	<item name="cmd_supercache_disable_post_search_help">
+		<value xml:lang="ko"><![CDATA[스케치북 등 일부 게시판 스킨에서 동일한 검색을 POST와 GET으로 2번 요청하는 버그를 우회합니다.<br>POST 요청으로 게시판 검색 시도시 실제 검색을 수행하지 않고 건너뜁니다.]]></value>
+		<value xml:lang="en"><![CDATA[Some board skins have a bug that causes them to request the same search twice, once via POST and once via GET.<br>This option works around this bug by skipping the actual search step in the POST request.]]></value>
+	</item>
 </lang>

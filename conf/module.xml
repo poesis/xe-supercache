@@ -3,7 +3,9 @@
 	<permissions />
 	<actions>
 		<action name="dispSupercacheAdminConfigPagingCache" type="view" admin_index="true" menu_name="supercache" />
+		<action name="dispSupercacheAdminConfigOther" type="view" />
 		<action name="procSupercacheAdminInsertPagingCache" type="controller" />
+		<action name="procSupercacheAdminInsertOther" type="controller" />
 	</actions>
 	<menus>
 		<menu name="supercache" type="all">

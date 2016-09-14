@@ -67,6 +67,12 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
+		// If this is a POST search request (often caused by sketchbook skin), abort to prevent double searching.
+		if ($config->disable_post_search && $_SERVER['REQUEST_METHOD'] === 'POST' && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !$_POST['act'] && $obj->search_keyword)
+		{
+			return $this->terminateRequest('disable_post_search');
+		}
+
 		// Abort if this request is for any page greater than 1.
 		if ($obj->page > $this->_maxSupportedPage && !$config->paging_cache_use_offset)
 		{
@@ -175,5 +181,18 @@ class SuperCacheController extends SuperCache
 	public function triggerAfterRestoreDocumentFromTrash($obj)
 	{
 		$this->triggerAfterUpdateDocument($obj);
+	}
+	
+	/**
+	 * Terminate the current request.
+	 */
+	public function terminateRequest($type = '')
+	{
+		$output = new Object;
+		$output->add('supercache_terminated', $type);
+		$oDisplayHandler = new DisplayHandler;
+		$oDisplayHandler->printContent($output);
+		Context::close();
+		exit;
 	}
 }

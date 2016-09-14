@@ -78,8 +78,8 @@ class SuperCacheModel extends SuperCache
 		
 		// Fill in virtual numbers to emulate XE search results.
 		$virtual_number = $total_count - (($page - 1) * $args->list_count);
-		$virtual_range = range($virtual_number, $virtual_number - count($output->data) + 1, -1);
-		$output->data = array_combine($virtual_range, $output->data);
+		$virtual_range = count($output->data) ? range($virtual_number, $virtual_number - count($output->data) + 1, -1) : array();
+		$output->data = count($output->data) ? array_combine($virtual_range, $output->data) : array();
 		
 		// Fill in missing fields to emulate XE search results.
 		$output->total_count = $total_count;

@@ -13,6 +13,7 @@ class SuperCacheAdminView extends SuperCache
 	 */
 	protected static $_menus = array(
 		'dispSupercacheAdminConfigPagingCache' => 'cmd_supercache_config_paging_cache',
+		'dispSupercacheAdminConfigOther' => 'cmd_supercache_config_other',
 	);
 	
 	/**
@@ -33,7 +34,7 @@ class SuperCacheAdminView extends SuperCache
 	}
 	
 	/**
-	 * Basic settings page.
+	 * Paging cache settings page.
 	 */
 	public function dispSuperCacheAdminConfigPagingCache()
 	{
@@ -46,6 +47,18 @@ class SuperCacheAdminView extends SuperCache
 		Context::set('sc_offset_query', $oAdminModel->isOffsetQuerySupported());
 		
 		// Display the config page.
-		$this->setTemplateFile('config');
+		$this->setTemplateFile('paging_cache');
+	}
+	
+	/**
+	 * Other settings page.
+	 */
+	public function dispSuperCacheAdminConfigOther()
+	{
+		// Get module configuration.
+		Context::set('sc_config', $config = $this->getConfig());
+		
+		// Display the config page.
+		$this->setTemplateFile('other');
 	}
 }
