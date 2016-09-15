@@ -23,6 +23,17 @@ span.console_font:hover {
 	text-decoration: underline;
 }
 
+span.mid {
+	font-size: 12px;
+	color: #999;
+	display: inline-block;
+	margin-left: 2px;
+}
+
+span.warning {
+	color: #e00;
+}
+
 input.full_width {
 	width: 100% !important;
 	height: 28px !important;
@@ -41,7 +52,7 @@ label.supported {
 
 label.unsupported {
 	cursor: text !important;
-	color: #f00;
+	color: #e00;
 }
 
 label.checkbox_wrapper {

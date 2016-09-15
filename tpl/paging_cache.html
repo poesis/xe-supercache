@@ -59,7 +59,7 @@
 			<div class="x_controls">
 				<label loop="$sc_modules => $sc_module" for="sc_paging_cache_exclude_modules_{$sc_module->module_srl}" class="checkbox_wrapper">
 					<input name="sc_paging_cache_exclude_modules[]" id="sc_paging_cache_exclude_modules_{$sc_module->module_srl}" type="checkbox" value="{$sc_module->module_srl}" checked="checked"|cond="isset($sc_config->paging_cache_exclude_modules[$sc_module->module_srl])" />
-					{$sc_module->browser_title} ({$sc_module->mid})
+					{$sc_module->browser_title} <span class="mid">({$sc_module->mid})</span>
 				</label>
 				<p class="x_help-block more_margin">
 					{$lang->cmd_supercache_paging_cache_exclude_modules_help}
