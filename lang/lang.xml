@@ -204,6 +204,14 @@
 		<value xml:lang="ko"><![CDATA[서버에 WinCache 확장 모듈이 설치되어 있지 않습니다.]]></value>
 		<value xml:lang="en"><![CDATA[The WinCache extension is not installed on this server.]]></value>
 	</item>
+	<item name="msg_supercache_list_replacement_not_supported">
+		<value xml:lang="ko"><![CDATA[이 사이트에서는 페이징 캐시를 사용할 수 없습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Pagination cache is not supported on this site.]]></value>
+	</item>
+	<item name="msg_supercache_offset_query_not_supported">
+		<value xml:lang="ko"><![CDATA[이 사이트에서는 오프셋 쿼리를 사용할 수 없습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Offset queries are not supported on this site.]]></value>
+	</item>
 	<item name="msg_supercache_config_save_failed">
 		<value xml:lang="ko"><![CDATA[설정 파일 저장에 실패했습니다.]]></value>
 		<value xml:lang="en"><![CDATA[Failed to save configuration file.]]></value>

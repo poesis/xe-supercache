@@ -5,7 +5,7 @@ div.supercache_help {
 	box-sizing: border-box;
 	background-color: #f4f4f4;
 	border: 1px solid #ddd;
-	border-radius: 2px;
+	border-radius: 4px;
 }
 
 input.console_font, span.console_font {

@@ -126,9 +126,13 @@ class SuperCacheAdminController extends SuperCache
 		$config->paging_cache_threshold = intval($vars->sc_paging_cache_threshold) ?: 1200;
 		$config->paging_cache_duration = intval($vars->sc_paging_cache_duration) ?: 3600;
 		$config->paging_cache_auto_refresh = intval($vars->sc_paging_cache_auto_refresh) ?: 2400;
+		if (!getAdminModel('supercache')->isListReplacementSupported())
+		{
+			return $this->error('msg_supercache_list_replacement_not_supported');
+		}
 		if (!getAdminModel('supercache')->isOffsetQuerySupported())
 		{
-			$config->paging_cache_use_offset = false;
+			return $this->error('msg_supercache_offset_query_not_supported');
 		}
 		
 		// Save the new config.
