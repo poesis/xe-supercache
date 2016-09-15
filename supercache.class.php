@@ -34,6 +34,7 @@ class SuperCache extends ModuleObject
 		array('document.moveDocumentModule', 'after', 'controller', 'triggerAfterMoveDocumentModule'),
 		array('document.moveDocumentToTrash', 'after', 'controller', 'triggerAfterMoveDocumentToTrash'),
 		array('document.restoreTrash', 'after', 'controller', 'triggerAfterRestoreDocumentFromTrash'),
+		array('display', 'after', 'controller', 'triggerAfterDisplay'),
 	);
 	
 	/**

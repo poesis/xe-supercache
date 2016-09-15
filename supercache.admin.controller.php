@@ -22,7 +22,50 @@
 class SuperCacheAdminController extends SuperCache
 {
 	/**
-	 * Save paging cache settings.
+	 * Save full page cache settings.
+	 */
+	public function procSuperCacheAdminInsertFullCache()
+	{
+		// Get current config and user selections.
+		$config = $this->getConfig();
+		$vars = Context::getRequestVars();
+		
+		// Fetch the new config.
+		$config->full_cache = $vars->sc_full_cache === 'Y' ? true : false;
+		$config->full_cache_duration = intval($vars->sc_full_cache_duration) ?: 300;
+		if ($vars->sc_full_cache_type)
+		{
+			$values = array_fill(0, count($vars->sc_full_cache_type), true);
+			$config->full_cache_type = array_combine($vars->sc_full_cache_type, $values);
+		}
+		else
+		{
+			$config->full_cache_type = array();
+		}
+		if ($vars->sc_full_cache_exclusions)
+		{
+			$keys = array_map('intval', $vars->sc_full_cache_exclusions);
+			$values = array_fill(0, count($keys), true);
+			$config->full_cache_exclusions = array_combine($keys, $values);
+		}
+		else
+		{
+			$config->full_cache_exclusions = array();
+		}
+		
+		// Save the new config.
+		$output = $this->setConfig($config);
+		if (!$output->toBool())
+		{
+			return $output;
+		}
+		
+		// Redirect to the main config page.
+		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispSupercacheAdminConfigFullCache'));
+	}
+	
+	/**
+	 * Save pagination cache settings.
 	 */
 	public function procSuperCacheAdminInsertPagingCache()
 	{

@@ -3,8 +3,17 @@ label.supported {
 	cursor: text !important;
 	color: #090;
 }
+
 label.unsupported {
 	font-weight: bold !important;
 	cursor: text !important;
 	color: #f00;
+}
+
+label.checkbox_wrapper {
+	padding: 5px 0 0px 0 !important;
+}
+
+p.more_margin {
+	margin-top: 8px !important;
 }

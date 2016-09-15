@@ -27,44 +27,29 @@ class SuperCacheController extends SuperCache
 	protected $_maxSupportedPage = 1;
 	
 	/**
+	 * Flag to cache the current request.
+	 */
+	protected $_cacheCurrentRequest = null;
+	protected $_cacheStartTimestamp = null;
+	
+	/**
 	 * Trigger called at moduleObject.proc (before)
 	 */
 	public function triggerBeforeModuleObjectProc($obj)
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		if (!$config->paging_cache || !($document_srl = Context::get('document_srl')) || Context::get('page'))
+		
+		// Check the full page cache.
+		if ($config->full_cache)
 		{
-			return;
+			$this->checkFullCache($obj, $config);
 		}
 		
-		// If this is a document view request without a page number, fill in the page number to prevent the getDocumentListPage query.
-		if (preg_match('/^(?:board|bodex|beluxe)\.disp(?:board|bodex|beluxe)content/i', $obj->module_info->module . '.' . $obj->act))
+		// Fill the page variable for paging cache.
+		if ($config->paging_cache)
 		{
-			// Use the referer to figure out which page the visitor came from.
-			if ($referer = $_SERVER['HTTP_REFERER'])
-			{
-				// Only guess the page number from the same module in the same site.
-				if (strpos($referer, '//' . $_SERVER['HTTP_HOST'] . '/') === false)
-				{
-					return;
-				}
-				elseif (preg_match('/\/([a-zA-Z0-9_-]+)(?:\?|(?:\/\d+)?$)/', $referer, $matches) && $matches[1] === $obj->mid)
-				{
-					Context::set('page', 1);
-				}
-				elseif (preg_match('/\bmid=([a-zA-Z0-9_-]+)\b/', $referer, $matches) && $matches[1] === $obj->mid)
-				{
-					if (preg_match('/\bpage=(\d+)\b/', $referer, $matches))
-					{
-						Context::set('page', $matches[1]);
-					}
-					else
-					{
-						Context::set('page', 1);
-					}
-				}
-			}
+			$this->fillPageVariable($obj, $config);
 		}
 	}
 	
@@ -197,12 +182,199 @@ class SuperCacheController extends SuperCache
 	}
 	
 	/**
-	 * Terminate the current request.
+	 * Trigger called at display (after)
 	 */
-	public function terminateRequest($type = '')
+	public function triggerAfterDisplay($obj)
+	{
+		if ($this->_cacheCurrentRequest)
+		{
+			$elapsed_time = microtime(true) - $this->_cacheStartTimestamp;
+			getModel('supercache')->setFullPageCache(
+				$obj,
+				$elapsed_time,
+				$this->_cacheCurrentRequest[0],
+				$this->_cacheCurrentRequest[1],
+				$this->_cacheCurrentRequest[2]
+			);
+		}
+	}
+	
+	/**
+	 * Check the full page cache for the current request,
+	 * and terminate the request with a cached response if available.
+	 * 
+	 * @param object $obj
+	 * @param object $config
+	 * @return void
+	 */
+	public function checkFullCache($obj, $config)
+	{
+		// Abort if not an HTML GET request.
+		if (Context::getRequestMethod() !== 'GET')
+		{
+			return;
+		}
+		
+		// Abort if logged in.
+		$logged_info = Context::get('logged_info');
+		if ($logged_info && $logged_info->member_srl)
+		{
+			return;
+		}
+		
+		// Abort if the current module is excluded or the current module is 'admin'.
+		$module_info = $obj->module_info;
+		if (!$module_info || isset($config->full_cache_exclusions[$module_info->module_srl]) || $module_info->module === 'admin')
+		{
+			return;
+		}
+		
+		// Determine the page type.
+		if ($act = Context::get('act'))
+		{
+			$page_type = 'other';
+		}
+		elseif ($document_srl = Context::get('document_srl'))
+		{
+			$page_type = 'document';
+		}
+		elseif ($obj->mid)
+		{
+			$page_type = 'module';
+		}
+		else
+		{
+			return;
+		}
+		
+		// Abort if the current page type is not selected for caching.
+		if (!isset($config->full_cache_type[$page_type]))
+		{
+			return;
+		}
+		
+		// Check the cache.
+		$oModel = getModel('supercache');
+		switch ($page_type)
+		{
+			case 'module':
+				$this->_cacheCurrentRequest = array($module_info->module_srl, 0, array());
+				$cache = $oModel->getFullPageCache($module_info->module_srl, 0, array());
+				break;
+			case 'document':
+				$this->_cacheCurrentRequest = array($module_info->module_srl, $document_srl, array());
+				$cache = $oModel->getFullPageCache($module_info->module_srl, $document_srl, array());
+				break;
+			case 'other':
+				$request_vars = Context::getRequestVars();
+				if (is_object($request_vars))
+				{
+					$request_vars = get_object_vars($request_vars);
+				}
+				$this->_cacheCurrentRequest = array(0, 0, $request_vars);
+				$cache = $oModel->getFullPageCache(0, 0, $request_vars);
+				break;
+		}
+		
+		// If cached content is available, print it and exit.
+		if ($cache)
+		{
+			$expires = max(0, $cache['expires'] - time());
+			$this->printCacheControlHeaders($page_type, $expires);
+			if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $cache['cached'])
+			{
+				header('HTTP/1.1 304 Not Modified');
+			}
+			else
+			{
+				header("Content-Type: text/html; charset=UTF-8");
+				echo $cache['content'];
+				echo "\n" . '<!--' . "\n";
+				echo '    Serving ' . strlen($cache['content']) . ' bytes from full page cache' . "\n";
+				echo '    Generated at ' . date('Y-m-d H:i:s P', $cache['cached']) . ' in ' . $cache['elapsed'] . "\n";
+				echo '    Cache expires in ' . $expires . ' seconds' . "\n";
+				echo '-->' . "\n";
+			}
+			Context::close();
+			exit;
+		}
+		
+		// Otherwise, prepare headers to cache the current request.
+		$this->printCacheControlHeaders($page_type, $config->full_cache_duration);
+		$this->_cacheStartTimestamp = microtime(true);
+	}
+	
+	/**
+	 * Print cache control headers.
+	 * 
+	 * @param string $page_type
+	 * @param int $expires
+	 * @return void
+	 */
+	public function printCacheControlHeaders($page_type, $expires)
+	{
+		$expires = intval($expires);
+		header('X-SuperCache: type=' . $page_type . '; expires=' . $expires);
+		header('Cache-Control: max-age=' . $expires);
+		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
+		header_remove('Pragma');
+	}
+	
+	/**
+	 * If this is a document view request without a page number,
+	 * fill in the page number to prevent the getDocumentListPage query.
+	 * 
+	 * @param object $obj
+	 * @param object $config
+	 * @return void
+	 */
+	public function fillPageVariable($obj, $config)
+	{
+		// Only work if there is a document_srl without a page variable and a suitable referer header.
+		if (Context::get('document_srl') && !Context::get('page') && ($referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : false))
+		{
+			// Check the module and act.
+			if (preg_match('/^(?:board|bodex|beluxe)\.disp(?:board|bodex|beluxe)content/i', $obj->module_info->module . '.' . $obj->act))
+			{
+				// Only guess the page number from the same module in the same site.
+				if (strpos($referer, '//' . $_SERVER['HTTP_HOST'] . '/') === false)
+				{
+					return;
+				}
+				elseif (preg_match('/\/([a-zA-Z0-9_-]+)(?:\?|(?:\/\d+)?$)/', $referer, $matches) && $matches[1] === $obj->mid)
+				{
+					Context::set('page', 1);
+				}
+				elseif (preg_match('/\bmid=([a-zA-Z0-9_-]+)\b/', $referer, $matches) && $matches[1] === $obj->mid)
+				{
+					if (preg_match('/\bpage=(\d+)\b/', $referer, $matches))
+					{
+						Context::set('page', $matches[1]);
+					}
+					else
+					{
+						Context::set('page', 1);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Terminate the current request.
+	 * 
+	 * @param string $reason
+	 * @param array $data (optional)
+	 * @return exit
+	 */
+	public function terminateRequest($reason = '', $data = array())
 	{
 		$output = new Object;
-		$output->add('supercache_terminated', $type);
+		$output->add('supercache_terminated', $reason);
+		foreach ($data as $key => $value)
+		{
+			$output->add($key, $value);
+		}
 		$oDisplayHandler = new DisplayHandler;
 		$oDisplayHandler->printContent($output);
 		Context::close();

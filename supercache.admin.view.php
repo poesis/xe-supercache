@@ -25,7 +25,9 @@ class SuperCacheAdminView extends SuperCache
 	 * Menu definition.
 	 */
 	protected static $_menus = array(
+		'dispSupercacheAdminConfigFullCache' => 'cmd_supercache_config_full_cache',
 		'dispSupercacheAdminConfigPagingCache' => 'cmd_supercache_config_paging_cache',
+		'dispSupercacheAdminConfigWidgetCache' => 'cmd_supercache_config_widget_cache',
 		'dispSupercacheAdminConfigOther' => 'cmd_supercache_config_other',
 	);
 	
@@ -44,6 +46,23 @@ class SuperCacheAdminView extends SuperCache
 			self::$_menus[$key] = $lang->$value;
 		}
 		Context::set('sc_menus', self::$_menus);
+	}
+	
+	/**
+	 * Full cache settings page.
+	 */
+	public function dispSuperCacheAdminConfigFullCache()
+	{
+		// Get module configuration.
+		Context::set('sc_config', $config = $this->getConfig());
+		
+		// Get the list of modules.
+		$site_srl = intval(Context::get('site_module_info')->site_srl) ?: 0;
+		$module_list = getModel('module')->getMidList((object)array('site_srl' => $site_srl));
+		Context::set('sc_modules', $module_list);
+		
+		// Display the config page.
+		$this->setTemplateFile('full_cache');
 	}
 	
 	/**

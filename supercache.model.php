@@ -22,6 +22,70 @@
 class SuperCacheModel extends SuperCache
 {
 	/**
+	 * Get a full page cache entry.
+	 * 
+	 * @param int $module_srl
+	 * @param int $document_srl
+	 * @param array $args
+	 * @return string|false
+	 */
+	public function getFullPageCache($module_srl, $document_srl, $args = array())
+	{
+		// Organize the request parameters.
+		$config = $this->getConfig();
+		$module_srl = intval($module_srl) ?: 0;
+		$document_srl = intval($document_srl) ?: 0;
+		ksort($args);
+		
+		// Check cache.
+		$cache_key = sprintf('fullpage_cache:%d:%d:%s', $module_srl, $document_srl, $args ? hash('sha256', json_encode($args)) : 'content');
+		$content = $this->getCache($cache_key, $config->full_cache_duration + 60);
+		
+		// Immediately re-cache expired cache entry for stampede protection.
+		if ($content['expires'] < time())
+		{
+			$contents['expires'] = time() + 60;
+			$this->setCache($cache_key, $content, 60);
+			return false;
+		}
+		else
+		{
+			return $content;
+		}
+	}
+	
+	/**
+	 * Set a full page cache entry.
+	 * 
+	 * @param string $content
+	 * @param float $elapsed_time
+	 * @param int $module_srl
+	 * @param int $document_srl
+	 * @param array $args
+	 * @return bool
+	 */
+	public function setFullPageCache($content, $elapsed_time, $module_srl, $document_srl, $args = array())
+	{
+		// Organize the request parameters.
+		$config = $this->getConfig();
+		$module_srl = intval($module_srl) ?: 0;
+		$document_srl = intval($document_srl) ?: 0;
+		ksort($args);
+		
+		// Organize the content.
+		$content = array(
+			'content' => strval($content),
+			'elapsed' => number_format($elapsed_time * 1000, 1) . ' ms',
+			'cached' => time(),
+			'expires' => time() + $config->full_cache_duration,
+		);
+		
+		// Save to cache.
+		$cache_key = sprintf('fullpage_cache:%d:%d:%s', $module_srl, $document_srl, $args ? hash('sha256', json_encode($args)) : 'content');
+		return $this->setCache($cache_key, $content, $config->full_cache_duration + 60);
+	}
+	
+	/**
 	 * Get the number of documents in a module.
 	 * 
 	 * @param int $module_srl

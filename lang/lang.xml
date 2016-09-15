@@ -4,21 +4,69 @@
 		<value xml:lang="ko"><![CDATA[슈퍼 캐시]]></value>
 		<value xml:lang="en"><![CDATA[Super Cache]]></value>
 	</item>
+	<item name="cmd_supercache_config_full_cache">
+		<value xml:lang="ko"><![CDATA[전체화면 캐시]]></value>
+		<value xml:lang="en"><![CDATA[Full Page Cache]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_use">
+		<value xml:lang="ko"><![CDATA[전체화면 캐시 사용]]></value>
+		<value xml:lang="en"><![CDATA[Use Full Page Cache]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_use_help">
+		<value xml:lang="ko"><![CDATA[로그인하지 않은 사용자에게는 페이지 전체를 캐싱하여 보여 줍니다.]]></value>
+		<value xml:lang="en"><![CDATA[Cache the entire page for visitors who are not logged in.]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_duration">
+		<value xml:lang="ko"><![CDATA[캐시 갱신 주기]]></value>
+		<value xml:lang="en"><![CDATA[Cache Expiry]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_duration_help">
+		<value xml:lang="ko"><![CDATA[위의 기간이 지나면 전체화면 캐시를 다시 생성합니다. 단위는 '초'입니다.]]></value>
+		<value xml:lang="en"><![CDATA[Regenerate the full page after the above number of seconds have elapsed.]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_type">
+		<value xml:lang="ko"><![CDATA[전체화면 캐시 대상]]></value>
+		<value xml:lang="en"><![CDATA[Types of Pages to Cache]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_type_module">
+		<value xml:lang="ko"><![CDATA[각 모듈의 초기화면]]></value>
+		<value xml:lang="en"><![CDATA[Main page of each module]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_type_document">
+		<value xml:lang="ko"><![CDATA[개별 문서 페이지]]></value>
+		<value xml:lang="en"><![CDATA[Individual documents]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_type_other">
+		<value xml:lang="ko"><![CDATA[기타 화면]]></value>
+		<value xml:lang="en"><![CDATA[Other pages]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_type_help">
+		<value xml:lang="ko"><![CDATA[선택한 종류의 페이지가 캐싱됩니다. 사이트 특성에 따라 조절하십시오.]]></value>
+		<value xml:lang="en"><![CDATA[The selected types of pages will be cached. Please adjust according to your site's needs.]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_exclusions">
+		<value xml:lang="ko"><![CDATA[캐시 예외 모듈]]></value>
+		<value xml:lang="en"><![CDATA[Modules to Exclude]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_exclusions_help">
+		<value xml:lang="ko"><![CDATA[선택한 모듈은 캐싱하지 않습니다.]]></value>
+		<value xml:lang="en"><![CDATA[The selected modules will be excluded from the full page cache.]]></value>
+	</item>
 	<item name="cmd_supercache_config_paging_cache">
 		<value xml:lang="ko"><![CDATA[페이징 캐시]]></value>
-		<value xml:lang="en"><![CDATA[Paging Cache]]></value>
+		<value xml:lang="en"><![CDATA[Pagination Cache]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_supported">
 		<value xml:lang="ko"><![CDATA[페이징 캐시 지원]]></value>
-		<value xml:lang="en"><![CDATA[Paging Cache Supported]]></value>
+		<value xml:lang="en"><![CDATA[Pagination Cache Supported]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_supported_list_replace">
 		<value xml:lang="ko"><![CDATA[페이징 캐시를 사용할 수 있습니다.]]></value>
-		<value xml:lang="en"><![CDATA[Paging cache is supported on this site.]]></value>
+		<value xml:lang="en"><![CDATA[Pagination cache is supported on this site.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_supported_list_replace_x">
 		<value xml:lang="ko"><![CDATA[페이징 캐시를 사용할 수 없습니다.]]></value>
-		<value xml:lang="en"><![CDATA[Paging cache is not supported on this site.]]></value>
+		<value xml:lang="en"><![CDATA[Pagination cache is not supported on this site.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_supported_offset_query">
 		<value xml:lang="ko"><![CDATA[오프셋 쿼리를 사용할 수 있습니다.]]></value>
@@ -30,7 +78,7 @@
 	</item>
 	<item name="cmd_supercache_paging_cache_use">
 		<value xml:lang="ko"><![CDATA[페이징 캐시 사용]]></value>
-		<value xml:lang="en"><![CDATA[Use Paging Cache]]></value>
+		<value xml:lang="en"><![CDATA[Use Pagination Cache]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_use_help">
 		<value xml:lang="ko"><![CDATA[게시판의 글 수와 페이지 수 등을 캐시하여 불필요한 쿼리를 실행하지 않도록 합니다.]]></value>
@@ -42,7 +90,7 @@
 	</item>
 	<item name="cmd_supercache_paging_cache_use_offset_query_help">
 		<value xml:lang="ko"><![CDATA[모든 페이지 검색에 캐시를 적용합니다. 사용하지 않을 경우 1페이지 검색에만 적용됩니다.]]></value>
-		<value xml:lang="en"><![CDATA[Enable the paging cache on all pages of a board. Without offset queries, it will only be enabled on the first page.]]></value>
+		<value xml:lang="en"><![CDATA[Enable the pagination cache on all pages of a board. Without offset queries, it will only be enabled on the first page.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_threshold">
 		<value xml:lang="ko"><![CDATA[캐시 사용 조건]]></value>
@@ -50,7 +98,7 @@
 	</item>
 	<item name="cmd_supercache_paging_cache_threshold_help">
 		<value xml:lang="ko"><![CDATA[게시판의 글 수가 위의 숫자보다 많을 때만 페이징 캐시를 사용합니다.]]></value>
-		<value xml:lang="en"><![CDATA[Use paging cache only if a board has more documents than the above threshold.]]></value>
+		<value xml:lang="en"><![CDATA[Use pagination cache only if a board has more documents than the above threshold.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_duration">
 		<value xml:lang="ko"><![CDATA[캐시 갱신 주기]]></value>
@@ -58,7 +106,7 @@
 	</item>
 	<item name="cmd_supercache_paging_cache_duration_help">
 		<value xml:lang="ko"><![CDATA[위의 기간이 지나면 페이징 캐시를 삭제하고 다시 계산합니다. 단위는 '초'입니다.]]></value>
-		<value xml:lang="en"><![CDATA[Invalidate and recalculate the paging cache after the above number of seconds have elapsed.]]></value>
+		<value xml:lang="en"><![CDATA[Invalidate and recalculate the pagination cache after the above number of seconds have elapsed.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_auto_refresh">
 		<value xml:lang="ko"><![CDATA[캐시 자동 갱신]]></value>
@@ -67,6 +115,14 @@
 	<item name="cmd_supercache_paging_cache_auto_refresh_help">
 		<value xml:lang="ko"><![CDATA[위에서 정한 기간이 지나지 않아도 요청 수가 이 값을 초과하면 캐시를 자동 갱신하여 오차 범위를 줄입니다.]]></value>
 		<value xml:lang="en"><![CDATA[Even if there is time left on the cache, invalidate it after the above number of requests have been served.]]></value>
+	</item>
+	<item name="cmd_supercache_config_widget_cache">
+		<value xml:lang="ko"><![CDATA[위젯 캐시]]></value>
+		<value xml:lang="en"><![CDATA[Widget Cache]]></value>
+	</item>
+	<item name="cmd_supercache_config_thumbnail_cache">
+		<value xml:lang="ko"><![CDATA[섬네일 캐시]]></value>
+		<value xml:lang="en"><![CDATA[Thumbnail Cache]]></value>
 	</item>
 	<item name="cmd_supercache_config_other">
 		<value xml:lang="ko"><![CDATA[기타 설정]]></value>
