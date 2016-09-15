@@ -33,9 +33,9 @@ class SuperCacheController extends SuperCache
 	protected $_cacheStartTimestamp = null;
 	
 	/**
-	 * Trigger called at moduleObject.proc (before)
+	 * Trigger called at moduleHandler.init (before)
 	 */
-	public function triggerBeforeModuleObjectProc($obj)
+	public function triggerBeforeModuleHandlerInit($obj)
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
@@ -45,6 +45,15 @@ class SuperCacheController extends SuperCache
 		{
 			$this->checkFullCache($obj, $config);
 		}
+	}
+	
+	/**
+	 * Trigger called at moduleObject.proc (before)
+	 */
+	public function triggerBeforeModuleObjectProc($obj)
+	{
+		// Get module configuration.
+		$config = $this->getConfig();
 		
 		// Fill the page variable for paging cache.
 		if ($config->paging_cache)
@@ -228,28 +237,49 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
-		// Abort if the current module/act is excluded or the current module is 'admin'.
-		$module_info = $obj->module_info;
-		if (!$module_info || isset($config->full_cache_exclude_modules[$module_info->module_srl]) || $module_info->module === 'admin')
+		// Abort if the current act is excluded.
+		if (isset($config->full_cache_exclude_acts[$obj->act]))
 		{
 			return;
 		}
-		$act = Context::get('act');
-		if (isset($config->full_cache_exclude_acts[$act]))
+		
+		// Abort if the current module is excluded.
+		if (!$obj->mid && !$obj->module && !$obj->module_srl)
+		{
+			$site_module_info = Context::get('site_module_info');
+			$module_srl = $site_module_info->module_srl;
+		}
+		elseif ($obj->module_srl)
+		{
+			$module_srl = $obj->module_srl;
+		}
+		elseif ($obj->mid)
+		{
+			$site_module_info = Context::get('site_module_info');
+			$module_info = getModel('module')->getModuleInfoByMid($obj->mid, intval($site_module_info->site_srl) ?: 0);
+			$module_srl = $module_info ? $module_info->module_srl : 0;
+		}
+		else
+		{
+			$module_srl = 0;
+		}
+		
+		$module_srl = intval($module_srl);
+		if (!$module_srl || isset($config->full_cache_exclude_modules[$module_srl]))
 		{
 			return;
 		}
 		
 		// Determine the page type.
-		if ($act)
+		if ($obj->act)
 		{
 			$page_type = 'other';
 		}
-		elseif ($document_srl = Context::get('document_srl'))
+		elseif ($obj->document_srl)
 		{
 			$page_type = 'document';
 		}
-		elseif ($obj->mid)
+		elseif ($module_srl)
 		{
 			$page_type = 'module';
 		}
@@ -264,24 +294,27 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
+		// Remove unnecessary request variables.
+		$request_vars = Context::getRequestVars();
+		if (is_object($request_vars))
+		{
+			$request_vars = get_object_vars($request_vars);
+		}
+		unset($request_vars['mid'], $request_vars['module'], $request_vars['module_srl'], $request_vars['document_srl']);
+		
 		// Check the cache.
 		$oModel = getModel('supercache');
 		switch ($page_type)
 		{
 			case 'module':
-				$this->_cacheCurrentRequest = array($module_info->module_srl, 0, array());
-				$cache = $oModel->getFullPageCache($module_info->module_srl, 0, array());
+				$this->_cacheCurrentRequest = array($module_srl, 0, $request_vars);
+				$cache = $oModel->getFullPageCache($module_srl, 0, $request_vars);
 				break;
 			case 'document':
-				$this->_cacheCurrentRequest = array($module_info->module_srl, $document_srl, array());
-				$cache = $oModel->getFullPageCache($module_info->module_srl, $document_srl, array());
+				$this->_cacheCurrentRequest = array($module_srl, $obj->document_srl, $request_vars);
+				$cache = $oModel->getFullPageCache($module_srl, $obj->document_srl, $request_vars);
 				break;
 			case 'other':
-				$request_vars = Context::getRequestVars();
-				if (is_object($request_vars))
-				{
-					$request_vars = get_object_vars($request_vars);
-				}
 				$this->_cacheCurrentRequest = array(0, 0, $request_vars);
 				$cache = $oModel->getFullPageCache(0, 0, $request_vars);
 				break;
@@ -295,6 +328,11 @@ class SuperCacheController extends SuperCache
 			{
 				$this->printCacheControlHeaders($page_type, $expires, $config->full_cache_stampede_protection ? 10 : 0);
 			}
+			else
+			{
+				header('X-SuperCache: type=' . $page_type . '; expires=' . $expires);
+			}
+			
 			if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $cache['cached'])
 			{
 				header('HTTP/1.1 304 Not Modified');
@@ -318,6 +356,10 @@ class SuperCacheController extends SuperCache
 		{
 			$this->printCacheControlHeaders($page_type, $config->full_cache_duration, $config->full_cache_stampede_protection ? 10 : 0);
 		}
+		else
+		{
+			header('X-SuperCache: type=' . $page_type . '; expires=' . $config->full_cache_duration);
+		}
 		$this->_cacheStartTimestamp = microtime(true);
 	}
 	
@@ -333,7 +375,7 @@ class SuperCacheController extends SuperCache
 	{
 		$scatter = intval($expires * ($scatter / 100));
 		$expires = intval($expires - mt_rand(0, $scatter));
-		header('X-SuperCache: type=' . $page_type . '; expires=' . $expires);
+		header('X-SuperCache: type=' . $page_type . '; expires=' . $config->full_cache_duration);
 		header('Cache-Control: max-age=' . $expires);
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
 		header_remove('Pragma');
