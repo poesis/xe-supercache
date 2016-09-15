@@ -8,6 +8,10 @@
 		<value xml:lang="ko"><![CDATA[전체화면 캐시]]></value>
 		<value xml:lang="en"><![CDATA[Full Page Cache]]></value>
 	</item>
+	<item name="cmd_supercache_config_full_cache_help">
+		<value xml:lang="ko"><![CDATA[웹 페이지 전체를 캐시에 저장해 두었다가 다른 방문자들에게도 똑같이 뿌려 주는 기능입니다.<br>로그인하지 않은 방문자가 대부분인 블로그, 단순 홍보성 사이트 등에서 큰 효과를 얻을 수 있습니다.<br>회원들의 활동이 많은 커뮤니티 사이트에서 사용할 경우 주의가 필요합니다.]]></value>
+		<value xml:lang="en"><![CDATA[The full page cache stores entire web pages and displays identical content to every visitor.<br>It is effective in blogs and informational sites where most visitors are not logged in.<br>It should be used cautiously in sites with many active members.]]></value>
+	</item>
 	<item name="cmd_supercache_full_cache_use">
 		<value xml:lang="ko"><![CDATA[전체화면 캐시 사용]]></value>
 		<value xml:lang="en"><![CDATA[Use Full Page Cache]]></value>
@@ -71,6 +75,10 @@
 	<item name="cmd_supercache_config_paging_cache">
 		<value xml:lang="ko"><![CDATA[페이징 캐시]]></value>
 		<value xml:lang="en"><![CDATA[Pagination Cache]]></value>
+	</item>
+	<item name="cmd_supercache_config_paging_cache_help">
+		<value xml:lang="ko"><![CDATA[XE에서는 게시판의 글 수가 많아지면 페이징 계산 쿼리 소요시간이 전체 로딩 시간의 상당 부분을 차지하게 됩니다.<br>이 문제를 덜어 주는 페이징 캐시는 대형 게시판을 사용하는 커뮤니티 사이트에 적합합니다.]]></value>
+		<value xml:lang="en"><![CDATA[The pagination cache speeds up your site by caching the most time-consuming query in XE boards: pagination.<br>It is effective in community sites with large boards.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_supported">
 		<value xml:lang="ko"><![CDATA[페이징 캐시 지원]]></value>
@@ -143,6 +151,10 @@
 	<item name="cmd_supercache_config_other">
 		<value xml:lang="ko"><![CDATA[기타 설정]]></value>
 		<value xml:lang="en"><![CDATA[Other Settings]]></value>
+	</item>
+	<item name="cmd_supercache_config_other_help">
+		<value xml:lang="ko"><![CDATA[사이트 성능 개선에 도움을 줄 수 있는 여러 가지 설정들을 모아 놓은 화면입니다.]]></value>
+		<value xml:lang="en"><![CDATA[This page contains miscellaneous options that may help improve your site's responsiveness.]]></value>
 	</item>
 	<item name="cmd_supercache_disable_post_search">
 		<value xml:lang="ko"><![CDATA[POST 이중 검색 방지]]></value>

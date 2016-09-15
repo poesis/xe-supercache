@@ -98,6 +98,29 @@ class SuperCacheAdminController extends SuperCache
 	}
 	
 	/**
+	 * Save widget cache settings.
+	 */
+	public function procSuperCacheAdminInsertWidgetCache()
+	{
+		// Get current config and user selections.
+		$config = $this->getConfig();
+		$vars = Context::getRequestVars();
+		
+		// Fetch the new config.
+		$config->widget_cache = $vars->sc_widget_cache === 'Y' ? true : false;
+		
+		// Save the new config.
+		$output = $this->setConfig($config);
+		if (!$output->toBool())
+		{
+			return $output;
+		}
+		
+		// Redirect to the main config page.
+		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispSupercacheAdminConfigWidgetCache'));
+	}
+	
+	/**
 	 * Save other settings.
 	 */
 	public function procSuperCacheAdminInsertOther()

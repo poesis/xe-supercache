@@ -1,3 +1,13 @@
+
+div.supercache_help {
+	clear: both;
+	padding: 12px;
+	box-sizing: border-box;
+	background-color: #f4f4f4;
+	border: 1px solid #ddd;
+	border-radius: 2px;
+}
+
 label.supported {
 	font-weight: bold !important;
 	cursor: text !important;

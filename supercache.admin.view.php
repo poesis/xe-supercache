@@ -83,6 +83,18 @@ class SuperCacheAdminView extends SuperCache
 	}
 	
 	/**
+	 * Widget cache settings page.
+	 */
+	public function dispSuperCacheAdminConfigWidgetCache()
+	{
+		// Get module configuration.
+		Context::set('sc_config', $config = $this->getConfig());
+		
+		// Display the config page.
+		$this->setTemplateFile('widget_cache');
+	}
+	
+	/**
 	 * Other settings page.
 	 */
 	public function dispSuperCacheAdminConfigOther()
