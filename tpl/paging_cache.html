@@ -55,6 +55,19 @@
 		</div>
 		
 		<div class="x_control-group">
+			<label class="x_control-label">{$lang->cmd_supercache_paging_cache_exclude_modules}</label>
+			<div class="x_controls">
+				<label loop="$sc_modules => $sc_module" for="sc_paging_cache_exclude_modules_{$sc_module->module_srl}" class="checkbox_wrapper">
+					<input name="sc_paging_cache_exclude_modules[]" id="sc_paging_cache_exclude_modules_{$sc_module->module_srl}" type="checkbox" value="{$sc_module->module_srl}" checked="checked"|cond="isset($sc_config->paging_cache_exclude_modules[$sc_module->module_srl])" />
+					{$sc_module->browser_title} ({$sc_module->mid})
+				</label>
+				<p class="x_help-block more_margin">
+					{$lang->cmd_supercache_paging_cache_exclude_modules_help}
+				</p>
+			</div>
+		</div>
+		
+		<div class="x_control-group">
 			<label class="x_control-label" for="sc_paging_cache_threshold">{$lang->cmd_supercache_paging_cache_threshold}</label>
 			<div class="x_controls">
 				<input name="sc_paging_cache_threshold" id="sc_paging_cache_threshold" type="number" value="{intval($sc_config->paging_cache_threshold) ?: 1200}" style="width:100px" />

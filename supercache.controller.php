@@ -91,6 +91,12 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
+		// Abort if the module is excluded by configuration.
+		if (isset($config->paging_cache_exclude_modules[$args->module_srl]))
+		{
+			return;
+		}
+		
 		// Abort if the module/category has fewer documents than the threshold.
 		$oModel = getModel('supercache');
 		$document_count = $oModel->getDocumentCount($args->module_srl, $args->category_srl);

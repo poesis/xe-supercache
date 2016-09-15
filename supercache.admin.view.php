@@ -50,6 +50,21 @@ class SuperCacheAdminView extends SuperCache
 	}
 	
 	/**
+	 * Basic settings page.
+	 */
+	public function dispSuperCacheAdminConfigBasic()
+	{
+		// Get module configuration.
+		Context::set('sc_config', $config = $this->getConfig());
+		
+		// Get current object cache settings.
+		Context::set('sc_object_cache', htmlspecialchars(Context::getDbInfo()->use_object_cache ?: ''));
+		
+		// Display the config page.
+		$this->setTemplateFile('basic');
+	}
+	
+	/**
 	 * Full cache settings page.
 	 */
 	public function dispSuperCacheAdminConfigFullCache()
@@ -67,21 +82,6 @@ class SuperCacheAdminView extends SuperCache
 	}
 	
 	/**
-	 * Full cache settings page.
-	 */
-	public function dispSuperCacheAdminConfigBasic()
-	{
-		// Get module configuration.
-		Context::set('sc_config', $config = $this->getConfig());
-		
-		// Get current object cache settings.
-		Context::set('sc_object_cache', htmlspecialchars(Context::getDbInfo()->use_object_cache ?: ''));
-		
-		// Display the config page.
-		$this->setTemplateFile('basic');
-	}
-	
-	/**
 	 * Paging cache settings page.
 	 */
 	public function dispSuperCacheAdminConfigPagingCache()
@@ -93,6 +93,14 @@ class SuperCacheAdminView extends SuperCache
 		$oAdminModel = getAdminModel('supercache');
 		Context::set('sc_list_replace', $oAdminModel->isListReplacementSupported());
 		Context::set('sc_offset_query', $oAdminModel->isOffsetQuerySupported());
+		
+		// Get the list of modules.
+		$site_srl = intval(Context::get('site_module_info')->site_srl) ?: 0;
+		$module_list = getModel('module')->getMidList((object)array('site_srl' => $site_srl));
+		$module_list = array_filter($module_list, function($val) {
+			return in_array($val->module, array('board', 'bodex', 'beluxe'));
+		});
+		Context::set('sc_modules', $module_list);
 		
 		// Display the config page.
 		$this->setTemplateFile('paging_cache');

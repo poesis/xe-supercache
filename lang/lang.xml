@@ -140,6 +140,14 @@
 		<value xml:lang="ko"><![CDATA[모든 페이지 검색에 캐시를 적용합니다. 사용하지 않을 경우 1페이지 검색에만 적용됩니다.<br>2페이지 이후의 게시판 목록이 잘못 표시될 경우 이 기능을 사용하지 마십시오.]]></value>
 		<value xml:lang="en"><![CDATA[Enable the pagination cache on all pages of a board. Without offset queries, it will only be enabled on the first page.<br>Please disable this feature if you see any errors on page 2 or higher.]]></value>
 	</item>
+	<item name="cmd_supercache_paging_cache_exclude_modules">
+		<value xml:lang="ko"><![CDATA[캐시 예외 게시판]]></value>
+		<value xml:lang="en"><![CDATA[Boards to Exclude]]></value>
+	</item>
+	<item name="cmd_supercache_paging_cache_exclude_modules_help">
+		<value xml:lang="ko"><![CDATA[선택한 게시판은 캐싱하지 않습니다. 캐싱 사용시 문제가 발생하는 게시판은 제외하시기 바랍니다.<br>아래의 &quot;캐시 사용 조건&quot; 설정을 통해서도 게시판 예외 처리가 가능합니다.]]></value>
+		<value xml:lang="en"><![CDATA[The selected boards will be excluded from the full page cache. Please check all boards that cause a problem when cached.<br>You can also exclude boards using the &quot;Cache Threshold&quot; setting below.]]></value>
+	</item>
 	<item name="cmd_supercache_paging_cache_threshold">
 		<value xml:lang="ko"><![CDATA[캐시 사용 조건]]></value>
 		<value xml:lang="en"><![CDATA[Cache Threshold]]></value>
@@ -154,15 +162,15 @@
 	</item>
 	<item name="cmd_supercache_paging_cache_duration_help">
 		<value xml:lang="ko"><![CDATA[위의 기간이 지나면 페이징 캐시를 삭제하고 다시 계산합니다. 단위는 '초'입니다.<br>위의 기간이 지나지 않아도 새 글을 등록하거나 글을 삭제하면 페이징 캐시에 곧 반영됩니다.]]></value>
-		<value xml:lang="en"><![CDATA[Invalidate and recalculate the pagination cache after the above number of seconds have elapsed.<br>Even during this time, the cache will be adjusted with each new or deleted documents.]]></value>
+		<value xml:lang="en"><![CDATA[Recalculate the pagination cache after the above number of seconds have elapsed.<br>Even during this time, the cache will be adjusted with each new or deleted documents.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_auto_refresh">
 		<value xml:lang="ko"><![CDATA[캐시 자동 갱신]]></value>
 		<value xml:lang="en"><![CDATA[Auto-Refresh]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_auto_refresh_help">
-		<value xml:lang="ko"><![CDATA[요청 수가 이 값을 초과하면 캐시를 자동 갱신하여 오차 범위를 줄입니다.]]></value>
-		<value xml:lang="en"><![CDATA[Invalidate the pagination cache after the above number of requests have been served.]]></value>
+		<value xml:lang="ko"><![CDATA[위의 기간과 무관하게, 요청 수가 많아지면 일정한 확률로 캐시를 갱신하여 오차 범위를 줄입니다.<br>예: 2400으로 지정한 경우 약 2400회 요청마다 캐시가 갱신됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[Recalculate the pagination cache at a random interval in order to reduce the margin of error.<br>The cache will be recalculated approximately every X requests, using the given value of X.]]></value>
 	</item>
 	<item name="cmd_supercache_config_widget_cache">
 		<value xml:lang="ko"><![CDATA[위젯 캐시]]></value>
