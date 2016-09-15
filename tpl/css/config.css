@@ -27,7 +27,7 @@ span.mid {
 	font-size: 12px;
 	color: #999;
 	display: inline-block;
-	margin-left: 2px;
+	margin-left: -12px;
 }
 
 span.warning {
