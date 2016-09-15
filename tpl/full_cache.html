@@ -81,7 +81,7 @@
 			<label class="x_control-label">{$lang->cmd_supercache_full_cache_stampede_protection}</label>
 			<div class="x_controls">
 				<label for="sc_full_cache_stampede_protection_y" class="x_inline">
-					<input name="sc_full_cache_stampede_protection" id="sc_full_cache_stampede_protection_y" type="radio" value="Y" checked="checked"|cond="$sc_config->full_cache_stampede_protection !== null" />
+					<input name="sc_full_cache_stampede_protection" id="sc_full_cache_stampede_protection_y" type="radio" value="Y" checked="checked"|cond="$sc_config->full_cache_stampede_protection !== false" />
 					{$lang->cmd_yes}
 				</label>
 				<label for="sc_full_cache_stampede_protection_n" class="x_inline">

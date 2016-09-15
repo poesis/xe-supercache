@@ -4,6 +4,22 @@
 		<value xml:lang="ko"><![CDATA[슈퍼 캐시]]></value>
 		<value xml:lang="en"><![CDATA[Super Cache]]></value>
 	</item>
+	<item name="cmd_supercache_config_basic">
+		<value xml:lang="ko"><![CDATA[기본 설정]]></value>
+		<value xml:lang="en"><![CDATA[Basic Settings]]></value>
+	</item>
+	<item name="cmd_supercache_config_basic_help">
+		<value xml:lang="ko"><![CDATA[슈퍼 캐시 모듈을 사용하려면 XE 코어에서 캐시를 사용하도록 설정되어 있어야 합니다.]]></value>
+		<value xml:lang="en"><![CDATA[In order to use Super Cache, XE core must be configured to use a cache backend.]]></value>
+	</item>
+	<item name="cmd_supercache_config_basic_rhymix_help">
+		<value xml:lang="ko"><![CDATA[라이믹스에서는 <a href="./index.php?module=admin&amp;act=dispAdminConfigAdvanced">[시스템 설정 / 고급 설정]</a> 메뉴에서 캐시 설정을 변경하실 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[In Rhymix, please go to <a href="./index.php?module=admin&amp;act=dispAdminConfigAdvanced">[Systm Settings / Advanced Settings]</a> to change cache settings.]]></value>
+	</item>
+	<item name="cmd_supercache_core_object_cache">
+		<value xml:lang="ko"><![CDATA[XE 코어 캐시 설정]]></value>
+		<value xml:lang="en"><![CDATA[XE Core Cache Configuration]]></value>
+	</item>
 	<item name="cmd_supercache_config_full_cache">
 		<value xml:lang="ko"><![CDATA[전체화면 캐시]]></value>
 		<value xml:lang="en"><![CDATA[Full Page Cache]]></value>
@@ -77,8 +93,8 @@
 		<value xml:lang="en"><![CDATA[Pagination Cache]]></value>
 	</item>
 	<item name="cmd_supercache_config_paging_cache_help">
-		<value xml:lang="ko"><![CDATA[XE에서는 게시판의 글 수가 많아지면 페이징 계산 쿼리 소요시간이 전체 로딩 시간의 상당 부분을 차지하게 됩니다.<br>이 문제를 덜어 주는 페이징 캐시는 대형 게시판을 사용하는 커뮤니티 사이트에 적합합니다.]]></value>
-		<value xml:lang="en"><![CDATA[The pagination cache speeds up your site by caching the most time-consuming query in XE boards: pagination.<br>It is effective in community sites with large boards.]]></value>
+		<value xml:lang="ko"><![CDATA[게시판의 글 수가 많아지면 페이징 계산 쿼리 소요시간이 전체 로딩 시간의 상당 부분을 차지하게 됩니다.<br>이 문제를 덜어 주는 페이징 캐시는 대형 게시판을 사용하는 커뮤니티 사이트에 적합합니다.<br>XE 및 라이믹스 최신 버전에서만 지원되며, 구 버전에서는 패치가 필요합니다.]]></value>
+		<value xml:lang="en"><![CDATA[The pagination cache speeds up your site by caching the most time-consuming query in XE boards: pagination.<br>It is effective in community sites with large boards.<br>This feature is only compatible with the latest versions of XE and Rhymix.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_supported">
 		<value xml:lang="ko"><![CDATA[페이징 캐시 지원]]></value>
@@ -144,6 +160,10 @@
 		<value xml:lang="ko"><![CDATA[위젯 캐시]]></value>
 		<value xml:lang="en"><![CDATA[Widget Cache]]></value>
 	</item>
+	<item name="cmd_supercache_config_widget_cache_help">
+		<value xml:lang="ko"><![CDATA[이 기능은 아직 개발중입니다.]]></value>
+		<value xml:lang="en"><![CDATA[This feature is still under development.]]></value>
+	</item>
 	<item name="cmd_supercache_config_thumbnail_cache">
 		<value xml:lang="ko"><![CDATA[섬네일 캐시]]></value>
 		<value xml:lang="en"><![CDATA[Thumbnail Cache]]></value>
@@ -163,5 +183,29 @@
 	<item name="cmd_supercache_disable_post_search_help">
 		<value xml:lang="ko"><![CDATA[스케치북 등 일부 게시판 스킨에서 동일한 검색을 POST와 GET으로 2번 요청하는 버그를 우회합니다.<br>POST 요청으로 게시판 검색 시도시 실제 검색을 수행하지 않고 건너뜁니다.]]></value>
 		<value xml:lang="en"><![CDATA[Some board skins have a bug that causes them to request the same search twice, once via POST and once via GET.<br>This option works around this bug by skipping the actual search step in the POST request.]]></value>
+	</item>
+	<item name="msg_supercache_rhymix_no_cache">
+		<value xml:lang="ko"><![CDATA[라이믹스에서는 이 화면에서 캐시 설정을 변경할 수 없습니다.]]></value>
+		<value xml:lang="en"><![CDATA[You cannot change cache settings on this page when you use Rhymix.]]></value>
+	</item>
+	<item name="msg_supercache_memcached_not_supported">
+		<value xml:lang="ko"><![CDATA[서버에 Memcached 확장 모듈이 설치되어 있지 않습니다.]]></value>
+		<value xml:lang="en"><![CDATA[The Memcached extension is not installed on this server.]]></value>
+	</item>
+	<item name="msg_supercache_memcache_not_supported">
+		<value xml:lang="ko"><![CDATA[서버에 Memcache 확장 모듈이 설치되어 있지 않습니다.]]></value>
+		<value xml:lang="en"><![CDATA[The Memcache extension is not installed on this server.]]></value>
+	</item>
+	<item name="msg_supercache_apc_not_supported">
+		<value xml:lang="ko"><![CDATA[서버에 APC 확장 모듈이 설치되어 있지 않습니다.]]></value>
+		<value xml:lang="en"><![CDATA[The APC extension is not installed on this server.]]></value>
+	</item>
+	<item name="msg_supercache_wincache_not_supported">
+		<value xml:lang="ko"><![CDATA[서버에 WinCache 확장 모듈이 설치되어 있지 않습니다.]]></value>
+		<value xml:lang="en"><![CDATA[The WinCache extension is not installed on this server.]]></value>
+	</item>
+	<item name="msg_supercache_config_save_failed">
+		<value xml:lang="ko"><![CDATA[설정 파일 저장에 실패했습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Failed to save configuration file.]]></value>
 	</item>
 </lang>

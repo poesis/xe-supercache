@@ -24,6 +24,51 @@ class SuperCacheAdminController extends SuperCache
 	/**
 	 * Save full page cache settings.
 	 */
+	public function procSuperCacheAdminInsertBasic()
+	{
+		// Get current config and user selections.
+		$vars = Context::getRequestVars();
+		
+		// Save the new config.
+		$db_info = Context::getDbInfo();
+		if ($db_info->use_object_cache !== $vars->sc_core_object_cache)
+		{
+			if (defined('RX_BASEDIR'))
+			{
+				return $this->error('msg_supercache_rhymix_no_cache');
+			}
+			if (!strncasecmp('memcache', $vars->sc_core_object_cache, 8) && !class_exists('Memcache'))
+			{
+				return $this->error('msg_supercache_memcache_not_supported');
+			}
+			if ($vars->sc_core_object_cache === 'apc' && !function_exists('apc_store'))
+			{
+				return $this->error('msg_supercache_apc_not_supported');
+			}
+			if ($vars->sc_core_object_cache === 'wincache' && !function_exists('wincache_ucache_set'))
+			{
+				return $this->error('msg_supercache_wincache_not_supported');
+			}
+			
+			$db_info->use_object_cache = $vars->sc_core_object_cache;
+			Context::setDbInfo($db_info);
+			if (!getController('install')->makeConfigFile())
+			{
+				return $this->error('msg_supercache_config_save_failed');
+			}
+			if (function_exists('opcache_invalidate'))
+			{
+				@opcache_invalidate(_XE_PATH_ . 'files/config/db.config.php', true);
+			}
+		}
+		
+		// Redirect to the main config page.
+		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispSupercacheAdminConfigBasic'));
+	}
+	
+	/**
+	 * Save full page cache settings.
+	 */
 	public function procSuperCacheAdminInsertFullCache()
 	{
 		// Get current config and user selections.

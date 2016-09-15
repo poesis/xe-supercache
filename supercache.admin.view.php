@@ -25,6 +25,7 @@ class SuperCacheAdminView extends SuperCache
 	 * Menu definition.
 	 */
 	protected static $_menus = array(
+		'dispSupercacheAdminConfigBasic' => 'cmd_supercache_config_basic',
 		'dispSupercacheAdminConfigFullCache' => 'cmd_supercache_config_full_cache',
 		'dispSupercacheAdminConfigPagingCache' => 'cmd_supercache_config_paging_cache',
 		'dispSupercacheAdminConfigWidgetCache' => 'cmd_supercache_config_widget_cache',
@@ -63,6 +64,21 @@ class SuperCacheAdminView extends SuperCache
 		
 		// Display the config page.
 		$this->setTemplateFile('full_cache');
+	}
+	
+	/**
+	 * Full cache settings page.
+	 */
+	public function dispSuperCacheAdminConfigBasic()
+	{
+		// Get module configuration.
+		Context::set('sc_config', $config = $this->getConfig());
+		
+		// Get current object cache settings.
+		Context::set('sc_object_cache', htmlspecialchars(Context::getDbInfo()->use_object_cache ?: ''));
+		
+		// Display the config page.
+		$this->setTemplateFile('basic');
 	}
 	
 	/**

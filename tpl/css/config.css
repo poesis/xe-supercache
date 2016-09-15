@@ -8,14 +8,33 @@ div.supercache_help {
 	border-radius: 2px;
 }
 
+input.console_font, span.console_font {
+	font-family: Consolas, Courier New, Courier, monospace !important;
+}
+
+span.console_font {
+	display: inline-block;
+	margin: 0 2px;
+	color: #0088cc;
+	cursor: pointer;
+}
+span.console_font:hover {
+	color: #005580;
+	text-decoration: underline;
+}
+
+input.full_width {
+	width: 100% !important;
+	height: 28px !important;
+	box-sizing: border-box;
+}
+
 label.supported {
-	font-weight: bold !important;
 	cursor: text !important;
 	color: #090;
 }
 
 label.unsupported {
-	font-weight: bold !important;
 	cursor: text !important;
 	color: #f00;
 }
@@ -25,5 +44,14 @@ label.checkbox_wrapper {
 }
 
 p.more_margin {
+	margin-top: 8px !important;
+}
+
+ul.inside_help_block {
+	
+}
+	
+ul.inside_help_block li {
+	color: #595959 !important;
 	margin-top: 8px !important;
 }

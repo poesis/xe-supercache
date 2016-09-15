@@ -2,10 +2,12 @@
 <module>
 	<permissions />
 	<actions>
-		<action name="dispSupercacheAdminConfigFullCache" type="view" admin_index="true" menu_name="supercache" />
+		<action name="dispSupercacheAdminConfigBasic" type="view" admin_index="true" menu_name="supercache" />
+		<action name="dispSupercacheAdminConfigFullCache" type="view" />
 		<action name="dispSupercacheAdminConfigPagingCache" type="view" />
 		<action name="dispSupercacheAdminConfigWidgetCache" type="view" />
 		<action name="dispSupercacheAdminConfigOther" type="view" />
+		<action name="procSupercacheAdminInsertBasic" type="controller" />
 		<action name="procSupercacheAdminInsertFullCache" type="controller" />
 		<action name="procSupercacheAdminInsertPagingCache" type="controller" />
 		<action name="procSupercacheAdminInsertWidgetCache" type="controller" />
