@@ -237,6 +237,18 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
+		// Abort if the current URL does not match the default URL.
+		$site_module_info = Context::get('site_module_info');
+		$default_url = Context::getDefaultUrl();
+		$current_url = ($_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		if (strncmp($current_url, $default_url, strlen($default_url)))
+		{
+			if (strncmp($current_url, $site_module_info->domain, strlen($site_module_info->domain)))
+			{
+				return;
+			}
+		}
+		
 		// Abort if the current act is excluded.
 		if (isset($config->full_cache_exclude_acts[$obj->act]))
 		{
@@ -246,7 +258,6 @@ class SuperCacheController extends SuperCache
 		// Abort if the current module is excluded.
 		if (!$obj->mid && !$obj->module && !$obj->module_srl)
 		{
-			$site_module_info = Context::get('site_module_info');
 			$module_srl = $site_module_info->module_srl;
 		}
 		elseif ($obj->module_srl)
@@ -255,7 +266,6 @@ class SuperCacheController extends SuperCache
 		}
 		elseif ($obj->mid)
 		{
-			$site_module_info = Context::get('site_module_info');
 			$module_info = getModel('module')->getModuleInfoByMid($obj->mid, intval($site_module_info->site_srl) ?: 0);
 			$module_srl = $module_info ? $module_info->module_srl : 0;
 		}
