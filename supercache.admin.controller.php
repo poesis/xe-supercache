@@ -52,6 +52,8 @@ class SuperCacheAdminController extends SuperCache
 		{
 			$config->full_cache_exclusions = array();
 		}
+		$config->full_cache_stampede_protection = $vars->sc_full_cache_stampede_protection === 'Y' ? true : false;
+		$config->full_cache_use_headers = $vars->sc_full_cache_use_headers === 'Y' ? true : false;
 		
 		// Save the new config.
 		$output = $this->setConfig($config);

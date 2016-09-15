@@ -13,8 +13,8 @@
 		<value xml:lang="en"><![CDATA[Use Full Page Cache]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_use_help">
-		<value xml:lang="ko"><![CDATA[로그인하지 않은 사용자에게는 페이지 전체를 캐싱하여 보여 줍니다.]]></value>
-		<value xml:lang="en"><![CDATA[Cache the entire page for visitors who are not logged in.]]></value>
+		<value xml:lang="ko"><![CDATA[로그인하지 않은 사용자에게는 페이지 전체를 캐싱하여 보여 줍니다.<br>새로 등록된 글, 스킨 및 레이아웃 수정 내역 등이 즉시 반영되지 않을 수도 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Cache the entire page for visitors who are not logged in.<br>They will not see the latest posts or recent changes to the design of your site.]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_duration">
 		<value xml:lang="ko"><![CDATA[캐시 갱신 주기]]></value>
@@ -37,8 +37,8 @@
 		<value xml:lang="en"><![CDATA[Individual documents]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_type_other">
-		<value xml:lang="ko"><![CDATA[기타 화면]]></value>
-		<value xml:lang="en"><![CDATA[Other pages]]></value>
+		<value xml:lang="ko"><![CDATA[기타 화면 (불가피한 경우 외에는 선택하지 마십시오.)]]></value>
+		<value xml:lang="en"><![CDATA[Other pages (Please do not select unless absolutely necessary.)]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_type_help">
 		<value xml:lang="ko"><![CDATA[선택한 종류의 페이지가 캐싱됩니다. 사이트 특성에 따라 조절하십시오.]]></value>
@@ -51,6 +51,22 @@
 	<item name="cmd_supercache_full_cache_exclusions_help">
 		<value xml:lang="ko"><![CDATA[선택한 모듈은 캐싱하지 않습니다.]]></value>
 		<value xml:lang="en"><![CDATA[The selected modules will be excluded from the full page cache.]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_stampede_protection">
+		<value xml:lang="ko"><![CDATA[스탬피드 방지 기능]]></value>
+		<value xml:lang="en"><![CDATA[Stampede Protection]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_stampede_protection_help">
+		<value xml:lang="ko"><![CDATA[캐싱된 페이지가 만료되자마자 동시 요청이 한꺼번에 몰리는 현상을 방지합니다.<br>참고 문서: <a href="https://en.wikipedia.org/wiki/Cache_stampede" target="_blank">Cache Stampede</a>]]></value>
+		<value xml:lang="en"><![CDATA[Prevent surges in simultaneous requests as soon as a cached page expires.<br>See: <a href="https://en.wikipedia.org/wiki/Cache_stampede" target="_blank">Cache Stampede</a>]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_use_headers">
+		<value xml:lang="ko"><![CDATA[Cache-Control 헤더 사용]]></value>
+		<value xml:lang="en"><![CDATA[Use Cache-Control Headers]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_use_headers_help">
+		<value xml:lang="ko"><![CDATA[Cache-Control 헤더를 사용하여 캐싱된 페이지에 대한 반복 요청을 줄입니다.<br>로그인 후에도 캐싱된 페이지가 표시될 수 있으니 주의하십시오.]]></value>
+		<value xml:lang="en"><![CDATA[Use Cache-Control headers to prevent repeat requests.<br>This may cause visitors to see cached pages even after logging in.]]></value>
 	</item>
 	<item name="cmd_supercache_config_paging_cache">
 		<value xml:lang="ko"><![CDATA[페이징 캐시]]></value>
@@ -81,40 +97,40 @@
 		<value xml:lang="en"><![CDATA[Use Pagination Cache]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_use_help">
-		<value xml:lang="ko"><![CDATA[게시판의 글 수와 페이지 수 등을 캐시하여 불필요한 쿼리를 실행하지 않도록 합니다.]]></value>
-		<value xml:lang="en"><![CDATA[Prevent unnecessary queries by caching the document count and page count of boards.]]></value>
+		<value xml:lang="ko"><![CDATA[게시판의 글 수와 페이지 수 등을 캐시하여 불필요한 쿼리를 실행하지 않도록 합니다.<br>화면에 표시되는 글 수와 페이지 수에 약간의 오차가 발생할 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Prevent unnecessary queries by caching the document count and page count of boards.<br>You may see slightly incorrect counts from time to time.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_use_offset_query">
 		<value xml:lang="ko"><![CDATA[오프셋 쿼리 사용]]></value>
 		<value xml:lang="en"><![CDATA[Use Offset Queries]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_use_offset_query_help">
-		<value xml:lang="ko"><![CDATA[모든 페이지 검색에 캐시를 적용합니다. 사용하지 않을 경우 1페이지 검색에만 적용됩니다.]]></value>
-		<value xml:lang="en"><![CDATA[Enable the pagination cache on all pages of a board. Without offset queries, it will only be enabled on the first page.]]></value>
+		<value xml:lang="ko"><![CDATA[모든 페이지 검색에 캐시를 적용합니다. 사용하지 않을 경우 1페이지 검색에만 적용됩니다.<br>2페이지 이후의 게시판 목록이 잘못 표시될 경우 이 기능을 사용하지 마십시오.]]></value>
+		<value xml:lang="en"><![CDATA[Enable the pagination cache on all pages of a board. Without offset queries, it will only be enabled on the first page.<br>Please disable this feature if you see any errors on page 2 or higher.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_threshold">
 		<value xml:lang="ko"><![CDATA[캐시 사용 조건]]></value>
 		<value xml:lang="en"><![CDATA[Cache Threshold]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_threshold_help">
-		<value xml:lang="ko"><![CDATA[게시판의 글 수가 위의 숫자보다 많을 때만 페이징 캐시를 사용합니다.]]></value>
-		<value xml:lang="en"><![CDATA[Use pagination cache only if a board has more documents than the above threshold.]]></value>
+		<value xml:lang="ko"><![CDATA[게시판의 글 수가 위의 숫자보다 많을 때만 페이징 캐시를 사용합니다.<br>사용량이 적은 게시판에서 불필요한 캐시 요쳥을 방지할 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Use pagination cache only if a board has more documents than the above threshold.<br>You can use this option to prevent unnecessary cache lookups in small boards.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_duration">
 		<value xml:lang="ko"><![CDATA[캐시 갱신 주기]]></value>
 		<value xml:lang="en"><![CDATA[Cache Expiry]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_duration_help">
-		<value xml:lang="ko"><![CDATA[위의 기간이 지나면 페이징 캐시를 삭제하고 다시 계산합니다. 단위는 '초'입니다.]]></value>
-		<value xml:lang="en"><![CDATA[Invalidate and recalculate the pagination cache after the above number of seconds have elapsed.]]></value>
+		<value xml:lang="ko"><![CDATA[위의 기간이 지나면 페이징 캐시를 삭제하고 다시 계산합니다. 단위는 '초'입니다.<br>위의 기간이 지나지 않아도 새 글을 등록하거나 글을 삭제하면 페이징 캐시에 곧 반영됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[Invalidate and recalculate the pagination cache after the above number of seconds have elapsed.<br>Even during this time, the cache will be adjusted with each new or deleted documents.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_auto_refresh">
 		<value xml:lang="ko"><![CDATA[캐시 자동 갱신]]></value>
 		<value xml:lang="en"><![CDATA[Auto-Refresh]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_auto_refresh_help">
-		<value xml:lang="ko"><![CDATA[위에서 정한 기간이 지나지 않아도 요청 수가 이 값을 초과하면 캐시를 자동 갱신하여 오차 범위를 줄입니다.]]></value>
-		<value xml:lang="en"><![CDATA[Even if there is time left on the cache, invalidate it after the above number of requests have been served.]]></value>
+		<value xml:lang="ko"><![CDATA[요청 수가 이 값을 초과하면 캐시를 자동 갱신하여 오차 범위를 줄입니다.]]></value>
+		<value xml:lang="en"><![CDATA[Invalidate the pagination cache after the above number of requests have been served.]]></value>
 	</item>
 	<item name="cmd_supercache_config_widget_cache">
 		<value xml:lang="ko"><![CDATA[위젯 캐시]]></value>

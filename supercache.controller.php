@@ -280,7 +280,10 @@ class SuperCacheController extends SuperCache
 		if ($cache)
 		{
 			$expires = max(0, $cache['expires'] - time());
-			$this->printCacheControlHeaders($page_type, $expires);
+			if ($config->full_cache_use_headers)
+			{
+				$this->printCacheControlHeaders($page_type, $expires, $config->full_cache_stampede_protection ? 10 : 0);
+			}
 			if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $cache['cached'])
 			{
 				header('HTTP/1.1 304 Not Modified');
@@ -300,7 +303,10 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Otherwise, prepare headers to cache the current request.
-		$this->printCacheControlHeaders($page_type, $config->full_cache_duration);
+		if ($config->full_cache_use_headers)
+		{
+			$this->printCacheControlHeaders($page_type, $config->full_cache_duration, $config->full_cache_stampede_protection ? 10 : 0);
+		}
 		$this->_cacheStartTimestamp = microtime(true);
 	}
 	
@@ -309,11 +315,13 @@ class SuperCacheController extends SuperCache
 	 * 
 	 * @param string $page_type
 	 * @param int $expires
+	 * @param int $scatter
 	 * @return void
 	 */
-	public function printCacheControlHeaders($page_type, $expires)
+	public function printCacheControlHeaders($page_type, $expires, $scatter)
 	{
-		$expires = intval($expires);
+		$scatter = intval($expires * ($scatter / 100));
+		$expires = intval($expires - mt_rand(0, $scatter));
 		header('X-SuperCache: type=' . $page_type . '; expires=' . $expires);
 		header('Cache-Control: max-age=' . $expires);
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');

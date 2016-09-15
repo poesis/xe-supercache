@@ -42,7 +42,7 @@ class SuperCacheModel extends SuperCache
 		$content = $this->getCache($cache_key, $config->full_cache_duration + 60);
 		
 		// Immediately re-cache expired cache entry for stampede protection.
-		if ($content['expires'] < time())
+		if ($config->full_cache_stampede_protection && $content['expires'] < time())
 		{
 			$contents['expires'] = time() + 60;
 			$this->setCache($cache_key, $content, 60);
