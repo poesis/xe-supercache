@@ -9,16 +9,16 @@
 		<value xml:lang="en"><![CDATA[Basic Settings]]></value>
 	</item>
 	<item name="cmd_supercache_config_basic_help">
-		<value xml:lang="ko"><![CDATA[슈퍼 캐시 모듈을 사용하려면 XE 코어에서 캐시를 사용하도록 설정되어 있어야 합니다.]]></value>
-		<value xml:lang="en"><![CDATA[In order to use Super Cache, XE core must be configured to use a cache backend.]]></value>
+		<value xml:lang="ko"><![CDATA[슈퍼 캐시 모듈을 사용하려면 XE에서 &quot;오브젝트 캐시&quot;를 사용하도록 설정되어 있어야 합니다.<br>XE 코어에서는 오브젝트 캐시를 설정하는 화면을 제공하지 않지만, 이 페이지를 통해 설정할 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[In order to use Super Cache, XE must be configured to use an &quot;object cache&quot;.<br>XE Core does not provide a screen to configure it, but you can do so on this page.]]></value>
 	</item>
 	<item name="cmd_supercache_config_basic_rhymix_help">
-		<value xml:lang="ko"><![CDATA[라이믹스에서는 <a href="./index.php?module=admin&amp;act=dispAdminConfigAdvanced">[시스템 설정 / 고급 설정]</a> 메뉴에서 캐시 설정을 변경하실 수 있습니다.]]></value>
-		<value xml:lang="en"><![CDATA[In Rhymix, please go to <a href="./index.php?module=admin&amp;act=dispAdminConfigAdvanced">[Systm Settings / Advanced Settings]</a> to change cache settings.]]></value>
+		<value xml:lang="ko"><![CDATA[라이믹스 사용자는 <a href="./index.php?module=admin&amp;act=dispAdminConfigAdvanced">[시스템 설정 / 고급 설정]</a> 메뉴에서 캐시 설정을 변경하실 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Rhymix users can go to <a href="./index.php?module=admin&amp;act=dispAdminConfigAdvanced">[Systm Settings / Advanced Settings]</a> to change cache settings.]]></value>
 	</item>
 	<item name="cmd_supercache_core_object_cache">
-		<value xml:lang="ko"><![CDATA[XE 코어 캐시 설정]]></value>
-		<value xml:lang="en"><![CDATA[XE Core Cache Configuration]]></value>
+		<value xml:lang="ko"><![CDATA[오브젝트 캐시 설정]]></value>
+		<value xml:lang="en"><![CDATA[Object Cache Configuration]]></value>
 	</item>
 	<item name="cmd_supercache_config_full_cache">
 		<value xml:lang="ko"><![CDATA[전체화면 캐시]]></value>
