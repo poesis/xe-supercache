@@ -8,7 +8,7 @@ div.supercache_help {
 	border-radius: 4px;
 }
 
-input.console_font, span.console_font {
+input.console_font, span.console_font, textarea.console_font {
 	font-family: Consolas, Courier New, Courier, monospace !important;
 }
 
@@ -26,6 +26,11 @@ span.console_font:hover {
 input.full_width {
 	width: 100% !important;
 	height: 28px !important;
+	box-sizing: border-box;
+}
+
+textarea.full_width {
+	width: 100% !important;
 	box-sizing: border-box;
 }
 

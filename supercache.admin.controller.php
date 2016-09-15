@@ -78,6 +78,9 @@ class SuperCacheAdminController extends SuperCache
 		// Fetch the new config.
 		$config->full_cache = $vars->sc_full_cache === 'Y' ? true : false;
 		$config->full_cache_duration = intval($vars->sc_full_cache_duration) ?: 300;
+		$config->full_cache_stampede_protection = $vars->sc_full_cache_stampede_protection === 'Y' ? true : false;
+		$config->full_cache_use_headers = $vars->sc_full_cache_use_headers === 'Y' ? true : false;
+		
 		if ($vars->sc_full_cache_type)
 		{
 			$values = array_fill(0, count($vars->sc_full_cache_type), true);
@@ -87,18 +90,29 @@ class SuperCacheAdminController extends SuperCache
 		{
 			$config->full_cache_type = array();
 		}
-		if ($vars->sc_full_cache_exclusions)
+		
+		if ($vars->sc_full_cache_exclude_modules)
 		{
-			$keys = array_map('intval', $vars->sc_full_cache_exclusions);
+			$keys = array_map('intval', $vars->sc_full_cache_exclude_modules);
 			$values = array_fill(0, count($keys), true);
-			$config->full_cache_exclusions = array_combine($keys, $values);
+			$config->full_cache_exclude_modules = array_combine($keys, $values);
 		}
 		else
 		{
-			$config->full_cache_exclusions = array();
+			$config->full_cache_exclude_modules = array();
 		}
-		$config->full_cache_stampede_protection = $vars->sc_full_cache_stampede_protection === 'Y' ? true : false;
-		$config->full_cache_use_headers = $vars->sc_full_cache_use_headers === 'Y' ? true : false;
+		
+		if ($vars->sc_full_cache_exclude_acts)
+		{
+			$keys = array_map('trim', preg_split('/(,|\s)+/', trim($vars->sc_full_cache_exclude_acts)));
+			$keys = array_filter($keys, function($val) { return preg_match('/^[a-zA-Z0-9_]+$/', $val); });
+			$values = array_fill(0, count($keys), true);
+			$config->full_cache_exclude_acts = array_combine($keys, $values);
+		}
+		else
+		{
+			$config->full_cache_exclude_acts = array();
+		}
 		
 		// Save the new config.
 		$output = $this->setConfig($config);

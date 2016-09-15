@@ -64,13 +64,21 @@
 		<value xml:lang="ko"><![CDATA[선택한 종류의 페이지가 캐싱됩니다. 사이트 특성에 따라 조절하십시오.]]></value>
 		<value xml:lang="en"><![CDATA[The selected types of pages will be cached. Please adjust according to your site's needs.]]></value>
 	</item>
-	<item name="cmd_supercache_full_cache_exclusions">
+	<item name="cmd_supercache_full_cache_exclude_modules">
 		<value xml:lang="ko"><![CDATA[캐시 예외 모듈]]></value>
 		<value xml:lang="en"><![CDATA[Modules to Exclude]]></value>
 	</item>
-	<item name="cmd_supercache_full_cache_exclusions_help">
-		<value xml:lang="ko"><![CDATA[선택한 모듈은 캐싱하지 않습니다.]]></value>
-		<value xml:lang="en"><![CDATA[The selected modules will be excluded from the full page cache.]]></value>
+	<item name="cmd_supercache_full_cache_exclude_modules_help">
+		<value xml:lang="ko"><![CDATA[선택한 모듈은 캐싱하지 않습니다. 캐싱 사용시 문제가 발생하는 모듈은 제외하시기 바랍니다.]]></value>
+		<value xml:lang="en"><![CDATA[The selected modules will be excluded from the full page cache. Please check all modules that cause a problem when cached.]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_exclude_acts">
+		<value xml:lang="ko"><![CDATA[캐시 예외 액션]]></value>
+		<value xml:lang="en"><![CDATA[Actions to Exclude]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_exclude_acts_help">
+		<value xml:lang="ko"><![CDATA[여기에 나열한 액션은 캐싱하지 않습니다. 쉼표, 공백, 줄바꿈 등으로 구분하여 작성할 수 있습니다.<br>위에서 &quot;기타 화면&quot;을 선택한 경우에만 적용됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[Actions listed here will be excluded from the full page cache. Please separate actions using commas, spaces, or newlines.<br>This setting is only effective when &quot;Other pages&quot; is selected above.]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_stampede_protection">
 		<value xml:lang="ko"><![CDATA[스탬피드 방지 기능]]></value>

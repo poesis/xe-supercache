@@ -222,15 +222,20 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
-		// Abort if the current module is excluded or the current module is 'admin'.
+		// Abort if the current module/act is excluded or the current module is 'admin'.
 		$module_info = $obj->module_info;
-		if (!$module_info || isset($config->full_cache_exclusions[$module_info->module_srl]) || $module_info->module === 'admin')
+		if (!$module_info || isset($config->full_cache_exclude_modules[$module_info->module_srl]) || $module_info->module === 'admin')
+		{
+			return;
+		}
+		$act = Context::get('act');
+		if (isset($config->full_cache_exclude_acts[$act]))
 		{
 			return;
 		}
 		
 		// Determine the page type.
-		if ($act = Context::get('act'))
+		if ($act)
 		{
 			$page_type = 'other';
 		}

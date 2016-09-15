@@ -55,14 +55,24 @@
 		</div>
 		
 		<div class="x_control-group">
-			<label class="x_control-label">{$lang->cmd_supercache_full_cache_exclusions}</label>
+			<label class="x_control-label">{$lang->cmd_supercache_full_cache_exclude_modules}</label>
 			<div class="x_controls">
-				<label loop="$sc_modules => $sc_module" for="sc_full_cache_exclusions_{$sc_module->module_srl}" class="checkbox_wrapper">
-					<input name="sc_full_cache_exclusions[]" id="sc_full_cache_exclusions_{$sc_module->module_srl}" type="checkbox" value="{$sc_module->module_srl}" checked="checked"|cond="isset($sc_config->full_cache_exclusions[$sc_module->module_srl])" />
+				<label loop="$sc_modules => $sc_module" for="sc_full_cache_exclude_modules_{$sc_module->module_srl}" class="checkbox_wrapper">
+					<input name="sc_full_cache_exclude_modules[]" id="sc_full_cache_exclude_modules_{$sc_module->module_srl}" type="checkbox" value="{$sc_module->module_srl}" checked="checked"|cond="isset($sc_config->full_cache_exclude_modules[$sc_module->module_srl])" />
 					{$sc_module->browser_title} ({$sc_module->mid})
 				</label>
 				<p class="x_help-block more_margin">
-					{$lang->cmd_supercache_full_cache_exclusions_help}
+					{$lang->cmd_supercache_full_cache_exclude_modules_help}
+				</p>
+			</div>
+		</div>
+		
+		<div class="x_control-group">
+			<label class="x_control-label" for="sc_full_cache_exclude_acts">{$lang->cmd_supercache_full_cache_exclude_acts}</label>
+			<div class="x_controls">
+				<textarea name="sc_full_cache_exclude_acts" id="sc_full_cache_exclude_acts" class="console_font full_width">{htmlspecialchars(implode("\n", $sc_config->full_cache_exclude_acts ? array_keys($sc_config->full_cache_exclude_acts) : array()))}</textarea>
+				<p class="x_help-block more_margin">
+					{$lang->cmd_supercache_full_cache_exclude_acts_help}
 				</p>
 			</div>
 		</div>
