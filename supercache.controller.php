@@ -283,6 +283,7 @@ class SuperCacheController extends SuperCache
 				$this->_cacheCurrentRequest[0],
 				$this->_cacheCurrentRequest[1],
 				$this->_cacheCurrentRequest[2],
+				$this->_cacheCurrentRequest[3],
 				$obj,
 				microtime(true) - $this->_cacheStartTimestamp
 			);
@@ -311,6 +312,9 @@ class SuperCacheController extends SuperCache
 		{
 			return;
 		}
+		
+		// Abort if the user agent is excluded.
+		$is_mobile = Mobile::isFromMobilePhone() ? true : false;
 		
 		// Abort if the current URL does not match the default URL.
 		$site_module_info = Context::get('site_module_info');
@@ -392,16 +396,16 @@ class SuperCacheController extends SuperCache
 		switch ($page_type)
 		{
 			case 'module':
-				$this->_cacheCurrentRequest = array($module_srl, 0, $request_vars);
-				$cache = $oModel->getFullPageCache($module_srl, 0, $request_vars);
+				$this->_cacheCurrentRequest = array($module_srl, 0, $is_mobile, $request_vars);
+				$cache = $oModel->getFullPageCache($module_srl, 0, $is_mobile, $request_vars);
 				break;
 			case 'document':
-				$this->_cacheCurrentRequest = array($module_srl, $obj->document_srl, $request_vars);
-				$cache = $oModel->getFullPageCache($module_srl, $obj->document_srl, $request_vars);
+				$this->_cacheCurrentRequest = array($module_srl, $obj->document_srl, $is_mobile, $request_vars);
+				$cache = $oModel->getFullPageCache($module_srl, $obj->document_srl, $is_mobile, $request_vars);
 				break;
 			case 'other':
-				$this->_cacheCurrentRequest = array(0, 0, $request_vars);
-				$cache = $oModel->getFullPageCache(0, 0, $request_vars);
+				$this->_cacheCurrentRequest = array(0, 0, $is_mobile, $request_vars);
+				$cache = $oModel->getFullPageCache(0, 0, $is_mobile, $request_vars);
 				break;
 		}
 		
