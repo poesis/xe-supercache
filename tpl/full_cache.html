@@ -85,6 +85,48 @@
 		</div>
 		
 		<div class="x_control-group">
+			<label class="x_control-label">{$lang->cmd_supercache_full_cache_document_action}</label>
+			<div class="x_controls">
+				<label for="sc_full_cache_document_action_refresh_document" class="checkbox_wrapper">
+					<input name="sc_full_cache_document_action[]" id="sc_full_cache_document_action_refresh_document" type="checkbox" value="refresh_document" checked="checked"|cond="isset($sc_config->full_cache_document_action['refresh_document']) || !isset($sc_config->full_cache_document_action)" />
+					{$lang->cmd_supercache_full_cache_document_action_refresh_document}
+				</label>
+				<label for="sc_full_cache_document_action_refresh_module" class="checkbox_wrapper">
+					<input name="sc_full_cache_document_action[]" id="sc_full_cache_document_action_refresh_module" type="checkbox" value="refresh_module" checked="checked"|cond="isset($sc_config->full_cache_document_action['refresh_module'])" />
+					{$lang->cmd_supercache_full_cache_document_action_refresh_module}
+				</label>
+				<label for="sc_full_cache_document_action_refresh_index" class="checkbox_wrapper">
+					<input name="sc_full_cache_document_action[]" id="sc_full_cache_document_action_refresh_index" type="checkbox" value="refresh_index" checked="checked"|cond="isset($sc_config->full_cache_document_action['refresh_index'])" />
+					{$lang->cmd_supercache_full_cache_document_action_refresh_index}
+				</label>
+				<p class="x_help-block more_margin">
+					{$lang->cmd_supercache_full_cache_document_action_help}
+				</p>
+			</div>
+		</div>
+		
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->cmd_supercache_full_cache_comment_action}</label>
+			<div class="x_controls">
+				<label for="sc_full_cache_comment_action_refresh_document" class="checkbox_wrapper">
+					<input name="sc_full_cache_comment_action[]" id="sc_full_cache_comment_action_refresh_document" type="checkbox" value="refresh_document" checked="checked"|cond="isset($sc_config->full_cache_comment_action['refresh_document']) || !isset($sc_config->full_cache_comment_action)" />
+					{$lang->cmd_supercache_full_cache_document_action_refresh_document}
+				</label>
+				<label for="sc_full_cache_comment_action_refresh_module" class="checkbox_wrapper">
+					<input name="sc_full_cache_comment_action[]" id="sc_full_cache_comment_action_refresh_module" type="checkbox" value="refresh_module" checked="checked"|cond="isset($sc_config->full_cache_comment_action['refresh_module'])" />
+					{$lang->cmd_supercache_full_cache_document_action_refresh_module}
+				</label>
+				<label for="sc_full_cache_comment_action_refresh_index" class="checkbox_wrapper">
+					<input name="sc_full_cache_comment_action[]" id="sc_full_cache_comment_action_refresh_index" type="checkbox" value="refresh_index" checked="checked"|cond="isset($sc_config->full_cache_comment_action['refresh_index'])" />
+					{$lang->cmd_supercache_full_cache_document_action_refresh_index}
+				</label>
+				<p class="x_help-block more_margin">
+					{$lang->cmd_supercache_full_cache_comment_action_help}
+				</p>
+			</div>
+		</div>
+		
+		<div class="x_control-group">
 			<label class="x_control-label" for="sc_full_cache_duration">{$lang->cmd_supercache_full_cache_duration}</label>
 			<div class="x_controls">
 				<input name="sc_full_cache_duration" id="sc_full_cache_duration" type="number" value="{intval($sc_config->full_cache_duration) ?: 300}" style="width:100px" />

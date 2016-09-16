@@ -126,6 +126,26 @@ class SuperCacheAdminController extends SuperCache
 			$config->full_cache_exclude_acts = array();
 		}
 		
+		if ($vars->sc_full_cache_document_action)
+		{
+			$values = array_fill(0, count($vars->sc_full_cache_document_action), true);
+			$config->full_cache_document_action = array_combine($vars->sc_full_cache_document_action, $values);
+		}
+		else
+		{
+			$config->full_cache_document_action = array();
+		}
+		
+		if ($vars->sc_full_cache_comment_action)
+		{
+			$values = array_fill(0, count($vars->sc_full_cache_comment_action), true);
+			$config->full_cache_comment_action = array_combine($vars->sc_full_cache_comment_action, $values);
+		}
+		else
+		{
+			$config->full_cache_comment_action = array();
+		}
+		
 		// Save the new config.
 		$output = $this->setConfig($config);
 		if (!$output->toBool())

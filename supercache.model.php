@@ -57,14 +57,14 @@ class SuperCacheModel extends SuperCache
 	/**
 	 * Set a full page cache entry.
 	 * 
-	 * @param string $content
-	 * @param float $elapsed_time
 	 * @param int $module_srl
 	 * @param int $document_srl
 	 * @param array $args
+	 * @param string $content
+	 * @param float $elapsed_time
 	 * @return bool
 	 */
-	public function setFullPageCache($content, $elapsed_time, $module_srl, $document_srl, array $args = array())
+	public function setFullPageCache($module_srl, $document_srl, array $args = array(), $content, $elapsed_time)
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
@@ -80,6 +80,27 @@ class SuperCacheModel extends SuperCache
 		// Save to cache.
 		$cache_key = $this->_getFullPageCacheKey($module_srl, $document_srl, $args);
 		return $this->setCache($cache_key, $content, $config->full_cache_duration + 60);
+	}
+	
+	/**
+	 * Delete a full page cache entry.
+	 * 
+	 * @param int $module_srl
+	 * @param int $document_srl
+	 * @param int $max_page (optional)
+	 * @return bool
+	 */
+	public function deleteFullPageCache($module_srl, $document_srl, $max_page = 1)
+	{
+		// Delete all cache entries beginning with page 1.
+		for ($i = 1; $i <= $max_page; $i++)
+		{
+			$cache_key = $this->_getFullPageCacheKey($module_srl, $document_srl, array('page' => $i));
+			$this->deleteCache($cache_key);
+		}
+		
+		// We don't have any reason to return anything else here.
+		return true;
 	}
 	
 	/**
@@ -210,7 +231,7 @@ class SuperCacheModel extends SuperCache
 		{
 			$argskey = 'p1';
 		}
-		elseif (count($args) === 1 && isset($args['page']) && ctype_digit($args['page']))
+		elseif (count($args) === 1 && isset($args['page']) && (is_int($args['page']) || ctype_digit(strval($args['page']))))
 		{
 			$argskey = 'p' . $args['page'];
 		}

@@ -129,8 +129,29 @@ class SuperCacheController extends SuperCache
 	 */
 	public function triggerAfterInsertDocument($obj)
 	{
+		// Get module configuration.
+		$config = $this->getConfig();
+		
+		// Update document count for pagination cache.
 		$oModel = getModel('supercache');
 		$oModel->updateDocumentCount($obj->module_srl, $obj->category_srl, 1);
+		
+		// Refresh full page cache for the current module and/or index module.
+		if ($config->full_cache && $config->full_cache_document_action)
+		{
+			if (isset($config->full_cache_document_action['refresh_module']) && $obj->module_srl)
+			{
+				$oModel->deleteFullPageCache($obj->module_srl, 0, 1);
+			}
+			if (isset($config->full_cache_document_action['refresh_index']))
+			{
+				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
+				if ($index_module_srl != $obj->module_srl)
+				{
+					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -138,19 +159,53 @@ class SuperCacheController extends SuperCache
 	 */
 	public function triggerAfterUpdateDocument($obj)
 	{
+		// Get module configuration.
+		$config = $this->getConfig();
+		
+		// Get the old and new values of module_srl and category_srl.
 		$original = getModel('document')->getDocument($obj->document_srl);
 		$original_module_srl = intval($original->get('module_srl'));
 		$original_category_srl = intval($original->get('category_srl'));
 		$new_module_srl = intval($obj->module_srl) ?: $original_module_srl;
 		$new_category_srl = intval($obj->category_srl) ?: $original_category_srl;
 		
+		// Update document count for pagination cache.
+		$oModel = getModel('supercache');
 		if ($original_module_srl !== $new_module_srl || $original_category_srl !== $new_category_srl)
 		{
-			$oModel = getModel('supercache');
 			$oModel->updateDocumentCount($new_module_srl, $new_category_srl, 1);
 			if ($original_module_srl)
 			{
 				$oModel->updateDocumentCount($original_module_srl, $original_category_srl, -1);
+			}
+		}
+		
+		// Refresh full page cache for the current module and/or index module.
+		if ($config->full_cache && $config->full_cache_document_action)
+		{
+			if (isset($config->full_cache_document_action['refresh_document']))
+			{
+				$oModel->deleteFullPageCache($original_module_srl, $obj->document_srl, 1);
+				if ($original_module_srl !== $new_module_srl)
+				{
+					$oModel->deleteFullPageCache($new_module_srl, $obj->document_srl, 1);
+				}
+			}
+			if (isset($config->full_cache_document_action['refresh_module']) && $obj->module_srl)
+			{
+				$oModel->deleteFullPageCache($original_module_srl, 0, 1);
+				if ($original_module_srl !== $new_module_srl)
+				{
+					$oModel->deleteFullPageCache($new_module_srl, 0, 1);
+				}
+			}
+			if (isset($config->full_cache_document_action['refresh_index']))
+			{
+				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
+				if ($index_module_srl != $original_module_srl && $index_module_srl != $new_module_srl)
+				{
+					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
+				}
 			}
 		}
 	}
@@ -160,8 +215,29 @@ class SuperCacheController extends SuperCache
 	 */
 	public function triggerAfterDeleteDocument($obj)
 	{
+		// Get module configuration.
+		$config = $this->getConfig();
+		
+		// Update document count for pagination cache.
 		$oModel = getModel('supercache');
 		$oModel->updateDocumentCount($obj->module_srl, $obj->category_srl, -1);
+		
+		// Refresh full page cache for the current module and/or index module.
+		if ($config->full_cache && $config->full_cache_document_action)
+		{
+			if (isset($config->full_cache_document_action['refresh_module']) && $obj->module_srl)
+			{
+				$oModel->deleteFullPageCache($obj->module_srl, 0, 1);
+			}
+			if (isset($config->full_cache_document_action['refresh_index']))
+			{
+				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
+				if ($index_module_srl != $obj->module_srl)
+				{
+					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -203,13 +279,12 @@ class SuperCacheController extends SuperCache
 	{
 		if ($this->_cacheCurrentRequest)
 		{
-			$elapsed_time = microtime(true) - $this->_cacheStartTimestamp;
 			getModel('supercache')->setFullPageCache(
-				$obj,
-				$elapsed_time,
 				$this->_cacheCurrentRequest[0],
 				$this->_cacheCurrentRequest[1],
-				$this->_cacheCurrentRequest[2]
+				$this->_cacheCurrentRequest[2],
+				$obj,
+				microtime(true) - $this->_cacheStartTimestamp
 			);
 		}
 	}
