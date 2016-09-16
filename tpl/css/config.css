@@ -15,10 +15,14 @@ input.console_font, span.console_font, textarea.console_font {
 span.console_font {
 	display: inline-block;
 	margin: 0 2px;
+}
+
+span.console_font.link {
 	color: #0088cc;
 	cursor: pointer;
 }
-span.console_font:hover {
+
+span.console_font.link:hover {
 	color: #005580;
 	text-decoration: underline;
 }

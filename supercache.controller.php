@@ -40,10 +40,30 @@ class SuperCacheController extends SuperCache
 		// Get module configuration.
 		$config = $this->getConfig();
 		
+		// Check the default URL.
+		if ($config->redirect_to_default_url && Context::getRequestMethod() === 'GET')
+		{
+			$current_domain = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']);
+			$default_url = parse_url(Context::getDefaultUrl());
+			if ($current_domain !== $default_url['host'])
+			{
+				$redirect_url = sprintf('%s://%s%s%s', $default_url['scheme'], $default_url['host'], $default_url['port'] ? (':' . $default_url['port']) : '', $_SERVER['REQUEST_URI']);
+				return $this->terminateRedirectTo($redirect_url);
+			}
+			else
+			{
+				$default_url_checked = true;
+			}
+		}
+		else
+		{
+			$default_url_checked = false;
+		}
+		
 		// Check the full page cache.
 		if ($config->full_cache)
 		{
-			$this->checkFullCache($obj, $config);
+			$this->checkFullCache($obj, $config, $default_url_checked);
 		}
 	}
 	
@@ -397,9 +417,10 @@ class SuperCacheController extends SuperCache
 	 * 
 	 * @param object $obj
 	 * @param object $config
+	 * @param object $default_url_checked (optional)
 	 * @return void
 	 */
-	public function checkFullCache($obj, $config)
+	public function checkFullCache($obj, $config, $default_url_checked = false)
 	{
 		// Abort if not an HTML GET request.
 		if (Context::getRequestMethod() !== 'GET')
@@ -426,13 +447,14 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
-		// Abort if the current URL does not match the default URL.
+		// Abort if the current domain does not match the default domain.
+		$is_secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && $_SERVER['HTTPS'] !== 'off');
 		$site_module_info = Context::get('site_module_info');
-		$default_url = Context::getDefaultUrl();
-		$current_url = ($_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-		if (strncmp($current_url, $default_url, strlen($default_url)))
+		if (!$default_url_checked)
 		{
-			if (strncmp($current_url, $site_module_info->domain, strlen($site_module_info->domain)))
+			$current_domain = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']);
+			$default_domain = parse_url(Context::getDefaultUrl(), PHP_URL_HOST);
+			if ($current_domain !== $default_domain && $current_domain !== parse_url($site_module_info->domain, PHP_URL_HOST))
 			{
 				return;
 			}
@@ -638,6 +660,31 @@ class SuperCacheController extends SuperCache
 		$oDisplayHandler = new DisplayHandler;
 		$oDisplayHandler->printContent($output);
 		Context::close();
+		exit;
+	}
+	
+	/**
+	 * Terminate the current request by redirecting to another URL.
+	 * 
+	 * @param string $url
+	 * @param int $status (optional)
+	 * @return exit
+	 */
+	public function terminateRedirectTo($url, $status = 301)
+	{
+		if ($status === 301)
+		{
+			header('HTTP/1.1 301 Moved Permanently');
+		}
+		else
+		{
+			header('HTTP/1.1 302 Found');
+		}
+		
+		header('Location: ' . $url);
+		header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+		header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
+		header_remove('Pragma');
 		exit;
 	}
 }

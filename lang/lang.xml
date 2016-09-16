@@ -240,6 +240,18 @@
 		<value xml:lang="ko"><![CDATA[스케치북 등 일부 게시판 스킨에서 동일한 검색을 POST와 GET으로 2번 요청하는 버그를 우회합니다.<br>POST 요청으로 게시판 검색 시도시 실제 검색을 수행하지 않고 건너뜁니다.]]></value>
 		<value xml:lang="en"><![CDATA[Some board skins have a bug that causes them to request the same search twice, once via POST and once via GET.<br>This option works around this bug by skipping the actual search step in the POST request.]]></value>
 	</item>
+	<item name="cmd_supercache_redirect_to_default_url">
+		<value xml:lang="ko"><![CDATA[항상 기본 URL로 리다이렉트]]></value>
+		<value xml:lang="en"><![CDATA[Always Redirect to Default URL]]></value>
+	</item>
+	<item name="cmd_supercache_redirect_to_default_url_help">
+		<value xml:lang="ko"><![CDATA[서로 다른 여러 도메인으로 사이트에 접속하면 전체화면 캐시의 효율이 떨어질 수 있습니다.<br>기본 URL 이외의 도메인으로 접속하거나 IP 주소로 직접 접속한 경우 기본 URL로 자동 리다이렉트합니다.]]></value>
+		<value xml:lang="en"><![CDATA[The full page cache will be less effective if your serve the same content on multiple domains.<br>This option redirects all visitors to the default URL if they try to access your site on another domain or IP address.]]></value>
+	</item>
+	<item name="cmd_supercache_redirect_to_default_url_help_current_url">
+		<value xml:lang="ko"><![CDATA[현재 설정된 기본 URL은 <span class="console_font">%s</span>입니다.]]></value>
+		<value xml:lang="en"><![CDATA[The currently configured default URL is as follows: <span class="console_font">%s</span>]]></value>
+	</item>
 	<item name="msg_supercache_rhymix_no_cache">
 		<value xml:lang="ko"><![CDATA[라이믹스에서는 이 화면에서 캐시 설정을 변경할 수 없습니다.]]></value>
 		<value xml:lang="en"><![CDATA[You cannot change cache settings on this page when you use Rhymix.]]></value>

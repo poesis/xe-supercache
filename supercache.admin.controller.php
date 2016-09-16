@@ -236,6 +236,7 @@ class SuperCacheAdminController extends SuperCache
 		
 		// Fetch the new config.
 		$config->disable_post_search = $vars->sc_disable_post_search === 'Y' ? true : false;
+		$config->redirect_to_default_url = $vars->sc_redirect_to_default_url === 'Y' ? true : false;
 		
 		// Save the new config.
 		$output = $this->setConfig($config);
