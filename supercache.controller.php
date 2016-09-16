@@ -65,6 +65,12 @@ class SuperCacheController extends SuperCache
 		{
 			$this->checkFullCache($obj, $config, $default_url_checked);
 		}
+		
+		// Fill the page variable for paging cache.
+		if ($config->paging_cache)
+		{
+			$this->fillPageVariable($obj, $config);
+		}
 	}
 	
 	/**
@@ -72,14 +78,7 @@ class SuperCacheController extends SuperCache
 	 */
 	public function triggerBeforeModuleObjectProc($obj)
 	{
-		// Get module configuration.
-		$config = $this->getConfig();
 		
-		// Fill the page variable for paging cache.
-		if ($config->paging_cache)
-		{
-			$this->fillPageVariable($obj, $config);
-		}
 	}
 	
 	/**
@@ -613,30 +612,26 @@ class SuperCacheController extends SuperCache
 	public function fillPageVariable($obj, $config)
 	{
 		// Only work if there is a document_srl without a page variable and a suitable referer header.
-		if (Context::get('document_srl') && !Context::get('page') && ($referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : false))
+		if ($obj->mid && $obj->document_srl && !$obj->act && !$obj->module && !Context::get('page') && ($referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : false))
 		{
-			// Check the module and act.
-			if (preg_match('/^(?:board|bodex|beluxe)\.disp(?:board|bodex|beluxe)content/i', $obj->module_info->module . '.' . $obj->act))
+			// Only guess the page number from the same module in the same site.
+			if (strpos($referer, '//' . $_SERVER['HTTP_HOST'] . '/') === false)
 			{
-				// Only guess the page number from the same module in the same site.
-				if (strpos($referer, '//' . $_SERVER['HTTP_HOST'] . '/') === false)
+				return;
+			}
+			elseif (preg_match('/\/([a-zA-Z0-9_-]+)(?:\?|(?:\/\d+)?$)/', $referer, $matches) && $matches[1] === $obj->mid)
+			{
+				Context::set('page', 1);
+			}
+			elseif (preg_match('/\bmid=([a-zA-Z0-9_-]+)\b/', $referer, $matches) && $matches[1] === $obj->mid)
+			{
+				if (preg_match('/\bpage=(\d+)\b/', $referer, $matches))
 				{
-					return;
+					Context::set('page', $matches[1]);
 				}
-				elseif (preg_match('/\/([a-zA-Z0-9_-]+)(?:\?|(?:\/\d+)?$)/', $referer, $matches) && $matches[1] === $obj->mid)
+				else
 				{
 					Context::set('page', 1);
-				}
-				elseif (preg_match('/\bmid=([a-zA-Z0-9_-]+)\b/', $referer, $matches) && $matches[1] === $obj->mid)
-				{
-					if (preg_match('/\bpage=(\d+)\b/', $referer, $matches))
-					{
-						Context::set('page', $matches[1]);
-					}
-					else
-					{
-						Context::set('page', 1);
-					}
 				}
 			}
 		}
