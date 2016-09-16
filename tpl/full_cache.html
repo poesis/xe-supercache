@@ -49,7 +49,7 @@
 					{$lang->cmd_supercache_full_cache_type_document}
 				</label>
 				<label for="sc_full_cache_type_other" class="checkbox_wrapper">
-					<input name="sc_full_cache_type[]" id="sc_full_cache_type_other" type="checkbox" value="other" checked="checked"|cond="isset($sc_config->full_cache_type['other'])" />
+					<input name="sc_full_cache_type[]" id="sc_full_cache_type_other" type="checkbox" value="other" checked="checked"|cond="isset($sc_config->full_cache_type['other'])" disabled="disabled"|cond="!isset($sc_config->full_cache_type['other'])" />
 					{$lang->cmd_supercache_full_cache_type_other}
 				</label>
 				<p class="x_help-block more_margin">
