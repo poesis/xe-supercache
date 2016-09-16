@@ -146,7 +146,7 @@ class SuperCacheController extends SuperCache
 			if (isset($config->full_cache_document_action['refresh_index']))
 			{
 				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
-				if ($index_module_srl != $obj->module_srl)
+				if ($index_module_srl != $obj->module_srl || !isset($config->full_cache_document_action['refresh_module']))
 				{
 					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
 				}
@@ -180,7 +180,7 @@ class SuperCacheController extends SuperCache
 			}
 		}
 		
-		// Refresh full page cache for the current module and/or index module.
+		// Refresh full page cache for the current document, module, and/or index module.
 		if ($config->full_cache && $config->full_cache_document_action)
 		{
 			if (isset($config->full_cache_document_action['refresh_document']))
@@ -202,7 +202,7 @@ class SuperCacheController extends SuperCache
 			if (isset($config->full_cache_document_action['refresh_index']))
 			{
 				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
-				if ($index_module_srl != $original_module_srl && $index_module_srl != $new_module_srl)
+				if (($index_module_srl != $original_module_srl && $index_module_srl != $new_module_srl) || !isset($config->full_cache_document_action['refresh_module']))
 				{
 					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
 				}
@@ -222,9 +222,13 @@ class SuperCacheController extends SuperCache
 		$oModel = getModel('supercache');
 		$oModel->updateDocumentCount($obj->module_srl, $obj->category_srl, -1);
 		
-		// Refresh full page cache for the current module and/or index module.
+		// Refresh full page cache for the current document, module, and/or index module.
 		if ($config->full_cache && $config->full_cache_document_action)
 		{
+			if (isset($config->full_cache_document_action['refresh_document']))
+			{
+				$oModel->deleteFullPageCache($obj->module_srl, $obj->document_srl, 1);
+			}
 			if (isset($config->full_cache_document_action['refresh_module']) && $obj->module_srl)
 			{
 				$oModel->deleteFullPageCache($obj->module_srl, 0, 1);
@@ -232,7 +236,7 @@ class SuperCacheController extends SuperCache
 			if (isset($config->full_cache_document_action['refresh_index']))
 			{
 				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
-				if ($index_module_srl != $obj->module_srl)
+				if ($index_module_srl != $obj->module_srl || !isset($config->full_cache_document_action['refresh_module']))
 				{
 					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
 				}
@@ -270,6 +274,103 @@ class SuperCacheController extends SuperCache
 	public function triggerAfterRestoreDocumentFromTrash($obj)
 	{
 		$this->triggerAfterUpdateDocument($obj);
+	}
+	
+	/**
+	 * Trigger called at comment.insertComment (after)
+	 */
+	public function triggerAfterInsertComment($obj)
+	{
+		// Get module configuration.
+		$config = $this->getConfig();
+		
+		// Refresh full page cache for the current document, module, and/or index module.
+		if ($config->full_cache && $config->full_cache_comment_action)
+		{
+			$oModel = getModel('supercache');
+			if (isset($config->full_cache_comment_action['refresh_document']))
+			{
+				$oModel->deleteFullPageCache($obj->module_srl, $obj->document_srl, 1);
+			}
+			if (isset($config->full_cache_comment_action['refresh_module']))
+			{
+				$oModel->deleteFullPageCache($obj->module_srl, 0, 1);
+			}
+			if (isset($config->full_cache_comment_action['refresh_index']))
+			{
+				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
+				if ($index_module_srl != $obj->module_srl || !isset($config->full_cache_comment_action['refresh_module']))
+				{
+					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Trigger called at comment.updateComment (after)
+	 */
+	public function triggerAfterUpdateComment($obj)
+	{
+		// Get module configuration.
+		$config = $this->getConfig();
+		
+		// Refresh full page cache for the current document, module, and/or index module.
+		if ($config->full_cache && $config->full_cache_comment_action)
+		{
+			$original = getModel('comment')->getComment($obj->comment_srl);
+			$document_srl = $obj->document_srl ?: $original->document_srl;
+			$module_srl = $obj->module_srl ?: $original->module_srl;
+			
+			$oModel = getModel('supercache');
+			if (isset($config->full_cache_comment_action['refresh_document']))
+			{
+				$oModel->deleteFullPageCache($module_srl, $document_srl, 1);
+			}
+			if (isset($config->full_cache_comment_action['refresh_module']))
+			{
+				$oModel->deleteFullPageCache($module_srl, 0, 1);
+			}
+			if (isset($config->full_cache_comment_action['refresh_index']))
+			{
+				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
+				if ($index_module_srl != $module_srl || !isset($config->full_cache_comment_action['refresh_module']))
+				{
+					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Trigger called at comment.deleteComment (after)
+	 */
+	public function triggerAfterDeleteComment($obj)
+	{
+		// Get module configuration.
+		$config = $this->getConfig();
+		
+		// Refresh full page cache for the current document, module, and/or index module.
+		if ($config->full_cache && $config->full_cache_comment_action)
+		{
+			$oModel = getModel('supercache');
+			if (isset($config->full_cache_comment_action['refresh_document']))
+			{
+				$oModel->deleteFullPageCache($obj->module_srl, $obj->document_srl, 1);
+			}
+			if (isset($config->full_cache_comment_action['refresh_module']))
+			{
+				$oModel->deleteFullPageCache($obj->module_srl, 0, 1);
+			}
+			if (isset($config->full_cache_comment_action['refresh_index']))
+			{
+				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
+				if ($index_module_srl != $obj->module_srl || !isset($config->full_cache_comment_action['refresh_module']))
+				{
+					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
+				}
+			}
+		}
 	}
 	
 	/**

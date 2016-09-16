@@ -35,6 +35,9 @@ class SuperCache extends ModuleObject
 		array('document.moveDocumentModule', 'after', 'controller', 'triggerAfterMoveDocumentModule'),
 		array('document.moveDocumentToTrash', 'after', 'controller', 'triggerAfterMoveDocumentToTrash'),
 		array('document.restoreTrash', 'after', 'controller', 'triggerAfterRestoreDocumentFromTrash'),
+		array('comment.insertComment', 'after', 'controller', 'triggerAfterInsertComment'),
+		array('comment.updateComment', 'after', 'controller', 'triggerAfterUpdateComment'),
+		array('comment.deleteComment', 'after', 'controller', 'triggerAfterDeleteComment'),
 		array('display', 'after', 'controller', 'triggerAfterDisplay'),
 	);
 	
