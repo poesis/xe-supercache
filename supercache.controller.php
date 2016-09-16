@@ -514,6 +514,9 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
+		// Compile the user agent type.
+		$user_agent_type = ($is_mobile ? 'mo' : 'pc') . ($is_secure ? 's' : '');
+		
 		// Remove unnecessary request variables.
 		$request_vars = Context::getRequestVars();
 		if (is_object($request_vars))
@@ -527,16 +530,16 @@ class SuperCacheController extends SuperCache
 		switch ($page_type)
 		{
 			case 'module':
-				$this->_cacheCurrentRequest = array($module_srl, 0, $is_mobile, $request_vars);
-				$cache = $oModel->getFullPageCache($module_srl, 0, $is_mobile, $request_vars);
+				$this->_cacheCurrentRequest = array($module_srl, 0, $user_agent_type, $request_vars);
+				$cache = $oModel->getFullPageCache($module_srl, 0, $user_agent_type, $request_vars);
 				break;
 			case 'document':
-				$this->_cacheCurrentRequest = array($module_srl, $obj->document_srl, $is_mobile, $request_vars);
-				$cache = $oModel->getFullPageCache($module_srl, $obj->document_srl, $is_mobile, $request_vars);
+				$this->_cacheCurrentRequest = array($module_srl, $obj->document_srl, $user_agent_type, $request_vars);
+				$cache = $oModel->getFullPageCache($module_srl, $obj->document_srl, $user_agent_type, $request_vars);
 				break;
 			case 'other':
-				$this->_cacheCurrentRequest = array(0, 0, $is_mobile, $request_vars);
-				$cache = $oModel->getFullPageCache(0, 0, $is_mobile, $request_vars);
+				$this->_cacheCurrentRequest = array(0, 0, $user_agent_type, $request_vars);
+				$cache = $oModel->getFullPageCache(0, 0, $user_agent_type, $request_vars);
 				break;
 		}
 		

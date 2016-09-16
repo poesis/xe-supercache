@@ -26,18 +26,17 @@ class SuperCacheModel extends SuperCache
 	 * 
 	 * @param int $module_srl
 	 * @param int $document_srl
-	 * @param bool $is_mobile
+	 * @param bool $user_agent_type
 	 * @param array $args
 	 * @return string|false
 	 */
-	public function getFullPageCache($module_srl, $document_srl, $is_mobile = false, array $args = array())
+	public function getFullPageCache($module_srl, $document_srl, $user_agent_type = 'pc', array $args = array())
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
 		
 		// Check cache.
-		$cache_key = $this->_getFullPageCacheKey($module_srl, $document_srl, $is_mobile, $args);
-		error_log($cache_key);
+		$cache_key = $this->_getFullPageCacheKey($module_srl, $document_srl, $user_agent_type, $args);
 		$content = $this->getCache($cache_key, $config->full_cache_duration + 60);
 		
 		// Apply stampede protection.
@@ -61,13 +60,13 @@ class SuperCacheModel extends SuperCache
 	 * 
 	 * @param int $module_srl
 	 * @param int $document_srl
-	 * @param bool $is_mobile
+	 * @param bool $user_agent_type
 	 * @param array $args
 	 * @param string $content
 	 * @param float $elapsed_time
 	 * @return bool
 	 */
-	public function setFullPageCache($module_srl, $document_srl, $is_mobile = false, array $args = array(), $content, $elapsed_time)
+	public function setFullPageCache($module_srl, $document_srl, $user_agent_type = 'pc', array $args = array(), $content, $elapsed_time)
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
@@ -81,7 +80,7 @@ class SuperCacheModel extends SuperCache
 		);
 		
 		// Save to cache.
-		$cache_key = $this->_getFullPageCacheKey($module_srl, $document_srl, $is_mobile, $args);
+		$cache_key = $this->_getFullPageCacheKey($module_srl, $document_srl, $user_agent_type, $args);
 		return $this->setCache($cache_key, $content, $config->full_cache_duration + 60);
 	}
 	
@@ -98,8 +97,10 @@ class SuperCacheModel extends SuperCache
 		// Delete all cache entries beginning with page 1.
 		for ($i = 1; $i <= $max_page; $i++)
 		{
-			$this->deleteCache($this->_getFullPageCacheKey($module_srl, $document_srl, true, array('page' => $i)));
-			$this->deleteCache($this->_getFullPageCacheKey($module_srl, $document_srl, false, array('page' => $i)));
+			$this->deleteCache($this->_getFullPageCacheKey($module_srl, $document_srl, 'pc', array('page' => $i)));
+			$this->deleteCache($this->_getFullPageCacheKey($module_srl, $document_srl, 'mo', array('page' => $i)));
+			$this->deleteCache($this->_getFullPageCacheKey($module_srl, $document_srl, 'pcs', array('page' => $i)));
+			$this->deleteCache($this->_getFullPageCacheKey($module_srl, $document_srl, 'mos', array('page' => $i)));
 		}
 		
 		// We don't have any reason to return anything else here.
@@ -219,11 +220,11 @@ class SuperCacheModel extends SuperCache
 	 * 
 	 * @param int $module_srl
 	 * @param int $document_srl
-	 * @param bool $is_mobile
+	 * @param bool $user_agent_type
 	 * @param array $args
 	 * @return string
 	 */
-	protected function _getFullPageCacheKey($module_srl, $document_srl, $is_mobile = false, array $args = array())
+	protected function _getFullPageCacheKey($module_srl, $document_srl, $user_agent_type = 'pc', array $args = array())
 	{
 		// Organize the request parameters.
 		$module_srl = intval($module_srl) ?: 0;
@@ -245,7 +246,7 @@ class SuperCacheModel extends SuperCache
 		}
 		
 		// Generate the cache key.
-		return sprintf('fullpage_cache:%d:%d:%s_%s', $module_srl, $document_srl, $is_mobile ? 'mo' : 'pc', $argskey);
+		return sprintf('fullpage_cache:%d:%d:%s_%s', $module_srl, $document_srl, $user_agent_type, $argskey);
 	}
 	
 	/**
