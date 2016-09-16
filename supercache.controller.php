@@ -41,7 +41,7 @@ class SuperCacheController extends SuperCache
 		$config = $this->getConfig();
 		
 		// Check the full page cache.
-		if ($config->full_cache)
+		if ($config->full_cache === true || ($config->full_cache === 'robots_only' && isCrawler()))
 		{
 			$this->checkFullCache($obj, $config);
 		}

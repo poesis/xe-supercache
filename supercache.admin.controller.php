@@ -76,7 +76,19 @@ class SuperCacheAdminController extends SuperCache
 		$vars = Context::getRequestVars();
 		
 		// Fetch the new config.
-		$config->full_cache = $vars->sc_full_cache === 'Y' ? true : false;
+		if ($vars->sc_full_cache === 'Y')
+		{
+			$config->full_cache = true;
+		}
+		elseif ($vars->sc_full_cache === 'robots_only')
+		{
+			$config->full_cache = 'robots_only';
+		}
+		else
+		{
+			$config->full_cache = false;
+		}
+		
 		$config->full_cache_duration = intval($vars->sc_full_cache_duration) ?: 300;
 		$config->full_cache_stampede_protection = $vars->sc_full_cache_stampede_protection === 'Y' ? true : false;
 		$config->full_cache_use_headers = $vars->sc_full_cache_use_headers === 'Y' ? true : false;

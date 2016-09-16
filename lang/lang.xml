@@ -32,9 +32,13 @@
 		<value xml:lang="ko"><![CDATA[전체화면 캐시 사용]]></value>
 		<value xml:lang="en"><![CDATA[Use Full Page Cache]]></value>
 	</item>
+	<item name="cmd_supercache_full_cache_use_robots_only">
+		<value xml:lang="ko"><![CDATA[로봇에게만 적용]]></value>
+		<value xml:lang="en"><![CDATA[Robots Only]]></value>
+	</item>
 	<item name="cmd_supercache_full_cache_use_help">
-		<value xml:lang="ko"><![CDATA[로그인하지 않은 사용자에게는 페이지 전체를 캐싱하여 보여 줍니다.<br>새로 등록된 글, 스킨 및 레이아웃 수정 내역 등이 즉시 반영되지 않을 수도 있습니다.]]></value>
-		<value xml:lang="en"><![CDATA[Cache the entire page for visitors who are not logged in.<br>They will not see the latest posts or recent changes to the design of your site.]]></value>
+		<value xml:lang="ko"><![CDATA[로그인하지 않은 사용자나 검색로봇에게는 페이지 전체를 캐싱하여 보여 줍니다.<br>새로 등록된 글, 스킨 및 레이아웃 수정 내역 등이 즉시 반영되지 않을 수도 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Cache the entire page for visitors who are not logged in, such as search engine robots.<br>They will not see the latest posts or recent changes to the design of your site.]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_duration">
 		<value xml:lang="ko"><![CDATA[캐시 갱신 주기]]></value>
