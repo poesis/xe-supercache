@@ -76,22 +76,15 @@ class SuperCacheAdminController extends SuperCache
 		$vars = Context::getRequestVars();
 		
 		// Fetch the new config.
-		if ($vars->sc_full_cache === 'Y')
+		if ($vars->sc_full_cache)
 		{
-			$config->full_cache = true;
-		}
-		elseif ($vars->sc_full_cache === 'robots_only')
-		{
-			$config->full_cache = 'robots_only';
+			$values = array_fill(0, count($vars->sc_full_cache), true);
+			$config->full_cache = array_combine($vars->sc_full_cache, $values);
 		}
 		else
 		{
-			$config->full_cache = false;
+			$config->full_cache = array();
 		}
-		
-		$config->full_cache_duration = intval($vars->sc_full_cache_duration) ?: 300;
-		$config->full_cache_stampede_protection = $vars->sc_full_cache_stampede_protection === 'Y' ? true : false;
-		$config->full_cache_use_headers = $vars->sc_full_cache_use_headers === 'Y' ? true : false;
 		
 		if ($vars->sc_full_cache_type)
 		{
@@ -145,6 +138,10 @@ class SuperCacheAdminController extends SuperCache
 		{
 			$config->full_cache_comment_action = array();
 		}
+		
+		$config->full_cache_duration = intval($vars->sc_full_cache_duration) ?: 300;
+		$config->full_cache_stampede_protection = $vars->sc_full_cache_stampede_protection === 'Y' ? true : false;
+		$config->full_cache_use_headers = $vars->sc_full_cache_use_headers === 'Y' ? true : false;
 		
 		// Save the new config.
 		$output = $this->setConfig($config);

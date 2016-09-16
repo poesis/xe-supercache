@@ -19,17 +19,17 @@
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_full_cache_use}</label>
 			<div class="x_controls">
-				<label for="sc_full_cache_y" class="x_inline">
-					<input name="sc_full_cache" id="sc_full_cache_y" type="radio" value="Y" checked="checked"|cond="$sc_config->full_cache === true" />
-					{$lang->cmd_yes}
+				<label for="sc_full_cache_pc" class="x_inline">
+					<input name="sc_full_cache[]" id="sc_full_cache_pc" type="checkbox" value="pc" checked="checked"|cond="isset($sc_config->full_cache['pc']) || !is_array($sc_config->full_cache)" />
+					{$lang->cmd_supercache_full_cache_use_pc}
 				</label>
-				<label for="sc_full_cache_n" class="x_inline">
-					<input name="sc_full_cache" id="sc_full_cache_n" type="radio" value="N" checked="checked"|cond="!$sc_config->full_cache" />
-					{$lang->cmd_no}
+				<label for="sc_full_cache_mobile" class="x_inline">
+					<input name="sc_full_cache[]" id="sc_full_cache_mobile" type="checkbox" value="mobile" checked="checked"|cond="isset($sc_config->full_cache['mobile'])" />
+					{$lang->cmd_supercache_full_cache_use_mobile}
 				</label>
-				<label for="sc_full_cache_robots_only" class="x_inline">
-					<input name="sc_full_cache" id="sc_full_cache_robots_only" type="radio" value="robots_only" checked="checked"|cond="$sc_config->full_cache === 'robots_only'" />
-					{$lang->cmd_supercache_full_cache_use_robots_only}
+				<label for="sc_full_cache_robot" class="x_inline">
+					<input name="sc_full_cache[]" id="sc_full_cache_robot" type="checkbox" value="robot" checked="checked"|cond="isset($sc_config->full_cache['robot'])" />
+					{$lang->cmd_supercache_full_cache_use_robot}
 				</label>
 				<p class="x_help-block">
 					{$lang->cmd_supercache_full_cache_use_help}

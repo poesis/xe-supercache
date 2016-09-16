@@ -32,9 +32,17 @@
 		<value xml:lang="ko"><![CDATA[전체화면 캐시 사용]]></value>
 		<value xml:lang="en"><![CDATA[Use Full Page Cache]]></value>
 	</item>
-	<item name="cmd_supercache_full_cache_use_robots_only">
-		<value xml:lang="ko"><![CDATA[로봇에게만 적용]]></value>
-		<value xml:lang="en"><![CDATA[Robots Only]]></value>
+	<item name="cmd_supercache_full_cache_use_pc">
+		<value xml:lang="ko"><![CDATA[PC]]></value>
+		<value xml:lang="en"><![CDATA[Desktop]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_use_mobile">
+		<value xml:lang="ko"><![CDATA[모바일]]></value>
+		<value xml:lang="en"><![CDATA[Mobile]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_use_robot">
+		<value xml:lang="ko"><![CDATA[로봇]]></value>
+		<value xml:lang="en"><![CDATA[Robot]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_use_help">
 		<value xml:lang="ko"><![CDATA[로그인하지 않은 사용자나 검색로봇에게는 페이지 전체를 캐싱하여 보여 줍니다.<br>새로 등록된 글, 스킨 및 레이아웃 수정 내역 등이 즉시 반영되지 않을 수도 있습니다.]]></value>

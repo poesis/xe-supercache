@@ -41,7 +41,7 @@ class SuperCacheController extends SuperCache
 		$config = $this->getConfig();
 		
 		// Check the full page cache.
-		if ($config->full_cache === true || ($config->full_cache === 'robots_only' && isCrawler()))
+		if ($config->full_cache)
 		{
 			$this->checkFullCache($obj, $config);
 		}
@@ -314,7 +314,16 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Abort if the user agent is excluded.
+		$is_crawler = isCrawler();
+		if ($is_crawler && !isset($config->full_cache['robot']))
+		{
+			return;
+		}
 		$is_mobile = Mobile::isFromMobilePhone() ? true : false;
+		if (($is_mobile && !isset($config->full_cache['mobile'])) || (!$is_mobile && !isset($config->full_cache['pc'])))
+		{
+			return;
+		}
 		
 		// Abort if the current URL does not match the default URL.
 		$site_module_info = Context::get('site_module_info');
