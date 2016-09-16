@@ -29,29 +29,29 @@ class SuperCacheModel extends SuperCache
 	 * @param array $args
 	 * @return string|false
 	 */
-	public function getFullPageCache($module_srl, $document_srl, $args = array())
+	public function getFullPageCache($module_srl, $document_srl, array $args = array())
 	{
-		// Organize the request parameters.
+		// Get module configuration.
 		$config = $this->getConfig();
-		$module_srl = intval($module_srl) ?: 0;
-		$document_srl = intval($document_srl) ?: 0;
-		ksort($args);
 		
 		// Check cache.
-		$cache_key = sprintf('fullpage_cache:%d:%d:%s', $module_srl, $document_srl, $args ? hash('sha256', json_encode($args)) : 'content');
+		$cache_key = $this->_getFullPageCacheKey($module_srl, $document_srl, $args);
 		$content = $this->getCache($cache_key, $config->full_cache_duration + 60);
 		
-		// Immediately re-cache expired cache entry for stampede protection.
-		if ($config->full_cache_stampede_protection && $content['expires'] < time())
+		// Apply stampede protection.
+		if ($config->full_cache_stampede_protection && $content)
 		{
-			$contents['expires'] = time() + 60;
-			$this->setCache($cache_key, $content, 60);
-			return false;
+			$current_timestamp = time();
+			if ($content['expires'] <= $current_timestamp)
+			{
+				$content['expires'] = $current_timestamp + 60;
+				$this->setCache($cache_key, $content, 60);
+				return false;
+			}
 		}
-		else
-		{
-			return $content;
-		}
+		
+		// Return the cached content.
+		return $content;
 	}
 	
 	/**
@@ -64,13 +64,10 @@ class SuperCacheModel extends SuperCache
 	 * @param array $args
 	 * @return bool
 	 */
-	public function setFullPageCache($content, $elapsed_time, $module_srl, $document_srl, $args = array())
+	public function setFullPageCache($content, $elapsed_time, $module_srl, $document_srl, array $args = array())
 	{
-		// Organize the request parameters.
+		// Get module configuration.
 		$config = $this->getConfig();
-		$module_srl = intval($module_srl) ?: 0;
-		$document_srl = intval($document_srl) ?: 0;
-		ksort($args);
 		
 		// Organize the content.
 		$content = array(
@@ -81,7 +78,7 @@ class SuperCacheModel extends SuperCache
 		);
 		
 		// Save to cache.
-		$cache_key = sprintf('fullpage_cache:%d:%d:%s', $module_srl, $document_srl, $args ? hash('sha256', json_encode($args)) : 'content');
+		$cache_key = $this->_getFullPageCacheKey($module_srl, $document_srl, $args);
 		return $this->setCache($cache_key, $content, $config->full_cache_duration + 60);
 	}
 	
@@ -191,6 +188,39 @@ class SuperCacheModel extends SuperCache
 				$this->setCache($cache_key, $count + $diff, $config->paging_cache_duration);
 			}
 		}
+	}
+	
+	/**
+	 * Generate a cache key for the full page cache.
+	 * 
+	 * @param int $module_srl
+	 * @param int $document_srl
+	 * @param array $args
+	 * @return string
+	 */
+	protected function _getFullPageCacheKey($module_srl, $document_srl, array $args = array())
+	{
+		// Organize the request parameters.
+		$module_srl = intval($module_srl) ?: 0;
+		$document_srl = intval($document_srl) ?: 0;
+		ksort($args);
+		
+		// Generate the arguments key.
+		if (!count($args))
+		{
+			$argskey = 'p1';
+		}
+		elseif (count($args) === 1 && isset($args['page']) && ctype_digit($args['page']))
+		{
+			$argskey = 'p' . $args['page'];
+		}
+		else
+		{
+			$argskey = hash('sha256', json_encode($args));
+		}
+		
+		// Generate the cache key.
+		return sprintf('fullpage_cache:%d:%d:%s', $module_srl, $document_srl, $argskey);
 	}
 	
 	/**
