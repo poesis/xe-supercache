@@ -644,27 +644,15 @@ class SuperCacheController extends SuperCache
 	{
 		switch ($http_status_code)
 		{
-			case 304:
-				return header('HTTP/1.1 304 Not Modified');
-			case 400:
-				return header('HTTP/1.1 400 Bad Request');
-			case 403:
-				return header('HTTP/1.1 403 Forbidden');
-			case 404:
-				return header('HTTP/1.1 404 Not Found');
-			case 500:
-				return header('HTTP/1.1 500 Internal Server Error');
-			case 503:
-				return header('HTTP/1.1 503 Service Unavailable');
-			default:
-				if (function_exists('http_response_code'))
-				{
-					return http_response_code($http_status_code);
-				}
-				else
-				{
-					return header(sprintf('HTTP/1.1 %d Internal Server Error', $http_status_code));
-				}
+			case 301: return header('HTTP/1.1 301 Moved Permanently');
+			case 302: return header('HTTP/1.1 302 Found');
+			case 304: return header('HTTP/1.1 304 Not Modified');
+			case 400: return header('HTTP/1.1 400 Bad Request');
+			case 403: return header('HTTP/1.1 403 Forbidden');
+			case 404: return header('HTTP/1.1 404 Not Found');
+			case 500: return header('HTTP/1.1 500 Internal Server Error');
+			case 503: return header('HTTP/1.1 503 Service Unavailable');
+			default: return function_exists('http_response_code') ? http_response_code($http_status_code) : header(sprintf('HTTP/1.1 %d Internal Server Error', $http_status_code));
 		}
 	}
 	
@@ -752,15 +740,7 @@ class SuperCacheController extends SuperCache
 	 */
 	public function terminateRedirectTo($url, $status = 301)
 	{
-		if ($status === 301)
-		{
-			header('HTTP/1.1 301 Moved Permanently');
-		}
-		else
-		{
-			header('HTTP/1.1 302 Found');
-		}
-		
+		$this->printHttpStatusCodeHeader($status);
 		header('Location: ' . $url);
 		header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 		header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
