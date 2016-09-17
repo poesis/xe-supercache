@@ -26,6 +26,7 @@ class SuperCacheController extends SuperCache
 	 */
 	protected $_cacheCurrentRequest = null;
 	protected $_cacheStartTimestamp = null;
+	protected $_cacheHttpStatusCode = 200;
 	
 	/**
 	 * Trigger called at moduleHandler.init (before)
@@ -384,18 +385,39 @@ class SuperCacheController extends SuperCache
 	}
 	
 	/**
+	 * Trigger called at moduleHandler.proc (after)
+	 */
+	public function triggerAfterModuleHandlerProc($obj)
+	{
+		if (!is_object($obj) || !method_exists($obj, 'getHttpStatusCode'))
+		{
+			$this->_cacheHttpStatusCode = 404;
+		}
+		elseif (($status_code = $obj->getHttpStatusCode()) > 200)
+		{
+			$this->_cacheHttpStatusCode = intval($status_code);
+		}
+	}
+	
+	/**
 	 * Trigger called at display (after)
 	 */
 	public function triggerAfterDisplay($obj)
 	{
 		if ($this->_cacheCurrentRequest)
 		{
+			if ($this->_cacheHttpStatusCode >= 300 && $this->_cacheHttpStatusCode <= 399)
+			{
+				return;
+			}
+			
 			getModel('supercache')->setFullPageCache(
 				$this->_cacheCurrentRequest[0],
 				$this->_cacheCurrentRequest[1],
 				$this->_cacheCurrentRequest[2],
 				$this->_cacheCurrentRequest[3],
 				$obj,
+				$this->_cacheHttpStatusCode,
 				microtime(true) - $this->_cacheStartTimestamp
 			);
 		}
@@ -488,7 +510,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		$module_srl = intval($module_srl);
-		if (!$module_srl || isset($config->full_cache_exclude_modules[$module_srl]))
+		if (isset($config->full_cache_exclude_modules[$module_srl]))
 		{
 			return;
 		}
@@ -508,11 +530,11 @@ class SuperCacheController extends SuperCache
 		}
 		else
 		{
-			return;
+			$page_type = 'url';
 		}
 		
 		// Abort if the current page type is not selected for caching.
-		if (!isset($config->full_cache_type[$page_type]))
+		if ($page_type !== 'url' && !isset($config->full_cache_type[$page_type]))
 		{
 			return;
 		}
@@ -538,6 +560,13 @@ class SuperCacheController extends SuperCache
 					$request_vars['_COOKIE'][$key] = strval($_COOKIE[$key]);
 				}
 			}
+		}
+		
+		// Add URL to request variables.
+		if ($page_type === 'url')
+		{
+			$request_vars['_REQUEST_URI'] = $_SERVER['REQUEST_URI'];
+			$page_type = 'other';
 		}
 		
 		// Check the cache.
@@ -573,10 +602,14 @@ class SuperCacheController extends SuperCache
 			
 			if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $cache['cached'])
 			{
-				header('HTTP/1.1 304 Not Modified');
+				$this->printHttpStatusCodeHeader(304);
 			}
 			else
 			{
+				if ($cache['status'] && $cache['status'] !== 200)
+				{
+					$this->printHttpStatusCodeHeader($cache['status']);
+				}
 				header("Content-Type: text/html; charset=UTF-8");
 				echo $cache['content'];
 				echo "\n" . '<!--' . "\n";
@@ -599,6 +632,40 @@ class SuperCacheController extends SuperCache
 			header('X-SuperCache: type=' . $page_type . '; expires=' . $config->full_cache_duration);
 		}
 		$this->_cacheStartTimestamp = microtime(true);
+	}
+	
+	/**
+	 * Print HTTP status code header.
+	 * 
+	 * @param int $http_status_code
+	 * @return void
+	 */
+	public function printHttpStatusCodeHeader($http_status_code)
+	{
+		switch ($http_status_code)
+		{
+			case 304:
+				return header('HTTP/1.1 304 Not Modified');
+			case 400:
+				return header('HTTP/1.1 400 Bad Request');
+			case 403:
+				return header('HTTP/1.1 403 Forbidden');
+			case 404:
+				return header('HTTP/1.1 404 Not Found');
+			case 500:
+				return header('HTTP/1.1 500 Internal Server Error');
+			case 503:
+				return header('HTTP/1.1 503 Service Unavailable');
+			default:
+				if (function_exists('http_response_code'))
+				{
+					return http_response_code($http_status_code);
+				}
+				else
+				{
+					return header(sprintf('HTTP/1.1 %d Internal Server Error', $http_status_code));
+				}
+		}
 	}
 	
 	/**

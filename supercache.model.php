@@ -35,7 +35,7 @@ class SuperCacheModel extends SuperCache
 	 * @param array $args
 	 * @return string|false
 	 */
-	public function getFullPageCache($module_srl, $document_srl, $user_agent_type = 'pc', array $args = array())
+	public function getFullPageCache($module_srl, $document_srl, $user_agent_type, array $args = array())
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
@@ -68,10 +68,11 @@ class SuperCacheModel extends SuperCache
 	 * @param bool $user_agent_type
 	 * @param array $args
 	 * @param string $content
+	 * @param int $http_status_code
 	 * @param float $elapsed_time
 	 * @return bool
 	 */
-	public function setFullPageCache($module_srl, $document_srl, $user_agent_type = 'pc', array $args = array(), $content, $elapsed_time)
+	public function setFullPageCache($module_srl, $document_srl, $user_agent_type, array $args = array(), $content, $http_status_code, $elapsed_time)
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
@@ -79,6 +80,7 @@ class SuperCacheModel extends SuperCache
 		// Organize the content.
 		$content = array(
 			'content' => strval($content),
+			'status' => intval($http_status_code),
 			'elapsed' => number_format($elapsed_time * 1000, 1) . ' ms',
 			'cached' => time(),
 			'expires' => time() + $config->full_cache_duration,
@@ -229,7 +231,7 @@ class SuperCacheModel extends SuperCache
 	 * @param array $args
 	 * @return string
 	 */
-	protected function _getFullPageCacheKey($module_srl, $document_srl, $user_agent_type = 'pc', array $args = array())
+	protected function _getFullPageCacheKey($module_srl, $document_srl, $user_agent_type, array $args = array())
 	{
 		// Organize the request parameters.
 		$module_srl = intval($module_srl) ?: 0;

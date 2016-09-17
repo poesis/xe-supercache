@@ -38,6 +38,7 @@ class SuperCache extends ModuleObject
 		array('comment.insertComment', 'after', 'controller', 'triggerAfterInsertComment'),
 		array('comment.updateComment', 'after', 'controller', 'triggerAfterUpdateComment'),
 		array('comment.deleteComment', 'after', 'controller', 'triggerAfterDeleteComment'),
+		array('moduleHandler.proc', 'after', 'controller', 'triggerAfterModuleHandlerProc'),
 		array('display', 'after', 'controller', 'triggerAfterDisplay'),
 	);
 	
