@@ -119,6 +119,30 @@ class SuperCacheAdminController extends SuperCache
 			$config->full_cache_exclude_acts = array();
 		}
 		
+		if ($vars->sc_full_cache_exclude_cookies)
+		{
+			$keys = array_map('trim', preg_split('/(,|\s)+/', trim($vars->sc_full_cache_exclude_cookies)));
+			$keys = array_filter($keys, function($val) { return preg_match('/^[a-zA-Z0-9_]+$/', $val); });
+			$values = array_fill(0, count($keys), true);
+			$config->full_cache_exclude_cookies = array_combine($keys, $values);
+		}
+		else
+		{
+			$config->full_cache_exclude_cookies = array();
+		}
+		
+		if ($vars->sc_full_cache_separate_cookies)
+		{
+			$keys = array_map('trim', preg_split('/(,|\s)+/', trim($vars->sc_full_cache_separate_cookies)));
+			$keys = array_filter($keys, function($val) { return preg_match('/^[a-zA-Z0-9_]+$/', $val); });
+			$values = array_fill(0, count($keys), true);
+			$config->full_cache_separate_cookies = array_combine($keys, $values);
+		}
+		else
+		{
+			$config->full_cache_separate_cookies = array();
+		}
+		
 		if ($vars->sc_full_cache_document_action)
 		{
 			$values = array_fill(0, count($vars->sc_full_cache_document_action), true);

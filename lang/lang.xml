@@ -84,6 +84,22 @@
 		<value xml:lang="ko"><![CDATA[여기에 나열한 액션은 캐싱하지 않습니다. 쉼표, 공백, 줄바꿈 등으로 구분하여 작성할 수 있습니다.<br>위에서 &quot;기타 화면&quot;을 선택한 경우에만 적용됩니다.]]></value>
 		<value xml:lang="en"><![CDATA[Actions listed here will be excluded from the full page cache. Please separate actions using commas, spaces, or newlines.<br>This setting is only effective when &quot;Other pages&quot; is selected above.]]></value>
 	</item>
+	<item name="cmd_supercache_full_cache_exclude_cookies">
+		<value xml:lang="ko"><![CDATA[캐시 예외 쿠키]]></value>
+		<value xml:lang="en"><![CDATA[Cookies to Exclude]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_exclude_cookies_help">
+		<value xml:lang="ko"><![CDATA[여기에 나열한 쿠키가 있는 방문자는 로그인한 방문자와 마찬가지로 취급하여 전체화면 캐시를 적용하지 않습니다.<br>쉼표, 공백, 줄바꿈 등으로 구분하여 작성할 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Visitors with cookies listed above will be excluded from the full page cache.<br>Please separate actions using commas, spaces, or newlines.]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_separate_cookies">
+		<value xml:lang="ko"><![CDATA[별도로 캐시할 쿠키]]></value>
+		<value xml:lang="en"><![CDATA[Cookies to Cache Separately]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_separate_cookies_help">
+		<value xml:lang="ko"><![CDATA[여기에 나열한 쿠키가 있는 방문자는 각 쿠키의 값에 따라 별도의 캐시를 적용합니다.<br>쉼표, 공백, 줄바꿈 등으로 구분하여 작성할 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Visitors with cookies listed above will be cached separately based on the value of each cookie.<br>Please separate actions using commas, spaces, or newlines.]]></value>
+	</item>
 	<item name="cmd_supercache_full_cache_document_action">
 		<value xml:lang="ko"><![CDATA[문서 작성시 자동 갱신]]></value>
 		<value xml:lang="en"><![CDATA[Action on Document Change]]></value>

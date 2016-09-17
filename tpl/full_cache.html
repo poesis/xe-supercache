@@ -85,6 +85,26 @@
 		</div>
 		
 		<div class="x_control-group">
+			<label class="x_control-label" for="sc_full_cache_exclude_cookies">{$lang->cmd_supercache_full_cache_exclude_cookies}</label>
+			<div class="x_controls">
+				<textarea name="sc_full_cache_exclude_cookies" id="sc_full_cache_exclude_cookies" class="console_font full_width">{htmlspecialchars(implode("\n", $sc_config->full_cache_exclude_cookies ? array_keys($sc_config->full_cache_exclude_cookies) : array()))}</textarea>
+				<p class="x_help-block more_margin">
+					{$lang->cmd_supercache_full_cache_exclude_cookies_help}
+				</p>
+			</div>
+		</div>
+		
+		<div class="x_control-group">
+			<label class="x_control-label" for="sc_full_cache_separate_cookies">{$lang->cmd_supercache_full_cache_separate_cookies}</label>
+			<div class="x_controls">
+				<textarea name="sc_full_cache_separate_cookies" id="sc_full_cache_separate_cookies" class="console_font full_width">{htmlspecialchars(implode("\n", $sc_config->full_cache_separate_cookies ? array_keys($sc_config->full_cache_separate_cookies) : array()))}</textarea>
+				<p class="x_help-block more_margin">
+					{$lang->cmd_supercache_full_cache_separate_cookies_help}
+				</p>
+			</div>
+		</div>
+		
+		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_full_cache_document_action}</label>
 			<div class="x_controls">
 				<label for="sc_full_cache_document_action_refresh_document" class="checkbox_wrapper">

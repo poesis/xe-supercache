@@ -430,6 +430,18 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
+		// Abort if the visitor has an excluded cookie.
+		if ($config->full_cache_exclude_cookies)
+		{
+			foreach ($config->full_cache_exclude_cookies as $key => $value)
+			{
+				if (isset($_COOKIE[$key]) && $_COOKIE[$key])
+				{
+					return;
+				}
+			}
+		}
+		
 		// Abort if the user agent is excluded.
 		$is_crawler = isCrawler();
 		if ($is_crawler && !isset($config->full_cache['robot']))
@@ -511,7 +523,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Compile the user agent type.
-		$user_agent_type = ($is_mobile ? 'mo' : 'pc') . ($is_secure ? 's' : '');
+		$user_agent_type = ($is_mobile ? 'mo' : 'pc') . ($is_secure ? '_secure' : '');
 		
 		// Remove unnecessary request variables.
 		$request_vars = Context::getRequestVars();
@@ -519,7 +531,19 @@ class SuperCacheController extends SuperCache
 		{
 			$request_vars = get_object_vars($request_vars);
 		}
-		unset($request_vars['mid'], $request_vars['module'], $request_vars['module_srl'], $request_vars['document_srl']);
+		unset($request_vars['mid'], $request_vars['module'], $request_vars['module_srl'], $request_vars['document_srl'], $request_vars['m']);
+		
+		// Add separate cookies to request variables.
+		if ($config->full_cache_separate_cookies)
+		{
+			foreach ($config->full_cache_separate_cookies as $key => $value)
+			{
+				if (isset($_COOKIE[$key]) && $_COOKIE[$key])
+				{
+					$request_vars['_COOKIE'][$key] = strval($_COOKIE[$key]);
+				}
+			}
+		}
 		
 		// Check the cache.
 		$oModel = getModel('supercache');
