@@ -305,8 +305,8 @@
 		<value xml:lang="en"><![CDATA[Gzip compression makes your site faster and saves bandwidth, but it may be incompatible with poorly written search robots.<br>If you encounter problems, please consider excluding certain robots.<br>This feature is not necessary if your web server provides automatic compression.]]></value>
 	</item>
 	<item name="cmd_supercache_use_gzip_help_constant">
-		<value xml:lang="ko"><![CDATA[이 설정을 변경하려면 <span class="console_font">config.inc.php</span> 파일에서 <span class="console_font">__OB_GZHANDLER_ENABLE__</span> 상수를 <span class="console_font">1</span>로 변경해야 합니다.]]></value>
-		<value xml:lang="en"><![CDATA[To change this setting, you need to change the <span class="console_font">__OB_GZHANDLER_ENABLE__</span> constant to <span class="console_font">1</span> in the <span class="console_font">config.inc.php</span> file.]]></value>
+		<value xml:lang="ko"><![CDATA[이 설정을 변경하려면 <span class="console_font">config.inc.php</span> 파일에서 <span class="console_font">__OB_GZHANDLER_ENABLE__</span> 상수를 <span class="console_font">1</span>로 지정해야 합니다.]]></value>
+		<value xml:lang="en"><![CDATA[To change this setting, you need to set the <span class="console_font">__OB_GZHANDLER_ENABLE__</span> constant to <span class="console_font">1</span> in the <span class="console_font">config.inc.php</span> file.]]></value>
 	</item>
 	<item name="msg_supercache_rhymix_no_cache">
 		<value xml:lang="ko"><![CDATA[라이믹스에서는 이 화면에서 캐시 설정을 변경할 수 없습니다.]]></value>

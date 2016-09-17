@@ -133,7 +133,7 @@ class SuperCacheAdminView extends SuperCache
 		}
 		else
 		{
-			Context::set('gzip_setting_changeable', !defined('__OB_GZHANDLER_ENABLE__') || constant(__OB_GZHANDLER_ENABLE__));
+			Context::set('gzip_setting_changeable', !defined('__OB_GZHANDLER_ENABLE__') || constant('__OB_GZHANDLER_ENABLE__'));
 		}
 		
 		// Display the config page.
