@@ -51,6 +51,38 @@
 			</div>
 		</div>
 	
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->cmd_supercache_use_gzip}</label>
+			<div class="x_controls">
+				<label for="sc_use_gzip_default" class="x_inline">
+					<input name="sc_use_gzip" id="sc_use_gzip_default" type="radio" value="default" checked="checked"|cond="$sc_config->use_gzip === 'default' || !$sc_config->use_gzip" />
+					{$lang->cmd_supercache_use_gzip_default}
+				</label>
+				<label for="sc_use_gzip_always" class="x_inline">
+					<input name="sc_use_gzip" id="sc_use_gzip_always" type="radio" value="always" checked="checked"|cond="$sc_config->use_gzip === 'always'" />
+					{$lang->cmd_supercache_use_gzip_always}
+				</label>
+				<label for="sc_use_gzip_except_robots" class="x_inline">
+					<input name="sc_use_gzip" id="sc_use_gzip_except_robots" type="radio" value="except_robots" checked="checked"|cond="$sc_config->use_gzip === 'except_robots'" />
+					{$lang->cmd_supercache_use_gzip_except_robots}
+				</label>
+				<label for="sc_use_gzip_except_naver" class="x_inline">
+					<input name="sc_use_gzip" id="sc_use_gzip_except_naver" type="radio" value="except_naver" checked="checked"|cond="$sc_config->use_gzip === 'except_naver'" />
+					{$lang->cmd_supercache_use_gzip_except_naver}
+				</label>
+				<label for="sc_use_gzip_none" class="x_inline">
+					<input name="sc_use_gzip" id="sc_use_gzip_none" type="radio" value="none" checked="checked"|cond="$sc_config->use_gzip === 'none'" />
+					{$lang->cmd_supercache_use_gzip_none}
+				</label>
+				<p class="x_help-block">
+					{$lang->cmd_supercache_use_gzip_help}<br />
+					<span class="warning" cond="!$gzip_setting_changeable">
+						{$lang->cmd_supercache_use_gzip_help_constant}
+					</span>
+				</p>
+			</div>
+		</div>
+	
 	</section>
 	
 	<div class="btnArea x_clearfix">

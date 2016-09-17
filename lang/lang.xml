@@ -276,6 +276,38 @@
 		<value xml:lang="ko"><![CDATA[현재 설정된 기본 URL은 <span class="console_font">%s</span>입니다.]]></value>
 		<value xml:lang="en"><![CDATA[The currently configured default URL is as follows: <span class="console_font">%s</span>]]></value>
 	</item>
+	<item name="cmd_supercache_use_gzip">
+		<value xml:lang="ko"><![CDATA[Gzip 압축 사용]]></value>
+		<value xml:lang="en"><![CDATA[Use Gzip Compression]]></value>
+	</item>
+	<item name="cmd_supercache_use_gzip_default">
+		<value xml:lang="ko"><![CDATA[기본값]]></value>
+		<value xml:lang="en"><![CDATA[Default]]></value>
+	</item>
+	<item name="cmd_supercache_use_gzip_always">
+		<value xml:lang="ko"><![CDATA[항상 사용]]></value>
+		<value xml:lang="en"><![CDATA[Always]]></value>
+	</item>
+	<item name="cmd_supercache_use_gzip_except_robots">
+		<value xml:lang="ko"><![CDATA[로봇 제외]]></value>
+		<value xml:lang="en"><![CDATA[Except robots]]></value>
+	</item>
+	<item name="cmd_supercache_use_gzip_except_naver">
+		<value xml:lang="ko"><![CDATA[네이버 로봇만 제외]]></value>
+		<value xml:lang="en"><![CDATA[Except Naver robot]]></value>
+	</item>
+	<item name="cmd_supercache_use_gzip_none">
+		<value xml:lang="ko"><![CDATA[사용하지 않음]]></value>
+		<value xml:lang="en"><![CDATA[Do not use]]></value>
+	</item>
+	<item name="cmd_supercache_use_gzip_help">
+		<value xml:lang="ko"><![CDATA[Gzip 압축 기능은 속도 개선 및 트래픽 절약 효과가 있으나, 일부 로봇이 접근하지 못하는 문제가 생길 수도 있습니다.<br>문제가 있는 경우 특정 로봇만 제외하고 사용하시기 바랍니다.<br>웹서버 자체에서 자동 압축 기능을 제공하는 경우 이 기능이 필요하지 않습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Gzip compression makes your site faster and saves bandwidth, but it may be incompatible with poorly written search robots.<br>If you encounter problems, please consider excluding certain robots.<br>This feature is not necessary if your web server provides automatic compression.]]></value>
+	</item>
+	<item name="cmd_supercache_use_gzip_help_constant">
+		<value xml:lang="ko"><![CDATA[이 설정을 변경하려면 <span class="console_font">config.inc.php</span> 파일에서 <span class="console_font">__OB_GZHANDLER_ENABLE__</span> 상수를 <span class="console_font">1</span>로 변경해야 합니다.]]></value>
+		<value xml:lang="en"><![CDATA[To change this setting, you need to change the <span class="console_font">__OB_GZHANDLER_ENABLE__</span> constant to <span class="console_font">1</span> in the <span class="console_font">config.inc.php</span> file.]]></value>
+	</item>
 	<item name="msg_supercache_rhymix_no_cache">
 		<value xml:lang="ko"><![CDATA[라이믹스에서는 이 화면에서 캐시 설정을 변경할 수 없습니다.]]></value>
 		<value xml:lang="en"><![CDATA[You cannot change cache settings on this page when you use Rhymix.]]></value>

@@ -389,6 +389,7 @@ class SuperCacheController extends SuperCache
 	 */
 	public function triggerAfterModuleHandlerProc($obj)
 	{
+		// Capture the HTTP status code of the current request.
 		if (!is_object($obj) || !method_exists($obj, 'getHttpStatusCode'))
 		{
 			$this->_cacheHttpStatusCode = 404;
@@ -397,6 +398,38 @@ class SuperCacheController extends SuperCache
 		{
 			$this->_cacheHttpStatusCode = intval($status_code);
 		}
+		
+		// Change gzip setting.
+		if (is_object($obj) && $gzip = $this->getConfig()->use_gzip)
+		{
+			if ($gzip !== 'none' && $gzip !== 'default')
+			{
+				if (defined('RX_VERSION') && function_exists('config'))
+				{
+					config('view.use_gzip', true);
+				}
+				elseif (!defined('__OB_GZHANDLER_ENABLE__'))
+				{
+					define('__OB_GZHANDLER_ENABLE__', 1);
+				}
+			}
+			
+			switch ($gzip)
+			{
+				case 'except_robots':
+					$obj->gzhandler_enable = isCrawler() ? false : true;
+					break;
+				case 'except_naver':
+					$obj->gzhandler_enable = preg_match('/(yeti|naver)/i', $_SERVER['HTTP_USER_AGENT']) ? false : true;
+					break;
+				case 'none':
+					$obj->gzhandler_enable = false;
+					break;
+				case 'always':
+				default:
+					break;
+			}
+		}
 	}
 	
 	/**
@@ -404,17 +437,22 @@ class SuperCacheController extends SuperCache
 	 */
 	public function triggerAfterDisplay($obj)
 	{
+		// Store the output of the current request in the full-page cache.
 		if ($this->_cacheCurrentRequest)
 		{
+			// Do not store redirects.
 			if ($this->_cacheHttpStatusCode >= 300 && $this->_cacheHttpStatusCode <= 399)
 			{
 				return;
 			}
+			
+			// Do not store error codes unless include_404 is true.
 			if ($this->_cacheHttpStatusCode !== 200 && !$this->getConfig()->full_cache_include_404)
 			{
 				return;
 			}
 			
+			// Set the full-page cache.
 			getModel('supercache')->setFullPageCache(
 				$this->_cacheCurrentRequest[0],
 				$this->_cacheCurrentRequest[1],
