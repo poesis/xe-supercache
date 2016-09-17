@@ -410,6 +410,10 @@ class SuperCacheController extends SuperCache
 			{
 				return;
 			}
+			if ($this->_cacheHttpStatusCode !== 200 && !$this->getConfig()->full_cache_include_404)
+			{
+				return;
+			}
 			
 			getModel('supercache')->setFullPageCache(
 				$this->_cacheCurrentRequest[0],
@@ -534,7 +538,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Abort if the current page type is not selected for caching.
-		if ($page_type !== 'url' && !isset($config->full_cache_type[$page_type]))
+		if (!isset($config->full_cache_type[$page_type]) && !($page_type === 'url' && $config->full_cache_include_404))
 		{
 			return;
 		}

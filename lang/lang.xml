@@ -152,6 +152,14 @@
 		<value xml:lang="ko"><![CDATA[Cache-Control 헤더를 사용하여 캐싱된 페이지에 대한 반복 요청을 줄입니다.<br>로그인 후에도 캐싱된 페이지가 표시될 수 있으니 주의하십시오.]]></value>
 		<value xml:lang="en"><![CDATA[Use Cache-Control headers to prevent repeat requests.<br>This may cause visitors to see cached pages even after logging in.]]></value>
 	</item>
+	<item name="cmd_supercache_full_cache_include_404">
+		<value xml:lang="ko"><![CDATA[404 에러 화면 캐시]]></value>
+		<value xml:lang="en"><![CDATA[Also Cache 404 Errors]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_include_404_help">
+		<value xml:lang="ko"><![CDATA[존재하지 않는 주소를 요청하는 방문자가 많은 경우, 404 에러 화면을 캐시하면 서버 부하 감소에 도움이 될 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Caching 404 error pages can help reduce server load if you have many visitors trying to open nonexistent URLs.]]></value>
+	</item>
 	<item name="cmd_supercache_config_paging_cache">
 		<value xml:lang="ko"><![CDATA[페이징 캐시]]></value>
 		<value xml:lang="en"><![CDATA[Pagination Cache]]></value>
