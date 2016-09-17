@@ -523,7 +523,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Compile the user agent type.
-		$user_agent_type = ($is_mobile ? 'mo' : 'pc') . ($is_secure ? '_secure' : '');
+		$user_agent_type = ($is_mobile ? 'mo' : 'pc') . ($is_secure ? '_secure' : '') . '_' . Context::getLangType();
 		
 		// Remove unnecessary request variables.
 		$request_vars = Context::getRequestVars();
