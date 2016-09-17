@@ -430,7 +430,7 @@ class SuperCacheController extends SuperCache
 		{
 			foreach ($config->full_cache_exclude_cookies as $key => $value)
 			{
-				if (isset($_COOKIE[$key]) && $_COOKIE[$key])
+				if (isset($_COOKIE[$key]) && strlen($_COOKIE[$key]))
 				{
 					return;
 				}
@@ -533,7 +533,7 @@ class SuperCacheController extends SuperCache
 		{
 			foreach ($config->full_cache_separate_cookies as $key => $value)
 			{
-				if (isset($_COOKIE[$key]) && $_COOKIE[$key])
+				if (isset($_COOKIE[$key]) && strlen($_COOKIE[$key]))
 				{
 					$request_vars['_COOKIE'][$key] = strval($_COOKIE[$key]);
 				}
