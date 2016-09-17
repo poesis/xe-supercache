@@ -97,8 +97,8 @@
 		<value xml:lang="en"><![CDATA[Document where the change took place]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_document_action_refresh_module">
-		<value xml:lang="ko"><![CDATA[해당 게시판 (1페이지에 한함)]]></value>
-		<value xml:lang="en"><![CDATA[Board where the change took place (First page only)]]></value>
+		<value xml:lang="ko"><![CDATA[해당 게시판]]></value>
+		<value xml:lang="en"><![CDATA[Board where the change took place]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_document_action_refresh_index">
 		<value xml:lang="ko"><![CDATA[사이트 메인 화면]]></value>

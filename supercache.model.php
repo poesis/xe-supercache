@@ -22,6 +22,11 @@
 class SuperCacheModel extends SuperCache
 {
 	/**
+	 * Subgroup cache keys are stored here.
+	 */
+	protected $_subgroup_keys = array();
+	
+	/**
 	 * Get a full page cache entry.
 	 * 
 	 * @param int $module_srl
@@ -89,18 +94,18 @@ class SuperCacheModel extends SuperCache
 	 * 
 	 * @param int $module_srl
 	 * @param int $document_srl
-	 * @param int $max_page (optional)
 	 * @return bool
 	 */
-	public function deleteFullPageCache($module_srl, $document_srl, $max_page = 1)
+	public function deleteFullPageCache($module_srl = 0, $document_srl = 0)
 	{
-		// Delete all cache entries beginning with page 1.
-		for ($i = 1; $i <= $max_page; $i++)
+		// Invalidate the subgroup cache keys for the module and/or document.
+		if ($module_srl)
 		{
-			$this->deleteCache($this->_getFullPageCacheKey($module_srl, $document_srl, 'pc', array('page' => $i)));
-			$this->deleteCache($this->_getFullPageCacheKey($module_srl, $document_srl, 'mo', array('page' => $i)));
-			$this->deleteCache($this->_getFullPageCacheKey($module_srl, $document_srl, 'pcs', array('page' => $i)));
-			$this->deleteCache($this->_getFullPageCacheKey($module_srl, $document_srl, 'mos', array('page' => $i)));
+			$this->_invalidateSubgroupCacheKey('module_' . $module_srl);
+		}
+		if ($document_srl)
+		{
+			$this->_invalidateSubgroupCacheKey('document_' . $document_srl);
 		}
 		
 		// We don't have any reason to return anything else here.
@@ -231,6 +236,10 @@ class SuperCacheModel extends SuperCache
 		$document_srl = intval($document_srl) ?: 0;
 		ksort($args);
 		
+		// Generate module and document subgroup keys.
+		$module_key = $this->_getSubgroupCacheKey('module_' . $module_srl);
+		$document_key = $document_srl ? $this->_getSubgroupCacheKey('document_' . $document_srl) : 'document_0';
+		
 		// Generate the arguments key.
 		if (!count($args))
 		{
@@ -246,7 +255,57 @@ class SuperCacheModel extends SuperCache
 		}
 		
 		// Generate the cache key.
-		return sprintf('fullpage_cache:%d:%d:%s_%s', $module_srl, $document_srl, $user_agent_type, $argskey);
+		return sprintf('fullpage:%s:%s:%s_%s', $module_key, $document_key, $user_agent_type, $argskey);
+	}
+	
+	/**
+	 * Get subgroup cache key.
+	 * 
+	 * @param string $cache_key
+	 * @param bool $subgroup_portion_only (optional)
+	 * @return string
+	 */
+	protected function _getSubgroupCacheKey($cache_key, $subgroup_portion_only = false)
+	{
+		if (isset($this->_subgroup_keys[$cache_key]))
+		{
+			$subgroup_key = $this->_subgroup_keys[$cache_key];
+		}
+		else
+		{
+			$subgroup_key = intval($this->getCache($cache_key . '_sgkey'));
+			if (!$subgroup_key)
+			{
+				$subgroup_key = 1;
+				$this->setCache($cache_key . '_sgkey', $subgroup_key, 0);
+			}
+			$this->_subgroup_keys[$cache_key] = $subgroup_key;
+		}
+		
+		if ($subgroup_portion_only)
+		{
+			return $subgroup_key;
+		}
+		else
+		{
+			return $cache_key . '_sg' . $subgroup_key;
+		}
+	}
+	
+	/**
+	 * Invalidate subgroup cache key.
+	 * 
+	 * @param string $cache_key
+	 * @return bool
+	 */
+	protected function _invalidateSubgroupCacheKey($cache_key)
+	{
+		$subgroup_key = $this->_getSubgroupCacheKey($cache_key, true);
+		$subgroup_key++;
+		
+		$this->setCache($cache_key . '_sgkey', $subgroup_key, 0);
+		$this->_subgroup_keys[$cache_key] = $subgroup_key;
+		return true;
 	}
 	
 	/**

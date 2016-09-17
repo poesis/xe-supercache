@@ -160,14 +160,14 @@ class SuperCacheController extends SuperCache
 		{
 			if (isset($config->full_cache_document_action['refresh_module']) && $obj->module_srl)
 			{
-				$oModel->deleteFullPageCache($obj->module_srl, 0, 1);
+				$oModel->deleteFullPageCache($obj->module_srl, 0);
 			}
 			if (isset($config->full_cache_document_action['refresh_index']))
 			{
 				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
 				if ($index_module_srl != $obj->module_srl || !isset($config->full_cache_document_action['refresh_module']))
 				{
-					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
+					$oModel->deleteFullPageCache($index_module_srl, 0);
 				}
 			}
 		}
@@ -204,18 +204,14 @@ class SuperCacheController extends SuperCache
 		{
 			if (isset($config->full_cache_document_action['refresh_document']))
 			{
-				$oModel->deleteFullPageCache($original_module_srl, $obj->document_srl, 1);
-				if ($original_module_srl !== $new_module_srl)
-				{
-					$oModel->deleteFullPageCache($new_module_srl, $obj->document_srl, 1);
-				}
+				$oModel->deleteFullPageCache(0, $obj->document_srl);
 			}
 			if (isset($config->full_cache_document_action['refresh_module']) && $obj->module_srl)
 			{
-				$oModel->deleteFullPageCache($original_module_srl, 0, 1);
+				$oModel->deleteFullPageCache($original_module_srl, 0);
 				if ($original_module_srl !== $new_module_srl)
 				{
-					$oModel->deleteFullPageCache($new_module_srl, 0, 1);
+					$oModel->deleteFullPageCache($new_module_srl, 0);
 				}
 			}
 			if (isset($config->full_cache_document_action['refresh_index']))
@@ -223,7 +219,7 @@ class SuperCacheController extends SuperCache
 				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
 				if (($index_module_srl != $original_module_srl && $index_module_srl != $new_module_srl) || !isset($config->full_cache_document_action['refresh_module']))
 				{
-					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
+					$oModel->deleteFullPageCache($index_module_srl, 0);
 				}
 			}
 		}
@@ -246,18 +242,18 @@ class SuperCacheController extends SuperCache
 		{
 			if (isset($config->full_cache_document_action['refresh_document']))
 			{
-				$oModel->deleteFullPageCache($obj->module_srl, $obj->document_srl, 1);
+				$oModel->deleteFullPageCache(0, $obj->document_srl);
 			}
 			if (isset($config->full_cache_document_action['refresh_module']) && $obj->module_srl)
 			{
-				$oModel->deleteFullPageCache($obj->module_srl, 0, 1);
+				$oModel->deleteFullPageCache($obj->module_srl, 0);
 			}
 			if (isset($config->full_cache_document_action['refresh_index']))
 			{
 				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
 				if ($index_module_srl != $obj->module_srl || !isset($config->full_cache_document_action['refresh_module']))
 				{
-					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
+					$oModel->deleteFullPageCache($index_module_srl, 0);
 				}
 			}
 		}
@@ -309,18 +305,18 @@ class SuperCacheController extends SuperCache
 			$oModel = getModel('supercache');
 			if (isset($config->full_cache_comment_action['refresh_document']))
 			{
-				$oModel->deleteFullPageCache($obj->module_srl, $obj->document_srl, 1);
+				$oModel->deleteFullPageCache(0, $obj->document_srl);
 			}
 			if (isset($config->full_cache_comment_action['refresh_module']))
 			{
-				$oModel->deleteFullPageCache($obj->module_srl, 0, 1);
+				$oModel->deleteFullPageCache($obj->module_srl, 0);
 			}
 			if (isset($config->full_cache_comment_action['refresh_index']))
 			{
 				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
 				if ($index_module_srl != $obj->module_srl || !isset($config->full_cache_comment_action['refresh_module']))
 				{
-					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
+					$oModel->deleteFullPageCache($index_module_srl, 0);
 				}
 			}
 		}
@@ -344,18 +340,18 @@ class SuperCacheController extends SuperCache
 			$oModel = getModel('supercache');
 			if (isset($config->full_cache_comment_action['refresh_document']))
 			{
-				$oModel->deleteFullPageCache($module_srl, $document_srl, 1);
+				$oModel->deleteFullPageCache(0, $document_srl);
 			}
 			if (isset($config->full_cache_comment_action['refresh_module']))
 			{
-				$oModel->deleteFullPageCache($module_srl, 0, 1);
+				$oModel->deleteFullPageCache($module_srl, 0);
 			}
 			if (isset($config->full_cache_comment_action['refresh_index']))
 			{
 				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
 				if ($index_module_srl != $module_srl || !isset($config->full_cache_comment_action['refresh_module']))
 				{
-					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
+					$oModel->deleteFullPageCache($index_module_srl, 0);
 				}
 			}
 		}
@@ -375,18 +371,18 @@ class SuperCacheController extends SuperCache
 			$oModel = getModel('supercache');
 			if (isset($config->full_cache_comment_action['refresh_document']))
 			{
-				$oModel->deleteFullPageCache($obj->module_srl, $obj->document_srl, 1);
+				$oModel->deleteFullPageCache(0, $obj->document_srl);
 			}
 			if (isset($config->full_cache_comment_action['refresh_module']))
 			{
-				$oModel->deleteFullPageCache($obj->module_srl, 0, 1);
+				$oModel->deleteFullPageCache($obj->module_srl, 0);
 			}
 			if (isset($config->full_cache_comment_action['refresh_index']))
 			{
 				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
 				if ($index_module_srl != $obj->module_srl || !isset($config->full_cache_comment_action['refresh_module']))
 				{
-					$oModel->deleteFullPageCache($index_module_srl, 0, 1);
+					$oModel->deleteFullPageCache($index_module_srl, 0);
 				}
 			}
 		}
