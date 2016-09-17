@@ -22,11 +22,6 @@
 class SuperCacheController extends SuperCache
 {
 	/**
-	 * The maximum supported page.
-	 */
-	protected $_maxSupportedPage = 1;
-	
-	/**
 	 * Flag to cache the current request.
 	 */
 	protected $_cacheCurrentRequest = null;
@@ -100,7 +95,7 @@ class SuperCacheController extends SuperCache
 		}
 
 		// Abort if this request is for any page greater than 1.
-		if ($obj->page > $this->_maxSupportedPage && !$config->paging_cache_use_offset)
+		if ($obj->page > 1 && !$config->paging_cache_use_offset)
 		{
 			return;
 		}
