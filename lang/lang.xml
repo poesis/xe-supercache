@@ -265,12 +265,28 @@
 		<value xml:lang="en"><![CDATA[This page contains miscellaneous options that may help improve your site's responsiveness.]]></value>
 	</item>
 	<item name="cmd_supercache_disable_post_search">
-		<value xml:lang="ko"><![CDATA[POST 이중 검색 방지]]></value>
-		<value xml:lang="en"><![CDATA[Prevent Duplicate Search via POST]]></value>
+		<value xml:lang="ko"><![CDATA[POST 이중 검색 차단]]></value>
+		<value xml:lang="en"><![CDATA[Block Duplicate Search via POST]]></value>
 	</item>
 	<item name="cmd_supercache_disable_post_search_help">
 		<value xml:lang="ko"><![CDATA[스케치북 등 일부 게시판 스킨에서 동일한 검색을 POST와 GET으로 2번 요청하는 버그를 우회합니다.<br>POST 요청으로 게시판 검색 시도시 실제 검색을 수행하지 않고 건너뜁니다.]]></value>
 		<value xml:lang="en"><![CDATA[Some board skins have a bug that causes them to request the same search twice, once via POST and once via GET.<br>This option works around this bug by skipping the actual search step in the POST request.]]></value>
+	</item>
+	<item name="cmd_supercache_block_css_request">
+		<value xml:lang="ko"><![CDATA[잘못된 CSS 요청 차단]]></value>
+		<value xml:lang="en"><![CDATA[Block Erroneous CSS Request]]></value>
+	</item>
+	<item name="cmd_supercache_block_css_request_help">
+		<value xml:lang="ko"><![CDATA[일부 레이아웃과 스킨에서 <span class="console_font">&lt;link&gt;</span> 태그의 속성이 잘못되어 페이지 전체를 CSS로 다시 로딩하려고 시도하는 버그를 우회합니다.<br>이렇게 잘못된 요청이 감지되면 즉시 실행을 종료하여 서버 자원을 절약합니다.]]></value>
+		<value xml:lang="en"><![CDATA[Some layouts and skins have a bug that causes them to reload the current page in a CSS <span class="console_font">&lt;link&gt;</span> tag.<br>This option works around this bug by immediately terminating the erroneous request.]]></value>
+	</item>
+	<item name="cmd_supercache_block_img_request">
+		<value xml:lang="ko"><![CDATA[잘못된 이미지 요청 차단]]></value>
+		<value xml:lang="en"><![CDATA[Block Erroneous Image Request]]></value>
+	</item>
+	<item name="cmd_supercache_block_img_request_help">
+		<value xml:lang="ko"><![CDATA[위와 같은 기능이나, 페이지 전체를 <span class="console_font">&lt;img&gt;</span> 태그로 다시 로딩하려고 시도하는 버그를 우회합니다.<br>이미지를 사용한 CSRF 공격 방지에 도움이 될 수도 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Same as above, but blocks erroneous attempts to reload the current page in an <span class="console_font">&lt;img&gt;</span> tag.<br>This option may also help defend against image-based CSRF attacks.]]></value>
 	</item>
 	<item name="cmd_supercache_redirect_to_default_url">
 		<value xml:lang="ko"><![CDATA[항상 기본 URL로 리다이렉트]]></value>

@@ -33,13 +33,28 @@ class SuperCacheController extends SuperCache
 	 */
 	public function triggerBeforeModuleHandlerInit($obj)
 	{
-		// Get module configuration.
+		// Get module configuration and request information.
 		$config = $this->getConfig();
+		$current_domain = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']);
+		$request_method = Context::getRequestMethod();
+		
+		// Check the Accept: header for erroneous CSS and image requests.
+		if ($request_method === 'GET' && isset($_SERVER['HTTP_REFERER']) && parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) === $current_domain)
+		{
+			$accept_header = isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : '';
+			if ($config->block_css_request && !strncmp($accept_header, 'text/css', 8))
+			{
+				return $this->terminateWithPlainText('/* block_css_request */');
+			}
+			if ($config->block_img_request && ($accept_header && (!strncmp($accept_header, 'image/', 6) || strpos($accept_header, 'ml') === false)))
+			{
+				return $this->terminateWithPlainText('/* block_img_request */');
+			}
+		}
 		
 		// Check the default URL.
-		if ($config->redirect_to_default_url && Context::getRequestMethod() === 'GET')
+		if ($config->redirect_to_default_url && $request_method === 'GET')
 		{
-			$current_domain = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']);
 			$default_url = parse_url(Context::getDefaultUrl());
 			if ($current_domain !== $default_url['host'])
 			{
@@ -794,6 +809,20 @@ class SuperCacheController extends SuperCache
 		}
 		$oDisplayHandler = new DisplayHandler;
 		$oDisplayHandler->printContent($output);
+		Context::close();
+		exit;
+	}
+	
+	/**
+	 * Terminate the current request by printing a plain text message.
+	 * 
+	 * @param string $message
+	 * @return exit
+	 */
+	public function terminateWithPlainText($message = '')
+	{
+		header('Content-Type: text/plain; charset=UTF-8');
+		echo $message;
 		Context::close();
 		exit;
 	}
