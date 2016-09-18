@@ -172,6 +172,23 @@
 				</p>
 			</div>
 		</div>
+		
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->cmd_supercache_full_cache_include_404}</label>
+			<div class="x_controls">
+				<label for="sc_full_cache_include_404_y" class="x_inline">
+					<input name="sc_full_cache_include_404" id="sc_full_cache_include_404_y" type="radio" value="Y" checked="checked"|cond="$sc_config->full_cache_include_404" />
+					{$lang->cmd_yes}
+				</label>
+				<label for="sc_full_cache_include_404_n" class="x_inline">
+					<input name="sc_full_cache_include_404" id="sc_full_cache_include_404_n" type="radio" value="N" checked="checked"|cond="!$sc_config->full_cache_include_404" />
+					{$lang->cmd_no}
+				</label>
+				<p class="x_help-block">
+					{$lang->cmd_supercache_full_cache_include_404_help}
+				</p>
+			</div>
+		</div>
 	
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_full_cache_use_headers}</label>
@@ -187,22 +204,12 @@
 				<p class="x_help-block">
 					{$lang->cmd_supercache_full_cache_use_headers_help}
 				</p>
-			</div>
-		</div>
-		
-		<div class="x_control-group">
-			<label class="x_control-label">{$lang->cmd_supercache_full_cache_include_404}</label>
-			<div class="x_controls">
-				<label for="sc_full_cache_include_404_y" class="x_inline">
-					<input name="sc_full_cache_include_404" id="sc_full_cache_include_404_y" type="radio" value="Y" checked="checked"|cond="$sc_config->full_cache_include_404" />
-					{$lang->cmd_yes}
-				</label>
-				<label for="sc_full_cache_include_404_n" class="x_inline">
-					<input name="sc_full_cache_include_404" id="sc_full_cache_include_404_n" type="radio" value="N" checked="checked"|cond="!$sc_config->full_cache_include_404" />
-					{$lang->cmd_no}
+				<label for="sc_full_cache_use_headers_proxy_too">
+					<input name="sc_full_cache_use_headers_proxy_too" id="sc_full_cache_use_headers_proxy_too" type="checkbox" value="Y" checked="checked"|cond="$sc_config->full_cache_use_headers_proxy_too" />
+					{$lang->cmd_supercache_full_cache_use_headers_proxy_too}
 				</label>
 				<p class="x_help-block">
-					{$lang->cmd_supercache_full_cache_include_404_help}
+					{$lang->cmd_supercache_full_cache_use_headers_proxy_too_help}
 				</p>
 			</div>
 		</div>

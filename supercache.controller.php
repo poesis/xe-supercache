@@ -633,7 +633,7 @@ class SuperCacheController extends SuperCache
 		if ($cache)
 		{
 			$expires = max(0, $cache['expires'] - time());
-			if ($config->full_cache_use_headers)
+			if ($this->useCacheControlHeaders($config))
 			{
 				$this->printCacheControlHeaders($page_type, $expires, $config->full_cache_stampede_protection ? 10 : 0);
 			}
@@ -665,7 +665,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Otherwise, prepare headers to cache the current request.
-		if ($config->full_cache_use_headers)
+		if ($this->useCacheControlHeaders($config))
 		{
 			$this->printCacheControlHeaders($page_type, $config->full_cache_duration, $config->full_cache_stampede_protection ? 10 : 0);
 		}
@@ -714,6 +714,31 @@ class SuperCacheController extends SuperCache
 		header('Cache-Control: max-age=' . $expires);
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
 		header_remove('Pragma');
+	}
+	
+	/**
+	 * Check if cache control headers are enabled for the current request.
+	 * 
+	 * @param object $config
+	 * @return bool
+	 */
+	public function useCacheControlHeaders($config)
+	{
+		if ($config->full_cache_use_headers)
+		{
+			if ($config->full_cache_use_headers_proxy_too)
+			{
+				return true;
+			}
+			else
+			{
+				return !(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']);
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	/**
