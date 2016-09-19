@@ -243,7 +243,7 @@ class SuperCacheModel extends SuperCache
 		if ($config->full_cache_incr_view_count_probabilistic)
 		{
 			$probability = max(1, floor(log($extra_data['view_count'], 1.5)));
-			$incr = mt_rand(0, $probability) === 0) ? $probability : 0;
+			$incr = mt_rand(0, $probability) === 0 ? $probability : 0;
 		}
 		else
 		{
