@@ -26,7 +26,6 @@ class SuperCache extends ModuleObject
 	 */
 	protected static $_insert_triggers = array(
 		array('moduleHandler.init', 'before', 'controller', 'triggerBeforeModuleHandlerInit'),
-		array('moduleObject.proc', 'before', 'controller', 'triggerBeforeModuleObjectProc'),
 		array('document.getDocumentList', 'before', 'controller', 'triggerBeforeGetDocumentList'),
 		array('document.insertDocument', 'after', 'controller', 'triggerAfterInsertDocument'),
 		array('document.updateDocument', 'after', 'controller', 'triggerAfterUpdateDocument'),
@@ -39,13 +38,16 @@ class SuperCache extends ModuleObject
 		array('comment.updateComment', 'after', 'controller', 'triggerAfterUpdateComment'),
 		array('comment.deleteComment', 'after', 'controller', 'triggerAfterDeleteComment'),
 		array('moduleHandler.proc', 'after', 'controller', 'triggerAfterModuleHandlerProc'),
+		array('display', 'before', 'controller', 'triggerBeforeDisplay'),
 		array('display', 'after', 'controller', 'triggerAfterDisplay'),
 	);
 	
 	/**
 	 * Triggers to delete.
 	 */
-	protected static $_delete_triggers = array();
+	protected static $_delete_triggers = array(
+		array('moduleObject.proc', 'before', 'controller', 'triggerBeforeModuleObjectProc'),
+	);
 	
 	/**
 	 * Module configuration cache.

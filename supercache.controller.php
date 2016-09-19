@@ -85,14 +85,6 @@ class SuperCacheController extends SuperCache
 	}
 	
 	/**
-	 * Trigger called at moduleObject.proc (before)
-	 */
-	public function triggerBeforeModuleObjectProc($obj)
-	{
-		
-	}
-	
-	/**
 	 * Trigger called at document.getDocumentList (before)
 	 */
 	public function triggerBeforeGetDocumentList($obj)
@@ -448,6 +440,14 @@ class SuperCacheController extends SuperCache
 	}
 	
 	/**
+	 * Trigger called at display (before)
+	 */
+	public function triggerBeforeDisplay($obj)
+	{
+		
+	}
+	
+	/**
 	 * Trigger called at display (after)
 	 */
 	public function triggerAfterDisplay($obj)
@@ -467,6 +467,19 @@ class SuperCacheController extends SuperCache
 				return;
 			}
 			
+			// Collect extra data.
+			if ($this->_cacheCurrentRequest[1] && ($oDocument = Context::get('oDocument')) && ($oDocument->document_srl == $this->_cacheCurrentRequest[1]))
+			{
+				$extra_data = array(
+					'member_srl' => abs(intval($oDocument->get('member_srl'))),
+					'view_count' => intval($oDocument->get('readed_count')),
+				);
+			}
+			else
+			{
+				$extra_data = array();
+			}
+			
 			// Set the full-page cache.
 			getModel('supercache')->setFullPageCache(
 				$this->_cacheCurrentRequest[0],
@@ -474,6 +487,7 @@ class SuperCacheController extends SuperCache
 				$this->_cacheCurrentRequest[2],
 				$this->_cacheCurrentRequest[3],
 				$obj,
+				$extra_data,
 				$this->_cacheHttpStatusCode,
 				microtime(true) - $this->_cacheStartTimestamp
 			);
@@ -644,10 +658,13 @@ class SuperCacheController extends SuperCache
 				break;
 		}
 		
-		// If cached content is available, print it and exit.
+		// If cached content is available, display it and exit.
 		if ($cache)
 		{
+			// Find out how much time is left until this content expires.
 			$expires = max(0, $cache['expires'] - time());
+			
+			// Print Cache-Control headers.
 			if ($this->useCacheControlHeaders($config))
 			{
 				$this->printCacheControlHeaders($page_type, $expires, $config->full_cache_stampede_protection ? 10 : 0);
@@ -657,6 +674,17 @@ class SuperCacheController extends SuperCache
 				header('X-SuperCache: type=' . $page_type . '; expires=' . $expires);
 			}
 			
+			// Increment the view count if required.
+			if ($page_type === 'document' && $config->full_cache_incr_view_count && isset($cache['extra_data']['view_count']))
+			{
+				if (!isset($_SESSION['readed_document'][$obj->document_srl]))
+				{
+					$oModel->updateDocumentViewCount($obj->document_srl, $cache['extra_data']);
+					$_SESSION['readed_document'][$obj->document_srl] = true;
+				}
+			}
+			
+			// Print the content or a 304 response.
 			if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $cache['cached'])
 			{
 				$this->printHttpStatusCodeHeader(304);

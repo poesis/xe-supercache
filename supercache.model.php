@@ -35,7 +35,7 @@ class SuperCacheModel extends SuperCache
 	 * @param array $args
 	 * @return string|false
 	 */
-	public function getFullPageCache($module_srl, $document_srl, $user_agent_type, array $args = array())
+	public function getFullPageCache($module_srl, $document_srl, $user_agent_type, array $args)
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
@@ -68,11 +68,12 @@ class SuperCacheModel extends SuperCache
 	 * @param bool $user_agent_type
 	 * @param array $args
 	 * @param string $content
+	 * @param array $extra_data
 	 * @param int $http_status_code
 	 * @param float $elapsed_time
 	 * @return bool
 	 */
-	public function setFullPageCache($module_srl, $document_srl, $user_agent_type, array $args = array(), $content, $http_status_code, $elapsed_time)
+	public function setFullPageCache($module_srl, $document_srl, $user_agent_type, array $args, $content, array $extra_data, $http_status_code, $elapsed_time)
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
@@ -80,10 +81,11 @@ class SuperCacheModel extends SuperCache
 		// Organize the content.
 		$content = array(
 			'content' => strval($content),
-			'status' => intval($http_status_code),
-			'elapsed' => number_format($elapsed_time * 1000, 1) . ' ms',
 			'cached' => time(),
 			'expires' => time() + $config->full_cache_duration,
+			'extra_data' => $extra_data,
+			'status' => intval($http_status_code),
+			'elapsed' => number_format($elapsed_time * 1000, 1) . ' ms',
 		);
 		
 		// Save to cache.
@@ -219,6 +221,41 @@ class SuperCacheModel extends SuperCache
 			{
 				$this->setCache($cache_key, $count + $diff, $config->paging_cache_duration);
 			}
+		}
+	}
+	
+	/**
+	 * Update the view count of a cached document.
+	 * 
+	 * @param int $document_srl
+	 * @param array $extra_data
+	 * @return bool
+	 */
+	public function updateDocumentViewCount($document_srl, $extra_data)
+	{
+		$config = $this->getConfig();
+		$document_srl = intval($document_srl);
+		if (!$document_srl || !$extra_data)
+		{
+			return;
+		}
+		
+		if ($config->full_cache_incr_view_count_probabilistic)
+		{
+			$probability = max(1, floor(log($extra_data['view_count'], 1.5)));
+			$incr = mt_rand(0, $probability) === 0) ? $probability : 0;
+		}
+		else
+		{
+			$incr = 1;
+		}
+		
+		if ($incr)
+		{
+			$oDB = DB::getInstance();
+			$oDB->query_id = 'supercache.updateReadedCount';
+			$output = $oDB->_query(sprintf('UPDATE %sdocuments SET readed_count = readed_count + %d WHERE document_srl = %d', $oDB->prefix, $incr, $document_srl));
+			return $output ? true : false;
 		}
 	}
 	

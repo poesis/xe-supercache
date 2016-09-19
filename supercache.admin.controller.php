@@ -167,6 +167,8 @@ class SuperCacheAdminController extends SuperCache
 		$config->full_cache_stampede_protection = $vars->sc_full_cache_stampede_protection === 'Y' ? true : false;
 		$config->full_cache_use_headers = $vars->sc_full_cache_use_headers === 'Y' ? true : false;
 		$config->full_cache_use_headers_proxy_too = $vars->sc_full_cache_use_headers_proxy_too === 'Y' ? true : false;
+		$config->full_cache_incr_view_count = $vars->sc_full_cache_incr_view_count === 'Y' ? true : false;
+		$config->full_cache_incr_view_count_probabilistic = $vars->sc_full_cache_incr_view_count_probabilistic === 'Y' ? true : false;
 		$config->full_cache_include_404 = $vars->sc_full_cache_include_404 === 'Y' ? true : false;
 		
 		// Save the new config.
