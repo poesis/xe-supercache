@@ -198,12 +198,12 @@ class SuperCacheAdminController extends SuperCache
 		$config->paging_cache_duration = intval($vars->sc_paging_cache_duration) ?: 3600;
 		$config->paging_cache_auto_refresh = intval($vars->sc_paging_cache_auto_refresh) ?: 2400;
 		
-		if (!getAdminModel('supercache')->isListReplacementSupported())
+		if ($config->paging_cache && !getAdminModel('supercache')->isListReplacementSupported())
 		{
 			return $this->error('msg_supercache_list_replacement_not_supported');
 		}
 		
-		if (!getAdminModel('supercache')->isOffsetQuerySupported())
+		if ($config->paging_cache_use_offset && !getAdminModel('supercache')->isOffsetQuerySupported())
 		{
 			return $this->error('msg_supercache_offset_query_not_supported');
 		}
@@ -218,7 +218,31 @@ class SuperCacheAdminController extends SuperCache
 		{
 			$config->paging_cache_exclude_modules = array();
 		}
+
+		$config->search_cache = $vars->sc_search_cache === 'Y' ? true : false;
+		$config->search_cache_duration = intval($vars->sc_search_cache_duration) ?: 3600;
 		
+		if ($config->search_cache && !getAdminModel('supercache')->isListReplacementSupported())
+		{
+			return $this->error('msg_supercache_list_replacement_not_supported');
+		}
+		
+		if ($config->search_cache && !$config->paging_cache)
+		{
+			return $this->error('msg_supercache_search_cache_requires_paging_cache');
+		}
+		
+		if ($vars->sc_search_cache_exclude_modules)
+		{
+			$keys = array_map('intval', $vars->sc_search_cache_exclude_modules);
+			$values = array_fill(0, count($keys), true);
+			$config->search_cache_exclude_modules = array_combine($keys, $values);
+		}
+		else
+		{
+			$config->search_cache_exclude_modules = array();
+		}
+
 		// Save the new config.
 		$output = $this->setConfig($config);
 		if (!$output->toBool())

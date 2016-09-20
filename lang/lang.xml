@@ -229,12 +229,12 @@
 		<value xml:lang="en"><![CDATA[Enable the pagination cache on all pages of a board. Without offset queries, it will only be enabled on the first page.<br>Please disable this feature if you see any errors on page 2 or higher.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_exclude_modules">
-		<value xml:lang="ko"><![CDATA[캐시 예외 게시판]]></value>
-		<value xml:lang="en"><![CDATA[Boards to Exclude]]></value>
+		<value xml:lang="ko"><![CDATA[페이징 캐시 예외 모듈]]></value>
+		<value xml:lang="en"><![CDATA[Boards to Exclude from Pagination Cache]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_exclude_modules_help">
-		<value xml:lang="ko"><![CDATA[선택한 게시판은 캐싱하지 않습니다. 캐싱 사용시 문제가 발생하는 게시판은 제외하시기 바랍니다.<br>아래의 &quot;캐시 사용 조건&quot; 설정을 통해서도 게시판 예외 처리가 가능합니다.]]></value>
-		<value xml:lang="en"><![CDATA[The selected boards will be excluded from the full page cache. Please check all boards that cause a problem when cached.<br>You can also exclude boards using the &quot;Cache Threshold&quot; setting below.]]></value>
+		<value xml:lang="ko"><![CDATA[선택한 게시판은 페이징 캐시를 적용하지 않습니다. 페이징 캐시 사용시 문제가 발생하는 게시판은 제외하시기 바랍니다.<br>위의 &quot;캐시 사용 조건&quot; 설정을 통해서도 게시판 예외 처리가 가능합니다.]]></value>
+		<value xml:lang="en"><![CDATA[The selected boards will be excluded from the pagination cache. Please check all boards that cause a problem when cached.<br>You can also exclude boards using the &quot;Cache Threshold&quot; setting above.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_threshold">
 		<value xml:lang="ko"><![CDATA[페이징 캐시 사용 조건]]></value>
@@ -259,6 +259,38 @@
 	<item name="cmd_supercache_paging_cache_auto_refresh_help">
 		<value xml:lang="ko"><![CDATA[위의 기간과 무관하게, 요청 수가 많아지면 일정한 확률로 캐시를 갱신하여 오차 범위를 줄입니다.<br>예: 2400으로 지정한 경우 약 2400회 요청마다 캐시가 갱신됩니다.]]></value>
 		<value xml:lang="en"><![CDATA[Recalculate the pagination cache at a random interval in order to reduce the margin of error.<br>The cache will be recalculated approximately every X requests, using the given value of X.]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_use">
+		<value xml:lang="ko"><![CDATA[검색 결과 캐시 사용]]></value>
+		<value xml:lang="en"><![CDATA[Use Search Result Cache]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_use_help">
+		<value xml:lang="ko"><![CDATA[시간이 오래 걸리고 서버에 부담을 많이 주는 게시판 검색 결과를 캐시합니다.<br>사용자가 검색 목록과 검색 결과 사이를 왔다갔다하더라도 동일한 검색을 다시 수행하지 않게 됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[Cache the results of time-consuming board search operations.<br>This will prevent the same search from being performed again when a user navigates back and forth between the list and each result.]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_supported_list_replace">
+		<value xml:lang="ko"><![CDATA[검색 결과 캐시를 사용할 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Search result cache is supported on this site.]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_supported_list_replace_x">
+		<value xml:lang="ko"><![CDATA[검색 결과 캐시를 사용할 수 없습니다. <a href="https://github.com/xpressengine/xe-core/pull/1957" target="_blank">패치</a>]]></value>
+		<value xml:lang="en"><![CDATA[Search result cache is not supported on this site. <a href="https://github.com/xpressengine/xe-core/pull/1957" target="_blank">Patch</a>]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_duration">
+		<value xml:lang="ko"><![CDATA[검색 결과 캐시 갱신 주기]]></value>
+		<value xml:lang="en"><![CDATA[Search Result Cache Expiry]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_duration_help">
+		<value xml:lang="ko"><![CDATA[위의 기간이 지나면 검색 결과 캐시를 삭제하고 다시 계산합니다. 단위는 '초'입니다.]]></value>
+		<value xml:lang="en"><![CDATA[Recalculate the search result cache after the above number of seconds have elapsed.]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_exclude_modules">
+		<value xml:lang="ko"><![CDATA[검색 결과 캐시 예외 모듈]]></value>
+		<value xml:lang="en"><![CDATA[Boards to Exclude from Search Result Cache]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_exclude_modules_help">
+		<value xml:lang="ko"><![CDATA[선택한 게시판은 검색 결과 캐시를 적용하지 않습니다. 검색 결과가 실시간으로 갱신되어야 하는 게시판은 제외하시기 바랍니다.<br>검색 기능을 변형 또는 대체하는 다른 모듈을 사용하는 경우 호환되지 않을 수 있으니 주의하십시오.]]></value>
+		<value xml:lang="en"><![CDATA[The selected boards will be excluded from the search result cache. Please check all boards that require real-time update of search results.<br>Please be aware of possible incompatibility if you use another module that affects search behavior.]]></value>
 	</item>
 	<item name="cmd_supercache_config_widget_cache">
 		<value xml:lang="ko"><![CDATA[위젯 캐시]]></value>
@@ -375,6 +407,10 @@
 	<item name="msg_supercache_offset_query_not_supported">
 		<value xml:lang="ko"><![CDATA[이 사이트에서는 오프셋 쿼리를 사용할 수 없습니다.]]></value>
 		<value xml:lang="en"><![CDATA[Offset queries are not supported on this site.]]></value>
+	</item>
+	<item name="msg_supercache_search_cache_requires_paging_cache">
+		<value xml:lang="ko"><![CDATA[검색 결과 캐시를 사용하려면 페이징 캐시가 필요합니다.]]></value>
+		<value xml:lang="en"><![CDATA[Search result cache requires the paging cache to be enabled.]]></value>
 	</item>
 	<item name="msg_supercache_config_save_failed">
 		<value xml:lang="ko"><![CDATA[설정 파일 저장에 실패했습니다.]]></value>
