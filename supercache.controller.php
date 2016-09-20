@@ -91,7 +91,7 @@ class SuperCacheController extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		if (!$config->paging_cache || (!$obj->mid && !$obj->module_srl))
+		if (!$config->paging_cache || (!$obj->mid && !$obj->module_srl) || $obj->use_alternate_output)
 		{
 			return;
 		}
