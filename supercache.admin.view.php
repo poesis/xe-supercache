@@ -27,7 +27,7 @@ class SuperCacheAdminView extends SuperCache
 	protected static $_menus = array(
 		'dispSupercacheAdminConfigBasic' => 'cmd_supercache_config_basic',
 		'dispSupercacheAdminConfigFullCache' => 'cmd_supercache_config_full_cache',
-		'dispSupercacheAdminConfigPagingCache' => 'cmd_supercache_config_paging_cache',
+		'dispSupercacheAdminConfigBoardCache' => 'cmd_supercache_config_board_cache',
 		'dispSupercacheAdminConfigWidgetCache' => 'cmd_supercache_config_widget_cache',
 		'dispSupercacheAdminConfigOther' => 'cmd_supercache_config_other',
 	);
@@ -82,9 +82,9 @@ class SuperCacheAdminView extends SuperCache
 	}
 	
 	/**
-	 * Paging cache settings page.
+	 * Board cache settings page.
 	 */
-	public function dispSuperCacheAdminConfigPagingCache()
+	public function dispSuperCacheAdminConfigBoardCache()
 	{
 		// Get module configuration.
 		Context::set('sc_config', $config = $this->getConfig());
@@ -103,7 +103,7 @@ class SuperCacheAdminView extends SuperCache
 		Context::set('sc_modules', $module_list);
 		
 		// Display the config page.
-		$this->setTemplateFile('paging_cache');
+		$this->setTemplateFile('board_cache');
 	}
 	
 	/**

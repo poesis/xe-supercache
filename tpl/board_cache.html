@@ -4,14 +4,14 @@
 
 <form class="x_form-horizontal" action="./" method="post" id="supercache_config">
 	<input type="hidden" name="module" value="supercache" />
-	<input type="hidden" name="act" value="procSupercacheAdminInsertPagingCache" />
+	<input type="hidden" name="act" value="procSupercacheAdminInsertBoardCache" />
 	<input type="hidden" name="success_return_url" value="{getRequestUriByServerEnviroment()}" />
 	<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
 		<p>{$XE_VALIDATOR_MESSAGE}</p>
 	</div>
 	
 	<div class="supercache_help">
-		{$lang->cmd_supercache_config_paging_cache_help}
+		{$lang->cmd_supercache_config_board_cache_help}
 	</div>
 	
 	<section class="section">
@@ -55,22 +55,6 @@
 		</div>
 		
 		<div class="x_control-group">
-			<label class="x_control-label">{$lang->cmd_supercache_paging_cache_exclude_modules}</label>
-			<div class="x_controls">
-				<div loop="$sc_modules => $sc_module">
-					<label for="sc_paging_cache_exclude_modules_{$sc_module->module_srl}" class="checkbox_wrapper x_inline">
-						<input name="sc_paging_cache_exclude_modules[]" id="sc_paging_cache_exclude_modules_{$sc_module->module_srl}" type="checkbox" value="{$sc_module->module_srl}" checked="checked"|cond="isset($sc_config->paging_cache_exclude_modules[$sc_module->module_srl])" />
-						{$sc_module->browser_title}
-					</label>
-					<span class="mid">({$sc_module->mid})</span>
-				</div>
-				<p class="x_help-block more_margin">
-					{$lang->cmd_supercache_paging_cache_exclude_modules_help}
-				</p>
-			</div>
-		</div>
-		
-		<div class="x_control-group">
 			<label class="x_control-label" for="sc_paging_cache_threshold">{$lang->cmd_supercache_paging_cache_threshold}</label>
 			<div class="x_controls">
 				<input name="sc_paging_cache_threshold" id="sc_paging_cache_threshold" type="number" value="{intval($sc_config->paging_cache_threshold) ?: 1200}" style="width:100px" />
@@ -96,6 +80,22 @@
 				<input name="sc_paging_cache_auto_refresh" id="sc_paging_cache_auto_refresh" type="number" value="{intval($sc_config->paging_cache_auto_refresh) ?: 2400}" style="width:100px" />
 				<p class="x_help-block">
 					{$lang->cmd_supercache_paging_cache_auto_refresh_help}
+				</p>
+			</div>
+		</div>
+		
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->cmd_supercache_paging_cache_exclude_modules}</label>
+			<div class="x_controls">
+				<div loop="$sc_modules => $sc_module">
+					<label for="sc_paging_cache_exclude_modules_{$sc_module->module_srl}" class="checkbox_wrapper x_inline">
+						<input name="sc_paging_cache_exclude_modules[]" id="sc_paging_cache_exclude_modules_{$sc_module->module_srl}" type="checkbox" value="{$sc_module->module_srl}" checked="checked"|cond="isset($sc_config->paging_cache_exclude_modules[$sc_module->module_srl])" />
+						{$sc_module->browser_title}
+					</label>
+					<span class="mid">({$sc_module->mid})</span>
+				</div>
+				<p class="x_help-block more_margin">
+					{$lang->cmd_supercache_paging_cache_exclude_modules_help}
 				</p>
 			</div>
 		</div>

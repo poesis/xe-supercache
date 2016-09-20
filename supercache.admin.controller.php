@@ -183,9 +183,9 @@ class SuperCacheAdminController extends SuperCache
 	}
 	
 	/**
-	 * Save pagination cache settings.
+	 * Save Board cache settings.
 	 */
-	public function procSuperCacheAdminInsertPagingCache()
+	public function procSuperCacheAdminInsertBoardCache()
 	{
 		// Get current config and user selections.
 		$config = $this->getConfig();
@@ -227,7 +227,7 @@ class SuperCacheAdminController extends SuperCache
 		}
 		
 		// Redirect to the main config page.
-		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispSupercacheAdminConfigPagingCache'));
+		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispSupercacheAdminConfigBoardCache'));
 	}
 	
 	/**
