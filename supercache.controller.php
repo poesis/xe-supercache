@@ -75,7 +75,7 @@ class SuperCacheController extends SuperCache
 		// Check the full page cache.
 		if ($config->full_cache)
 		{
-			$this->checkFullCache($obj, $config, $default_url_checked);
+			$this->checkFullPageCache($obj, $config, $default_url_checked);
 		}
 		
 		// Fill the page variable for paging cache.
@@ -194,7 +194,10 @@ class SuperCacheController extends SuperCache
 		
 		// Update document count for pagination cache.
 		$oModel = getModel('supercache');
-		$oModel->updateDocumentCount($obj->module_srl, $obj->category_srl, 1);
+		if ($config->paging_cache)
+		{
+			$oModel->updateDocumentCount($obj->module_srl, $obj->category_srl, 1);
+		}
 		
 		// Refresh full page cache for the current module and/or index module.
 		if ($config->full_cache && $config->full_cache_document_action)
@@ -240,7 +243,7 @@ class SuperCacheController extends SuperCache
 		
 		// Update document count for pagination cache.
 		$oModel = getModel('supercache');
-		if ($original_module_srl !== $new_module_srl || $original_category_srl !== $new_category_srl)
+		if ($config->paging_cache && ($original_module_srl !== $new_module_srl || $original_category_srl !== $new_category_srl))
 		{
 			$oModel->updateDocumentCount($new_module_srl, $new_category_srl, 1);
 			if ($original_module_srl)
@@ -298,7 +301,10 @@ class SuperCacheController extends SuperCache
 		
 		// Update document count for pagination cache.
 		$oModel = getModel('supercache');
-		$oModel->updateDocumentCount($obj->module_srl, $obj->category_srl, -1);
+		if ($config->paging_cache)
+		{
+			$oModel->updateDocumentCount($obj->module_srl, $obj->category_srl, -1);
+		}
 		
 		// Refresh full page cache for the current document, module, and/or index module.
 		if ($config->full_cache && $config->full_cache_document_action)
@@ -599,7 +605,7 @@ class SuperCacheController extends SuperCache
 	 * @param object $default_url_checked (optional)
 	 * @return void
 	 */
-	public function checkFullCache($obj, $config, $default_url_checked = false)
+	public function checkFullPageCache($obj, $config, $default_url_checked = false)
 	{
 		// Abort if not an HTML GET request.
 		if (Context::getRequestMethod() !== 'GET')
