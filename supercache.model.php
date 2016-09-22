@@ -117,6 +117,76 @@ class SuperCacheModel extends SuperCache
 	}
 	
 	/**
+	 * Get a search result cache entry.
+	 * 
+	 * @param object $args
+	 * @return object|false
+	 */
+	public function getSearchResultCache($args)
+	{
+		// Get module configuration.
+		$config = $this->getConfig();
+		
+		// Check cache.
+		$cache_key = $this->_getSearchResultCacheKey($args);
+		$content = $this->getCache($cache_key, $config->search_cache_duration);
+		if (!$content)
+		{
+			return false;
+		}
+		
+		// Execute the query to reconstruct the document list.
+		$query_args = new stdClass;
+		$query_args->document_srl = $content['document_srls'];
+		$query_args->list_count = $content['list_count'];
+		$query_args->sort_index = $content['sort_index'];
+		$query_args->order_type = $content['order_type'];
+		$output = executeQuery('supercache.getDocumentList', $query_args);
+		if (is_object($output->data))
+		{
+			$output->data = array($output->data);
+		}
+		
+		// Fill in pagination data to emulate XE search results.
+		$this->_fillPaginationData($output, $content['total_count'], $content['list_count'] ?: 20, $args->page_count ?: 10, $args->page ?: 1);
+		
+		// Return the result.
+		return $output;
+	}
+	
+	/**
+	 * Set a search result cache entry.
+	 * 
+	 * @param object $args
+	 * @param object $result
+	 * @return bool
+	 */
+	public function setSearchResultCache($args, $result)
+	{
+		// Get module configuration.
+		$config = $this->getConfig();
+		
+		// Organize the content.
+		$content = array(
+			'document_srls' => array(),
+			'total_count' => $result->total_count,
+			'list_count' => intval($args->list_count),
+			'sort_index' => trim($args->sort_index) ?: 'list_order',
+			'order_type' => trim($args->order_type) ?: 'asc',
+			'cached' => time(),
+			'expires' => time() + $config->search_cache_duration,
+		);
+		foreach ($result->data as $document)
+		{
+			$content['document_srls'][] = $document->document_srl;
+		}
+		
+		// Save to cache.
+		$cache_key = $this->_getSearchResultCacheKey($args);
+		return $this->setCache($cache_key, $content, $config->search_cache_duration);
+	}
+	
+	/**
 	 * Get the number of documents in a module.
 	 * 
 	 * @param int $module_srl
@@ -184,16 +254,8 @@ class SuperCacheModel extends SuperCache
 			$output->data = array($output->data);
 		}
 		
-		// Fill in virtual numbers to emulate XE search results.
-		$virtual_number = $total_count - (($page - 1) * $args->list_count);
-		$virtual_range = count($output->data) ? range($virtual_number, $virtual_number - count($output->data) + 1, -1) : array();
-		$output->data = count($output->data) ? array_combine($virtual_range, $output->data) : array();
-		
-		// Fill in missing fields to emulate XE search results.
-		$output->total_count = $total_count;
-		$output->total_page = max(1, ceil($total_count / $args->list_count));
-		$output->page = $page;
-		$output->page_navigation = new PageHandler($output->total_count, $output->total_page, $page, $page_count);
+		// Fill in pagination data to emulate XE search results.
+		$this->_fillPaginationData($output, $total_count, $args->list_count, $page_count, $page);
 		
 		// Return the result.
 		return $output;
@@ -295,6 +357,33 @@ class SuperCacheModel extends SuperCache
 		
 		// Generate the cache key.
 		return sprintf('fullpage:%s:%s:%s_%s', $module_key, $document_key, $user_agent_type, $argskey);
+	}
+	
+	/**
+	 * Generate a cache key for the search result cache.
+	 * 
+	 * @param object $args
+	 * @return string
+	 */
+	protected function _getSearchResultCacheKey($args)
+	{
+		// Generate module and category subgroup keys.
+		$module_key = $this->_getSubgroupCacheKey('search_module_' . intval($args->module_srl));
+		$category_key = 'category_' . intval($args->category_srl);
+		
+		// Generate the arguments key.
+		$search_key = hash('sha256', json_encode(array(
+			'search_target' => trim($args->search_target),
+			'search_keyword' => trim($args->search_keyword),
+			'sort_index' => trim($args->sort_index) ?: 'list_order',
+			'order_type' => trim($args->order_type) ?: 'asc',
+			'list_count' => intval($args->list_count),
+			'page_count' => intval($args->page_count),
+			'isExtraVars' => (bool)($args->isExtraVars),
+		)));
+		
+		// Generate the cache key.
+		return sprintf('board_search:%s:%s:%s:p%d', $module_key, $category_key, $search_key, max(1, intval($args->page)));
 	}
 	
 	/**
@@ -407,5 +496,29 @@ class SuperCacheModel extends SuperCache
 		$result = $category->childs ?: array();
 		$result[] = $category->category_srl;
 		return $result;
+	}
+	
+	/**
+	 * Fill in pagination data to a query output.
+	 * 
+	 * @param object $output
+	 * @param int $total_count
+	 * @param int $list_count
+	 * @param int $page_count
+	 * @param int $page
+	 * @return void
+	 */
+	protected function _fillPaginationData(&$output, $total_count, $list_count, $page_count, $page)
+	{
+		// Fill in virtual numbers.
+		$virtual_number = $total_count - (($page - 1) * $list_count);
+		$virtual_range = count($output->data) ? range($virtual_number, $virtual_number - count($output->data) + 1, -1) : array();
+		$output->data = count($output->data) ? array_combine($virtual_range, $output->data) : array();
+		
+		// Fill in pagination fields.
+		$output->total_count = $total_count;
+		$output->total_page = max(1, ceil($total_count / $list_count));
+		$output->page = $page;
+		$output->page_navigation = new PageHandler($output->total_count, $output->total_page, $page, $page_count);
 	}
 }

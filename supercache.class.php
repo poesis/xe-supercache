@@ -27,6 +27,7 @@ class SuperCache extends ModuleObject
 	protected static $_insert_triggers = array(
 		array('moduleHandler.init', 'before', 'controller', 'triggerBeforeModuleHandlerInit'),
 		array('document.getDocumentList', 'before', 'controller', 'triggerBeforeGetDocumentList'),
+		array('document.getDocumentList', 'after', 'controller', 'triggerAfterGetDocumentList'),
 		array('document.insertDocument', 'after', 'controller', 'triggerAfterInsertDocument'),
 		array('document.updateDocument', 'after', 'controller', 'triggerAfterUpdateDocument'),
 		array('document.deleteDocument', 'after', 'controller', 'triggerAfterDeleteDocument'),

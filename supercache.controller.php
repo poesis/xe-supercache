@@ -24,6 +24,7 @@ class SuperCacheController extends SuperCache
 	/**
 	 * Flag to cache the current request.
 	 */
+	protected $_cacheCurrentSearch = false;
 	protected $_cacheCurrentRequest = null;
 	protected $_cacheStartTimestamp = null;
 	protected $_cacheHttpStatusCode = 200;
@@ -91,7 +92,7 @@ class SuperCacheController extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		if (!$config->paging_cache || (!$obj->mid && !$obj->module_srl) || $obj->use_alternate_output)
+		if ((!$config->paging_cache && !$config->search_cache) || (!$obj->mid && !$obj->module_srl))
 		{
 			return;
 		}
@@ -101,15 +102,33 @@ class SuperCacheController extends SuperCache
 		{
 			return $this->terminateRequest('disable_post_search');
 		}
-
-		// Abort if this request is for any page greater than 1.
-		if ($obj->page > 1 && !$config->paging_cache_use_offset)
+		
+		// Abort if an alternate list has already been set.
+		if ($obj->use_alternate_output)
 		{
 			return;
 		}
 		
-		// Abort if there are any search terms other than module_srl and category_srl.
+		// Abort if there are search queries, but activate the search result cache.
 		if ($obj->search_target || $obj->search_keyword || $obj->exclude_module_srl || $obj->start_date || $obj->end_date || $obj->member_srl)
+		{
+			if ($config->search_cache && Context::getRequestMethod() === 'GET' && Context::get('module') !== 'admin' && !Context::get('act'))
+			{
+				$oModel = getModel('supercache');
+				if ($cached_search_result = $oModel->getSearchResultCache($obj))
+				{
+					$obj->use_alternate_output = $cached_search_result;
+				}
+				else
+				{
+					$this->_cacheCurrentSearch = $obj;
+				}
+			}
+			return;
+		}
+		
+		// Abort if this request is for any page greater than 1.
+		if ($obj->page > 1 && !$config->paging_cache_use_offset)
 		{
 			return;
 		}
@@ -144,6 +163,25 @@ class SuperCacheController extends SuperCache
 		
 		// Get documents and replace the output.
 		$obj->use_alternate_output = $oModel->getDocumentList($args, $document_count);
+	}
+	
+	/**
+	 * Trigger called at document.getDocumentList (after)
+	 */
+	public function triggerAfterGetDocumentList($obj)
+	{
+		// Abort if the current search is not cacheable.
+		if (!$this->_cacheCurrentSearch)
+		{
+			return;
+		}
+		
+		// Cache the current search.
+		$oModel = getModel('supercache');
+		$oModel->setSearchResultCache($this->_cacheCurrentSearch, $obj);
+		
+		// Deactivate the search result cache.
+		$this->_cacheCurrentSearch = false;
 	}
 	
 	/**
