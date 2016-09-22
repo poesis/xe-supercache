@@ -190,14 +190,22 @@ class SuperCacheModel extends SuperCache
 	 * Delete a search result cache entry.
 	 * 
 	 * @param int $module_srl
+	 * @param bool $is_comment
 	 * @return bool
 	 */
-	public function deleteSearchResultCache($module_srl = 0)
+	public function deleteSearchResultCache($module_srl = 0, $is_comment)
 	{
 		// Invalidate the subgroup cache keys for the module.
 		if ($module_srl)
 		{
-			$this->_invalidateSubgroupCacheKey('search_module_' . intval($module_srl));
+			if ($is_comment)
+			{
+				$this->_invalidateSubgroupCacheKey('search_module_' . intval($module_srl) . '_comment');
+			}
+			else
+			{
+				$this->_invalidateSubgroupCacheKey('search_module_' . intval($module_srl));
+			}
 		}
 		
 		// We don't have any reason to return anything else here.
@@ -386,7 +394,8 @@ class SuperCacheModel extends SuperCache
 	protected function _getSearchResultCacheKey($args)
 	{
 		// Generate module and category subgroup keys.
-		$module_key = $this->_getSubgroupCacheKey('search_module_' . intval($args->module_srl));
+		$comment_key = ($args->search_target === 'comment') ? '_comment' : '';
+		$module_key = $this->_getSubgroupCacheKey('search_module_' . intval($args->module_srl) . $comment_key);
 		$category_key = 'category_' . intval($args->category_srl);
 		
 		// Generate the arguments key.

@@ -218,7 +218,7 @@ class SuperCacheController extends SuperCache
 		{
 			if (isset($config->search_cache_document_action['refresh_module']) && $obj->module_srl)
 			{
-				$oModel->deleteSearchResultCache($obj->module_srl);
+				$oModel->deleteSearchResultCache($obj->module_srl, false);
 			}
 		}
 	}
@@ -279,10 +279,10 @@ class SuperCacheController extends SuperCache
 		{
 			if (isset($config->search_cache_document_action['refresh_module']) && $obj->module_srl)
 			{
-				$oModel->deleteSearchResultCache($original_module_srl);
+				$oModel->deleteSearchResultCache($original_module_srl, false);
 				if ($original_module_srl !== $new_module_srl)
 				{
-					$oModel->deleteSearchResultCache($new_module_srl);
+					$oModel->deleteSearchResultCache($new_module_srl, false);
 				}
 			}
 		}
@@ -326,7 +326,7 @@ class SuperCacheController extends SuperCache
 		{
 			if (isset($config->search_cache_document_action['refresh_module']) && $obj->module_srl)
 			{
-				$oModel->deleteSearchResultCache($obj->module_srl);
+				$oModel->deleteSearchResultCache($obj->module_srl, false);
 			}
 		}
 	}
@@ -398,7 +398,7 @@ class SuperCacheController extends SuperCache
 		{
 			if (isset($config->search_cache_comment_action['refresh_module']) && $obj->module_srl)
 			{
-				$oModel->deleteSearchResultCache($obj->module_srl);
+				$oModel->deleteSearchResultCache($obj->module_srl, true);
 			}
 		}
 	}
@@ -442,7 +442,7 @@ class SuperCacheController extends SuperCache
 		{
 			if (isset($config->search_cache_comment_action['refresh_module']) && $module_srl)
 			{
-				$oModel->deleteSearchResultCache($module_srl);
+				$oModel->deleteSearchResultCache($module_srl, true);
 			}
 		}
 	}
@@ -482,7 +482,7 @@ class SuperCacheController extends SuperCache
 		{
 			if (isset($config->search_cache_comment_action['refresh_module']) && $obj->module_srl)
 			{
-				$oModel->deleteSearchResultCache($obj->module_srl);
+				$oModel->deleteSearchResultCache($obj->module_srl, true);
 			}
 		}
 	}

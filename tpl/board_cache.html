@@ -140,11 +140,15 @@
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_search_cache_document_action}</label>
 			<div class="x_controls">
-				<label for="sc_search_cache_document_action_refresh_module" class="checkbox_wrapper">
-					<input name="sc_search_cache_document_action[]" id="sc_search_cache_document_action_refresh_module" type="checkbox" value="refresh_module" checked="checked"|cond="isset($sc_config->search_cache_document_action['refresh_module'])" />
-					{$lang->cmd_supercache_search_cache_document_action_refresh_module}
+				<label for="sc_search_cache_document_action_refresh_module" class="x_inline">
+					<input name="sc_search_cache_document_action[]" id="sc_search_cache_document_action_refresh_module" type="radio" value="refresh_module" checked="checked"|cond="isset($sc_config->search_cache_document_action['refresh_module'])" />
+					{$lang->cmd_yes}
 				</label>
-				<p class="x_help-block more_margin">
+				<label for="sc_search_cache_document_action_none" class="x_inline">
+					<input name="sc_search_cache_document_action[]" id="sc_search_cache_document_action_none" type="radio" value="none" checked="checked"|cond="!isset($sc_config->search_cache_document_action['refresh_module'])" />
+					{$lang->cmd_no}
+				</label>
+				<p class="x_help-block">
 					{$lang->cmd_supercache_search_cache_document_action_help}
 				</p>
 			</div>
@@ -153,11 +157,15 @@
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_search_cache_comment_action}</label>
 			<div class="x_controls">
-				<label for="sc_search_cache_comment_action_refresh_module" class="checkbox_wrapper">
-					<input name="sc_search_cache_comment_action[]" id="sc_search_cache_comment_action_refresh_module" type="checkbox" value="refresh_module" checked="checked"|cond="isset($sc_config->search_cache_comment_action['refresh_module'])" />
-					{$lang->cmd_supercache_search_cache_comment_action_refresh_module}
+				<label for="sc_search_cache_comment_action_refresh_module" class="x_inline">
+					<input name="sc_search_cache_comment_action[]" id="sc_search_cache_comment_action_refresh_module" type="radio" value="refresh_module" checked="checked"|cond="isset($sc_config->search_cache_comment_action['refresh_module'])" />
+					{$lang->cmd_yes}
 				</label>
-				<p class="x_help-block more_margin">
+				<label for="sc_search_cache_comment_action_none" class="x_inline">
+					<input name="sc_search_cache_comment_action[]" id="sc_search_cache_comment_action_none" type="radio" value="none" checked="checked"|cond="!isset($sc_config->search_cache_comment_action['refresh_module'])" />
+					{$lang->cmd_no}
+				</label>
+				<p class="x_help-block">
 					{$lang->cmd_supercache_search_cache_comment_action_help}
 				</p>
 			</div>

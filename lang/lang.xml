@@ -297,24 +297,16 @@
 		<value xml:lang="en"><![CDATA[Action on Document Change]]></value>
 	</item>
 	<item name="cmd_supercache_search_cache_document_action_help">
-		<value xml:lang="ko"><![CDATA[새 글 작성, 수정, 삭제 등이 일어나면 선택한 검색 결과 캐시를 자동으로 갱신합니다.<br>활동량이 많은 사이트에서는 캐시 효율이 낮아질 수 있으니 주의하십시오.]]></value>
+		<value xml:lang="ko"><![CDATA[새 글 작성, 수정, 삭제 등이 일어나면 해당 게시판의 검색 결과 캐시를 자동으로 갱신합니다.<br>활동량이 많은 사이트에서는 캐시 효율이 낮아질 수 있으니 주의하십시오.]]></value>
 		<value xml:lang="en"><![CDATA[Automatically regenerate the selected cache entries when new document is created, edited, or deleted.<br>This can reduce cache effectiveness in a site with frequent activity.]]></value>
-	</item>
-	<item name="cmd_supercache_search_cache_document_action_refresh_module">
-		<value xml:lang="ko"><![CDATA[해당 게시판]]></value>
-		<value xml:lang="en"><![CDATA[Board where the change took place]]></value>
 	</item>
 	<item name="cmd_supercache_search_cache_comment_action">
 		<value xml:lang="ko"><![CDATA[댓글 작성시 자동 갱신]]></value>
 		<value xml:lang="en"><![CDATA[Action on Comment Change]]></value>
 	</item>
 	<item name="cmd_supercache_search_cache_comment_action_help">
-		<value xml:lang="ko"><![CDATA[새 댓글 작성, 수정, 삭제 등이 일어나면 선택한 검색 결과 캐시를 자동으로 갱신합니다.<br>활동량이 많은 사이트에서는 캐시 효율이 낮아질 수 있으니 주의하십시오.]]></value>
+		<value xml:lang="ko"><![CDATA[새 댓글 작성, 수정, 삭제 등이 일어나면 해당 게시판의 검색 결과 캐시를 자동으로 갱신합니다.<br>활동량이 많은 사이트에서는 캐시 효율이 낮아질 수 있으니 주의하십시오.]]></value>
 		<value xml:lang="en"><![CDATA[Automatically regenerate the selected cache entries when new comment is created, edited, or deleted.<br>This can reduce cache effectiveness in a site with frequent activity.]]></value>
-	</item>
-	<item name="cmd_supercache_search_cache_comment_action_refresh_module">
-		<value xml:lang="ko"><![CDATA[해당 게시판]]></value>
-		<value xml:lang="en"><![CDATA[Board where the change took place]]></value>
 	</item>
 	<item name="cmd_supercache_search_cache_exclude_modules">
 		<value xml:lang="ko"><![CDATA[검색 결과 캐시 예외 모듈]]></value>
