@@ -187,6 +187,24 @@ class SuperCacheModel extends SuperCache
 	}
 	
 	/**
+	 * Delete a search result cache entry.
+	 * 
+	 * @param int $module_srl
+	 * @return bool
+	 */
+	public function deleteSearchResultCache($module_srl = 0)
+	{
+		// Invalidate the subgroup cache keys for the module.
+		if ($module_srl)
+		{
+			$this->_invalidateSubgroupCacheKey('search_module_' . intval($module_srl));
+		}
+		
+		// We don't have any reason to return anything else here.
+		return true;
+	}
+	
+	/**
 	 * Get the number of documents in a module.
 	 * 
 	 * @param int $module_srl

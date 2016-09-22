@@ -232,6 +232,26 @@ class SuperCacheAdminController extends SuperCache
 			return $this->error('msg_supercache_search_cache_requires_paging_cache');
 		}
 		
+		if ($vars->sc_search_cache_document_action)
+		{
+			$values = array_fill(0, count($vars->sc_search_cache_document_action), true);
+			$config->search_cache_document_action = array_combine($vars->sc_search_cache_document_action, $values);
+		}
+		else
+		{
+			$config->search_cache_document_action = array();
+		}
+		
+		if ($vars->sc_search_cache_comment_action)
+		{
+			$values = array_fill(0, count($vars->sc_search_cache_comment_action), true);
+			$config->search_cache_comment_action = array_combine($vars->sc_search_cache_comment_action, $values);
+		}
+		else
+		{
+			$config->search_cache_comment_action = array();
+		}
+		
 		if ($vars->sc_search_cache_exclude_modules)
 		{
 			$keys = array_map('intval', $vars->sc_search_cache_exclude_modules);

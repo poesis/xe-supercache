@@ -105,7 +105,7 @@
 		<value xml:lang="en"><![CDATA[Action on Document Change]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_document_action_help">
-		<value xml:lang="ko"><![CDATA[새 글 작성, 수정, 삭제 등이 일어나면 여기에서 선택한 캐시를 자동으로 갱신합니다.<br>활동량이 많은 사이트에서는 캐시 효율이 낮아질 수 있으니 주의하십시오.]]></value>
+		<value xml:lang="ko"><![CDATA[새 글 작성, 수정, 삭제 등이 일어나면 선택한 전체 화면 캐시를 자동으로 갱신합니다.<br>활동량이 많은 사이트에서는 캐시 효율이 낮아질 수 있으니 주의하십시오.]]></value>
 		<value xml:lang="en"><![CDATA[Automatically regenerate the selected cache entries when new document is created, edited, or deleted.<br>This can reduce cache effectiveness in a site with frequent activity.]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_document_action_refresh_document">
@@ -125,7 +125,7 @@
 		<value xml:lang="en"><![CDATA[Action on Comment Change]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_comment_action_help">
-		<value xml:lang="ko"><![CDATA[새 댓글 작성, 수정, 삭제 등이 일어나면 여기에서 선택한 캐시를 자동으로 갱신합니다.<br>활동량이 많은 사이트에서는 캐시 효율이 낮아질 수 있으니 주의하십시오.]]></value>
+		<value xml:lang="ko"><![CDATA[새 댓글 작성, 수정, 삭제 등이 일어나면 선택한 전체 화면 캐시를 자동으로 갱신합니다.<br>활동량이 많은 사이트에서는 캐시 효율이 낮아질 수 있으니 주의하십시오.]]></value>
 		<value xml:lang="en"><![CDATA[Automatically regenerate the selected cache entries when new comment is created, edited, or deleted.<br>This can reduce cache effectiveness in a site with frequent activity.]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_duration">
@@ -212,6 +212,10 @@
 		<value xml:lang="ko"><![CDATA[오프셋 쿼리를 사용할 수 없습니다. <a href="https://github.com/xpressengine/xe-core/pull/1959" target="_blank">패치</a>]]></value>
 		<value xml:lang="en"><![CDATA[Offset queries are not supported on this site. <a href="https://github.com/xpressengine/xe-core/pull/1959" target="_blank">Patch</a>]]></value>
 	</item>
+	<item name="cmd_supercache_paging_cache">
+		<value xml:lang="ko"><![CDATA[페이징 캐시]]></value>
+		<value xml:lang="en"><![CDATA[Pagination Cache]]></value>
+	</item>
 	<item name="cmd_supercache_paging_cache_use">
 		<value xml:lang="ko"><![CDATA[페이징 캐시 사용]]></value>
 		<value xml:lang="en"><![CDATA[Use Pagination Cache]]></value>
@@ -260,6 +264,10 @@
 		<value xml:lang="ko"><![CDATA[위의 기간과 무관하게, 요청 수가 많아지면 일정한 확률로 캐시를 갱신하여 오차 범위를 줄입니다.<br>예: 2400으로 지정한 경우 약 2400회 요청마다 캐시가 갱신됩니다.]]></value>
 		<value xml:lang="en"><![CDATA[Recalculate the pagination cache at a random interval in order to reduce the margin of error.<br>The cache will be recalculated approximately every X requests, using the given value of X.]]></value>
 	</item>
+	<item name="cmd_supercache_search_cache">
+		<value xml:lang="ko"><![CDATA[검색 결과 캐시]]></value>
+		<value xml:lang="en"><![CDATA[Search Result Cache]]></value>
+	</item>
 	<item name="cmd_supercache_search_cache_use">
 		<value xml:lang="ko"><![CDATA[검색 결과 캐시 사용]]></value>
 		<value xml:lang="en"><![CDATA[Use Search Result Cache]]></value>
@@ -283,6 +291,30 @@
 	<item name="cmd_supercache_search_cache_duration_help">
 		<value xml:lang="ko"><![CDATA[위의 기간이 지나면 검색 결과 캐시를 삭제하고 다시 계산합니다. 단위는 '초'입니다.]]></value>
 		<value xml:lang="en"><![CDATA[Recalculate the search result cache after the above number of seconds have elapsed.]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_document_action">
+		<value xml:lang="ko"><![CDATA[문서 작성시 자동 갱신]]></value>
+		<value xml:lang="en"><![CDATA[Action on Document Change]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_document_action_help">
+		<value xml:lang="ko"><![CDATA[새 글 작성, 수정, 삭제 등이 일어나면 선택한 검색 결과 캐시를 자동으로 갱신합니다.<br>활동량이 많은 사이트에서는 캐시 효율이 낮아질 수 있으니 주의하십시오.]]></value>
+		<value xml:lang="en"><![CDATA[Automatically regenerate the selected cache entries when new document is created, edited, or deleted.<br>This can reduce cache effectiveness in a site with frequent activity.]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_document_action_refresh_module">
+		<value xml:lang="ko"><![CDATA[해당 게시판]]></value>
+		<value xml:lang="en"><![CDATA[Board where the change took place]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_comment_action">
+		<value xml:lang="ko"><![CDATA[댓글 작성시 자동 갱신]]></value>
+		<value xml:lang="en"><![CDATA[Action on Comment Change]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_comment_action_help">
+		<value xml:lang="ko"><![CDATA[새 댓글 작성, 수정, 삭제 등이 일어나면 선택한 검색 결과 캐시를 자동으로 갱신합니다.<br>활동량이 많은 사이트에서는 캐시 효율이 낮아질 수 있으니 주의하십시오.]]></value>
+		<value xml:lang="en"><![CDATA[Automatically regenerate the selected cache entries when new comment is created, edited, or deleted.<br>This can reduce cache effectiveness in a site with frequent activity.]]></value>
+	</item>
+	<item name="cmd_supercache_search_cache_comment_action_refresh_module">
+		<value xml:lang="ko"><![CDATA[해당 게시판]]></value>
+		<value xml:lang="en"><![CDATA[Board where the change took place]]></value>
 	</item>
 	<item name="cmd_supercache_search_cache_exclude_modules">
 		<value xml:lang="ko"><![CDATA[검색 결과 캐시 예외 모듈]]></value>

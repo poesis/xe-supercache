@@ -212,6 +212,15 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
+		
+		// Refresh search result cache for the current module.
+		if ($config->search_cache && $config->search_cache_document_action)
+		{
+			if (isset($config->search_cache_document_action['refresh_module']) && $obj->module_srl)
+			{
+				$oModel->deleteSearchResultCache($obj->module_srl);
+			}
+		}
 	}
 	
 	/**
@@ -264,6 +273,19 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
+		
+		// Refresh search result cache for the current module.
+		if ($config->search_cache && $config->search_cache_document_action)
+		{
+			if (isset($config->search_cache_document_action['refresh_module']) && $obj->module_srl)
+			{
+				$oModel->deleteSearchResultCache($original_module_srl);
+				if ($original_module_srl !== $new_module_srl)
+				{
+					$oModel->deleteSearchResultCache($new_module_srl);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -296,6 +318,15 @@ class SuperCacheController extends SuperCache
 				{
 					$oModel->deleteFullPageCache($index_module_srl, 0);
 				}
+			}
+		}
+		
+		// Refresh search result cache for the current module.
+		if ($config->search_cache && $config->search_cache_document_action)
+		{
+			if (isset($config->search_cache_document_action['refresh_module']) && $obj->module_srl)
+			{
+				$oModel->deleteSearchResultCache($obj->module_srl);
 			}
 		}
 	}
@@ -344,11 +375,11 @@ class SuperCacheController extends SuperCache
 		if ($config->full_cache && $config->full_cache_comment_action)
 		{
 			$oModel = getModel('supercache');
-			if (isset($config->full_cache_comment_action['refresh_document']))
+			if (isset($config->full_cache_comment_action['refresh_document']) && $obj->document_srl)
 			{
 				$oModel->deleteFullPageCache(0, $obj->document_srl);
 			}
-			if (isset($config->full_cache_comment_action['refresh_module']))
+			if (isset($config->full_cache_comment_action['refresh_module']) && $obj->module_srl)
 			{
 				$oModel->deleteFullPageCache($obj->module_srl, 0);
 			}
@@ -359,6 +390,15 @@ class SuperCacheController extends SuperCache
 				{
 					$oModel->deleteFullPageCache($index_module_srl, 0);
 				}
+			}
+		}
+		
+		// Refresh search result cache for the current module.
+		if ($config->search_cache && $config->search_cache_comment_action)
+		{
+			if (isset($config->search_cache_comment_action['refresh_module']) && $obj->module_srl)
+			{
+				$oModel->deleteSearchResultCache($obj->module_srl);
 			}
 		}
 	}
@@ -379,11 +419,11 @@ class SuperCacheController extends SuperCache
 			$module_srl = $obj->module_srl ?: $original->module_srl;
 			
 			$oModel = getModel('supercache');
-			if (isset($config->full_cache_comment_action['refresh_document']))
+			if (isset($config->full_cache_comment_action['refresh_document']) && $document_srl)
 			{
 				$oModel->deleteFullPageCache(0, $document_srl);
 			}
-			if (isset($config->full_cache_comment_action['refresh_module']))
+			if (isset($config->full_cache_comment_action['refresh_module']) && $module_srl)
 			{
 				$oModel->deleteFullPageCache($module_srl, 0);
 			}
@@ -394,6 +434,15 @@ class SuperCacheController extends SuperCache
 				{
 					$oModel->deleteFullPageCache($index_module_srl, 0);
 				}
+			}
+		}
+		
+		// Refresh search result cache for the current module.
+		if ($config->search_cache && $config->search_cache_comment_action)
+		{
+			if (isset($config->search_cache_comment_action['refresh_module']) && $module_srl)
+			{
+				$oModel->deleteSearchResultCache($module_srl);
 			}
 		}
 	}
@@ -410,11 +459,11 @@ class SuperCacheController extends SuperCache
 		if ($config->full_cache && $config->full_cache_comment_action)
 		{
 			$oModel = getModel('supercache');
-			if (isset($config->full_cache_comment_action['refresh_document']))
+			if (isset($config->full_cache_comment_action['refresh_document']) && $obj->document_srl)
 			{
 				$oModel->deleteFullPageCache(0, $obj->document_srl);
 			}
-			if (isset($config->full_cache_comment_action['refresh_module']))
+			if (isset($config->full_cache_comment_action['refresh_module']) && $obj->module_srl)
 			{
 				$oModel->deleteFullPageCache($obj->module_srl, 0);
 			}
@@ -425,6 +474,15 @@ class SuperCacheController extends SuperCache
 				{
 					$oModel->deleteFullPageCache($index_module_srl, 0);
 				}
+			}
+		}
+		
+		// Refresh search result cache for the current module.
+		if ($config->search_cache && $config->search_cache_comment_action)
+		{
+			if (isset($config->search_cache_comment_action['refresh_module']) && $obj->module_srl)
+			{
+				$oModel->deleteSearchResultCache($obj->module_srl);
 			}
 		}
 	}

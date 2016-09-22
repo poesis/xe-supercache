@@ -12,6 +12,10 @@ input.console_font, span.console_font, textarea.console_font {
 	font-family: Consolas, Courier New, Courier, monospace !important;
 }
 
+section h2 {
+	padding-bottom: 8px;
+}
+
 span.console_font {
 	display: inline-block;
 	margin: 0 2px;

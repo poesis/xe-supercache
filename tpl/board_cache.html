@@ -15,6 +15,8 @@
 	</div>
 	
 	<section class="section">
+	
+		<h2>{$lang->cmd_supercache_paging_cache}</h2>
 		
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_paging_cache_use}</label>
@@ -99,6 +101,12 @@
 				</p>
 			</div>
 		</div>
+	
+	</section>
+	
+	<section class="section">
+	
+		<h2>{$lang->cmd_supercache_search_cache}</h2>
 		
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_search_cache_use}</label>
@@ -122,9 +130,35 @@
 		<div class="x_control-group">
 			<label class="x_control-label" for="sc_search_cache_duration">{$lang->cmd_supercache_search_cache_duration}</label>
 			<div class="x_controls">
-				<input name="sc_search_cache_duration" id="sc_search_cache_duration" type="number" value="{intval($sc_config->search_cache_duration) ?: 3600}" style="width:100px" />
+				<input name="sc_search_cache_duration" id="sc_search_cache_duration" type="number" value="{intval($sc_config->search_cache_duration) ?: 600}" style="width:100px" />
 				<p class="x_help-block">
 					{$lang->cmd_supercache_search_cache_duration_help}
+				</p>
+			</div>
+		</div>
+		
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->cmd_supercache_search_cache_document_action}</label>
+			<div class="x_controls">
+				<label for="sc_search_cache_document_action_refresh_module" class="checkbox_wrapper">
+					<input name="sc_search_cache_document_action[]" id="sc_search_cache_document_action_refresh_module" type="checkbox" value="refresh_module" checked="checked"|cond="isset($sc_config->search_cache_document_action['refresh_module'])" />
+					{$lang->cmd_supercache_search_cache_document_action_refresh_module}
+				</label>
+				<p class="x_help-block more_margin">
+					{$lang->cmd_supercache_search_cache_document_action_help}
+				</p>
+			</div>
+		</div>
+		
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->cmd_supercache_search_cache_comment_action}</label>
+			<div class="x_controls">
+				<label for="sc_search_cache_comment_action_refresh_module" class="checkbox_wrapper">
+					<input name="sc_search_cache_comment_action[]" id="sc_search_cache_comment_action_refresh_module" type="checkbox" value="refresh_module" checked="checked"|cond="isset($sc_config->search_cache_comment_action['refresh_module'])" />
+					{$lang->cmd_supercache_search_cache_comment_action_refresh_module}
+				</label>
+				<p class="x_help-block more_margin">
+					{$lang->cmd_supercache_search_cache_comment_action_help}
 				</p>
 			</div>
 		</div>
