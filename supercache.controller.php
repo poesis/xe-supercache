@@ -112,7 +112,7 @@ class SuperCacheController extends SuperCache
 		// Abort if there are search queries, but activate the search result cache.
 		if ($obj->search_target || $obj->search_keyword || $obj->exclude_module_srl || $obj->start_date || $obj->end_date || $obj->member_srl)
 		{
-			if ($config->search_cache && Context::getRequestMethod() === 'GET' && Context::get('module') !== 'admin' && !Context::get('act'))
+			if ($config->search_cache && $obj->search_target && Context::getRequestMethod() === 'GET' && Context::get('module') !== 'admin' && !Context::get('act'))
 			{
 				$oModel = getModel('supercache');
 				if ($cached_search_result = $oModel->getSearchResultCache($obj))
