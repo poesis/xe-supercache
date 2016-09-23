@@ -230,13 +230,13 @@ class SuperCacheModel extends SuperCache
 		}
 		
 		// Check cache.
-		$cache_key = sprintf('document_count:%d:%s', $module_srl, count($category_srl) ? end($category_srl) : 'all');
+		$cache_key = $this->_getDocumentCountCacheKey($module_srl, $category_srl);
 		if (mt_rand(0, $config->paging_cache_auto_refresh) !== 0)
 		{
-			$count = $this->getCache($cache_key, $config->paging_cache_duration);
-			if ($count !== false)
+			$content = $this->getCache($cache_key, $config->paging_cache_duration);
+			if (is_array($content))
 			{
-				return intval($count);
+				return $content['count'];
 			}
 		}
 		
@@ -248,9 +248,13 @@ class SuperCacheModel extends SuperCache
 		$output = executeQuery('supercache.getDocumentCount', $args);
 		if ($output->toBool() && isset($output->data->count))
 		{
-			$count = intval($output->data->count);
-			$this->setCache($cache_key, $count, $config->paging_cache_duration);
-			return $count;
+			$content = array(
+				'count' => intval($output->data->count),
+				'cached' => time(),
+				'expires' => time() + $config->paging_cache_duration,
+			);
+			$this->setCache($cache_key, $content, $config->paging_cache_duration);
+			return $content['count'];
 		}
 		else
 		{
@@ -303,11 +307,13 @@ class SuperCacheModel extends SuperCache
 		
 		foreach ($categories as $category)
 		{
-			$cache_key = sprintf('document_count:%d:%s', $module_srl, $category);
-			$count = $this->getCache($cache_key, $config->paging_cache_duration);
-			if ($count !== false)
+			$cache_key = $this->_getDocumentCountCacheKey($module_srl, $category);
+			$content = $this->getCache($cache_key, $config->paging_cache_duration);
+			error_log('UPDATE ' . $cache_key . ': ' . json_encode($content));
+			if (is_array($content) && $content['expires'] > time())
 			{
-				$this->setCache($cache_key, $count + $diff, $config->paging_cache_duration);
+				$content['count'] += $diff;
+				$this->setCache($cache_key, $content, $content['expires'] - time());
 			}
 		}
 	}
@@ -411,6 +417,23 @@ class SuperCacheModel extends SuperCache
 		
 		// Generate the cache key.
 		return sprintf('board_search:%s:%s:%s:p%d', $module_key, $category_key, $search_key, max(1, intval($args->page)));
+	}
+	
+	/**
+	 * Generate a cache key for the document count cache.
+	 * 
+	 * @param int $module_srl
+	 * @param int $category_srl
+	 * @return string
+	 */
+	protected function _getDocumentCountCacheKey($module_srl, $category_srl)
+	{
+		// Generate module and category subgroup keys.
+		$module_key = $this->_getSubgroupCacheKey('dcount_module_' . intval($module_srl));
+		$category_key = 'category_' . ($category_srl ? ((is_array($category_srl) && count($category_srl)) ? end($category_srl) : $category_srl) : 'all');
+		
+		// Generate the cache key.
+		return sprintf('document_count:%s:%s', $module_key, $category_key);
 	}
 	
 	/**
