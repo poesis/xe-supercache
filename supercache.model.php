@@ -309,7 +309,6 @@ class SuperCacheModel extends SuperCache
 		{
 			$cache_key = $this->_getDocumentCountCacheKey($module_srl, $category);
 			$content = $this->getCache($cache_key, $config->paging_cache_duration);
-			error_log('UPDATE ' . $cache_key . ': ' . json_encode($content));
 			if (is_array($content) && $content['expires'] > time())
 			{
 				$content['count'] += $diff;
