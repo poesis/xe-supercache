@@ -404,6 +404,7 @@ class SuperCacheController extends SuperCache
 		{
 			if (isset($config->search_cache_comment_action['refresh_module']) && $obj->module_srl)
 			{
+				$oModel = isset($oModel) ? $oModel : getModel('supercache');
 				$oModel->deleteSearchResultCache($obj->module_srl, true);
 			}
 		}
@@ -448,6 +449,7 @@ class SuperCacheController extends SuperCache
 		{
 			if (isset($config->search_cache_comment_action['refresh_module']) && $module_srl)
 			{
+				$oModel = isset($oModel) ? $oModel : getModel('supercache');
 				$oModel->deleteSearchResultCache($module_srl, true);
 			}
 		}
@@ -488,6 +490,7 @@ class SuperCacheController extends SuperCache
 		{
 			if (isset($config->search_cache_comment_action['refresh_module']) && $obj->module_srl)
 			{
+				$oModel = isset($oModel) ? $oModel : getModel('supercache');
 				$oModel->deleteSearchResultCache($obj->module_srl, true);
 			}
 		}
