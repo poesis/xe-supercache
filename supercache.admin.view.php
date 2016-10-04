@@ -58,7 +58,8 @@ class SuperCacheAdminView extends SuperCache
 		Context::set('sc_config', $config = $this->getConfig());
 		
 		// Get current object cache settings.
-		Context::set('sc_object_cache', htmlspecialchars(Context::getDbInfo()->use_object_cache ?: ''));
+		Context::set('sc_object_cache', htmlspecialchars(Context::getDbInfo()->use_object_cache ?: 'default'));
+		Context::set('is_rhymix', !defined('RX_BASEDIR'));
 		
 		// Display the config page.
 		$this->setTemplateFile('basic');

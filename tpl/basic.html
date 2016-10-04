@@ -19,24 +19,26 @@
 		<div class="x_control-group">
 			<label class="x_control-label" for="sc_core_object_cache">{$lang->cmd_supercache_core_object_cache}</label>
 			<div class="x_controls">
-				<input name="sc_core_object_cache" id="sc_core_object_cache" type="text" class="console_font full_width" value="{$sc_object_cache}" disabled="disabled"|cond="defined('RX_VERSION')" />
-				<p class="x_help-block" cond="defined('RX_VERSION')">
+				<input name="sc_core_object_cache" id="sc_core_object_cache" type="text" class="console_font full_width" value="{$sc_object_cache}" disabled="disabled"|cond="$is_rhymix" />
+				<p class="x_help-block" cond="$is_rhymix">
 					{$lang->cmd_supercache_config_basic_rhymix_help}
 				</p>
-				<p class="x_help-block" cond="!defined('RX_VERSION') && $lang_type === 'ko'">
+				<p class="x_help-block" cond="!$is_rhymix && $lang_type === 'ko'">
 					사용 가능한 설정 문법은 아래와 같습니다. 필요에 따라 변경하시기 바랍니다.
 					<ul class="inside_help_block">
-						<li>파일 캐시: <span class="console_font link">file</span><br>소규모 사이트나 Memcached를 사용하기 곤란한 웹호스팅 환경에서 쓸 수 있는 방법입니다.<br>files/cache/store 폴더가 디스크 용량을 많이 차지할 수 있으니 주의하십시오.</li>
-						<li>Memcached: <span class="console_font link">memcache://127.0.0.1:11211</span><br>대규모 사이트에서 최적의 선택입니다.<br>다른 서버에서 구동할 경우 IP 주소와 포트를 변경하십시오.</li>
-						<li>APC: <span class="console_font link">apc</span><br>불가피한 경우 외에는 권장하지 않습니다. PHP 5.5 이상 버전에서는 사용하지 마십시오.<br>특히 캐시 용량이 가득차면 안정성이 떨어진다는 제보가 있으니, 용량을 넉넉하게 설정하시기 바랍니다.</li>
+						<li>기본값: <span class="console_font link">default</span><br>대부분의 중소규모 사이트에 적합한 방법입니다.<br>캐시 파일이 저장되는 <span class="console_font">files/supercache</span> 폴더의 용량이 다소 커질 수 있습니다.</li>
+						<li>파일: <span class="console_font link">file</span><br>대규모 사이트로서 Memcached를 사용하기 곤란한 경우 차선책으로 쓸 수 있는 방법입니다.<br>캐시 파일이 저장되는 <span class="console_font">files/supercache</span> 및 <span class="console_font">files/cache/store</span> 폴더의 용량이 매우 커질 수 있으니 주의하십시오.</li>
+						<li>Memcached: <span class="console_font link">memcache://127.0.0.1:11211</span><br>대규모 사이트나 로드밸런싱 사용시 최적의 방법입니다.<br>Memcached 서비스를 다른 서버에서 구동하는 경우 IP 주소와 포트를 변경하십시오.</li>
+						<li>APC: <span class="console_font link">apc</span><br>불가피한 경우 외에는 권장하지 않습니다. 특히 PHP 5.5 이상 버전에서는 사용하지 마십시오.<br>캐시 용량이 가득 차면 안정성이 떨어진다는 제보가 있으니, 용량을 넉넉하게 설정하시기 바랍니다.</li>
 						<li>WinCache: <span class="console_font link">wincache</span><br>윈도우 서버 전용이며, 불가피한 경우 외에는 권장하지 않습니다.</li>
 					</ul>
 				</p>
-				<p class="x_help-block" cond="!defined('RX_VERSION') && $lang_type !== 'ko'">
+				<p class="x_help-block" cond="!$is_rhymix && $lang_type !== 'ko'">
 					You can use the following syntax. Please adjust to your needs.
 					<ul class="inside_help_block">
-						<li>Files: <span class="console_font link">file</span><br>Suitable for small sites on shared server where Memcached is not available.<br>Caution: This can cause a large amount of files to be stored in the files/cache/store folder.</li>
-						<li>Memcached: <span class="console_font link">memcache://127.0.0.1:11211</span><br>Best choice for large sites.<br>Please change the IP address and port if Memcached is running on a different server.</li>
+						<li>Default: <span class="console_font link">default</span><br>Best choice for most small and medium-sized sites.<br>Caution: This can cause a large amount of files to be stored in the <span class="console_font">files/supercache</span> folder.</li>
+						<li>File: <span class="console_font link">file</span><br>Second-best choice for large sites where Memcached is not an option for whatever reason.<br>Caution: This can cause a VERY large amount of files to be stored in the <span class="console_font">files/supercache</span> and <span class="console_font">files/cache/store</span> folders.</li>
+						<li>Memcached: <span class="console_font link">memcache://127.0.0.1:11211</span><br>Best choice for large sites or load-balanced environments.<br>Please change the IP address and port if Memcached is running on a different server.</li>
 						<li>APC: <span class="console_font link">apc</span><br>Not recommended, especially in PHP 5.5 or higher.<br>Caution: APC is known to become unstable when the cache size is too small.</li>
 						<li>WinCache: <span class="console_font link">wincache</span><br>Not recommended unless there is no other choice. Only for Windows servers.</li>
 					</ul>
@@ -46,7 +48,7 @@
 		
 	</section>
 	
-	<div class="btnArea x_clearfix" cond="!defined('RX_VERSION')">
+	<div class="btnArea x_clearfix" cond="!$is_rhymix">
 		<button type="submit" class="x_btn x_btn-primary x_pull-right">{$lang->cmd_registration}</button>
 	</div>
 	

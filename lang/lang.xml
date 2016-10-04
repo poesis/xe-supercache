@@ -5,20 +5,20 @@
 		<value xml:lang="en"><![CDATA[Super Cache]]></value>
 	</item>
 	<item name="cmd_supercache_config_basic">
-		<value xml:lang="ko"><![CDATA[오브젝트 캐시]]></value>
-		<value xml:lang="en"><![CDATA[Object Cache]]></value>
+		<value xml:lang="ko"><![CDATA[캐시 방식 설정]]></value>
+		<value xml:lang="en"><![CDATA[Cache Method]]></value>
 	</item>
 	<item name="cmd_supercache_config_basic_help">
-		<value xml:lang="ko"><![CDATA[슈퍼 캐시 모듈을 사용하려면 XE에서 &quot;오브젝트 캐시&quot;를 사용하도록 설정되어 있어야 합니다.<br>XE 코어에서는 오브젝트 캐시를 설정하는 화면을 제공하지 않지만, 이 페이지를 통해 설정할 수 있습니다.]]></value>
-		<value xml:lang="en"><![CDATA[In order to use Super Cache, XE must be configured to use an &quot;object cache&quot;.<br>XE Core does not provide a screen to configure it, but you can do so on this page.]]></value>
+		<value xml:lang="ko"><![CDATA[슈퍼 캐시 모듈은 다량의 임시 데이터를 생성합니다. 이 데이터를 어디에 저장할지 선택하시기 바랍니다.<br>별도로 설정하지 않을 경우 XE 설치 경로 아래 <span class="console_font">files/supercache</span> 폴더에 저장합니다.]]></value>
+		<value xml:lang="en"><![CDATA[Super Cache produces a large amount of temporary data. Please select where this data should be stored.<br>Unless otherwise configured, cache files will be stored in the <span class="console_font">files/supercache</span> folder.]]></value>
 	</item>
 	<item name="cmd_supercache_config_basic_rhymix_help">
-		<value xml:lang="ko"><![CDATA[라이믹스 사용자는 <a href="./index.php?module=admin&amp;act=dispAdminConfigAdvanced">[시스템 설정 / 고급 설정]</a> 메뉴에서 캐시 설정을 변경하실 수 있습니다.]]></value>
-		<value xml:lang="en"><![CDATA[Rhymix users can go to <a href="./index.php?module=admin&amp;act=dispAdminConfigAdvanced">[Systm Settings / Advanced Settings]</a> to change cache settings.]]></value>
+		<value xml:lang="ko"><![CDATA[라이믹스 사용자는 <a href="./index.php?module=admin&amp;act=dispAdminConfigAdvanced">[시스템 설정 / 고급 설정]</a> 메뉴에서 캐시 방식을 변경하실 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Rhymix users can go to <a href="./index.php?module=admin&amp;act=dispAdminConfigAdvanced">[Systm Settings / Advanced Settings]</a> to change the cache method.]]></value>
 	</item>
 	<item name="cmd_supercache_core_object_cache">
-		<value xml:lang="ko"><![CDATA[오브젝트 캐시 설정]]></value>
-		<value xml:lang="en"><![CDATA[Object Cache Configuration]]></value>
+		<value xml:lang="ko"><![CDATA[캐시 방식 설정]]></value>
+		<value xml:lang="en"><![CDATA[Cache Method]]></value>
 	</item>
 	<item name="cmd_supercache_config_full_cache">
 		<value xml:lang="ko"><![CDATA[전체화면 캐시]]></value>
@@ -365,8 +365,8 @@
 		<value xml:lang="en"><![CDATA[Block Erroneous Image Request]]></value>
 	</item>
 	<item name="cmd_supercache_block_img_request_help">
-		<value xml:lang="ko"><![CDATA[위와 같은 기능이나, 페이지 전체를 <span class="console_font">&lt;img&gt;</span> 태그로 다시 로딩하려고 시도하는 버그를 우회합니다.<br>이미지를 사용한 CSRF 공격 방지에 도움이 될 수도 있습니다.]]></value>
-		<value xml:lang="en"><![CDATA[Same as above, but blocks erroneous attempts to reload the current page in an <span class="console_font">&lt;img&gt;</span> tag.<br>This option may also help defend against image-based CSRF attacks.]]></value>
+		<value xml:lang="ko"><![CDATA[위와 같은 기능이나, 페이지 전체를 <span class="console_font">&lt;img&gt;</span> 태그로 다시 로딩하려고 시도하는 버그를 우회합니다.<br>이미지를 사용한 CSRF 공격 방지에 도움이 될 수 있으나, 일부 IE 구버전에서 오류가 발생한다는 제보가 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Same as above, but blocks erroneous attempts to reload the current page in an <span class="console_font">&lt;img&gt;</span> tag.<br>This option may help defend against image-based CSRF attacks, but there are reports that it malfunctions under some versions of IE.]]></value>
 	</item>
 	<item name="cmd_supercache_redirect_to_default_url">
 		<value xml:lang="ko"><![CDATA[항상 기본 URL로 리다이렉트]]></value>

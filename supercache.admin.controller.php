@@ -28,15 +28,19 @@ class SuperCacheAdminController extends SuperCache
 	{
 		// Get current config and user selections.
 		$vars = Context::getRequestVars();
+		$vars->sc_core_object_cache = trim($vars->sc_core_object_cache);
 		
 		// Save the new config.
 		$db_info = Context::getDbInfo();
 		if ($db_info->use_object_cache !== $vars->sc_core_object_cache)
 		{
+			// Don't change Rhymix config.
 			if (defined('RX_BASEDIR'))
 			{
 				return $this->error('msg_supercache_rhymix_no_cache');
 			}
+			
+			// Check extension availability.
 			if (!strncasecmp('memcache', $vars->sc_core_object_cache, 8) && !class_exists('Memcache'))
 			{
 				return $this->error('msg_supercache_memcache_not_supported');
@@ -50,6 +54,13 @@ class SuperCacheAdminController extends SuperCache
 				return $this->error('msg_supercache_wincache_not_supported');
 			}
 			
+			// Replace default option with an empty string.
+			if ($vars->sc_core_object_cache === 'default')
+			{
+				$vars->sc_core_object_cache = '';
+			}
+			
+			// Update system config.
 			$db_info->use_object_cache = $vars->sc_core_object_cache;
 			Context::setDbInfo($db_info);
 			if (!getController('install')->makeConfigFile())
