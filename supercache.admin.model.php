@@ -64,4 +64,34 @@ class SuperCacheAdminModel extends SuperCache
 		
 		return 0;
 	}
+	
+	/**
+	 * Check if the current environment supports Memcached.
+	 * 
+	 * @return int
+	 */
+	public function isMemcachedSupported()
+	{
+		if (class_exists('Memcache'))
+		{
+			return 1;
+		}
+		
+		if (class_exists('Memcached'))
+		{
+			if (defined('RX_VERSION'))
+			{
+				return 1;
+			}
+			
+			$memcached_filename = _XE_PATH_ . 'classes/cache/CacheMemcache.class.php';
+			$memcached_checkstr = 'new Memcached';
+			if (file_exists($memcached_filename) && strpos(file_get_contents($memcached_filename), $memcached_checkstr) !== false)
+			{
+				return 2;
+			}
+		}
+		
+		return 0;
+	}
 }

@@ -41,9 +41,9 @@ class SuperCacheAdminController extends SuperCache
 			}
 			
 			// Check extension availability.
-			if (!strncasecmp('memcache', $vars->sc_core_object_cache, 8) && !class_exists('Memcache'))
+			if (!strncasecmp('memcache', $vars->sc_core_object_cache, 8) && !getAdminModel('supercache')->isMemcachedSupported())
 			{
-				return $this->error('msg_supercache_memcache_not_supported');
+				return $this->error('msg_supercache_memcached_not_supported');
 			}
 			if ($vars->sc_core_object_cache === 'apc' && !function_exists('apc_store'))
 			{

@@ -417,12 +417,8 @@
 		<value xml:lang="en"><![CDATA[You cannot change cache settings on this page when you use Rhymix.]]></value>
 	</item>
 	<item name="msg_supercache_memcached_not_supported">
-		<value xml:lang="ko"><![CDATA[서버에 Memcached 확장 모듈이 설치되어 있지 않습니다.]]></value>
-		<value xml:lang="en"><![CDATA[The Memcached extension is not installed on this server.]]></value>
-	</item>
-	<item name="msg_supercache_memcache_not_supported">
-		<value xml:lang="ko"><![CDATA[서버에 Memcache 확장 모듈이 설치되어 있지 않습니다.]]></value>
-		<value xml:lang="en"><![CDATA[The Memcache extension is not installed on this server.]]></value>
+		<value xml:lang="ko"><![CDATA[서버에 Memcache 또는 Memcached 확장 모듈이 설치되어 있지 않습니다.]]></value>
+		<value xml:lang="en"><![CDATA[The Memcache or Memcached extension is not installed on this server.]]></value>
 	</item>
 	<item name="msg_supercache_apc_not_supported">
 		<value xml:lang="ko"><![CDATA[서버에 APC 확장 모듈이 설치되어 있지 않습니다.]]></value>
@@ -447,5 +443,9 @@
 	<item name="msg_supercache_config_save_failed">
 		<value xml:lang="ko"><![CDATA[설정 파일 저장에 실패했습니다.]]></value>
 		<value xml:lang="en"><![CDATA[Failed to save configuration file.]]></value>
+	</item>
+	<item name="msg_supercache_not_available">
+		<value xml:lang="ko"><![CDATA[사용할 수 없음]]></value>
+		<value xml:lang="en"><![CDATA[Not Available]]></value>
 	</item>
 </lang>
