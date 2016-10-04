@@ -93,6 +93,33 @@ class SuperCache extends ModuleObject
 	}
 	
 	/**
+	 * Get the cache handler from XE Core.
+	 * 
+	 * This automatically falls back to the built-in file cache driver
+	 * if XE doesn't have an object cache configured.
+	 * 
+	 * @return object
+	 */
+	protected function _getCacheHandler()
+	{
+		$db_info = Context::getDbInfo();
+		if ($db_info->use_object_cache)
+		{
+			if (!preg_match('/^(?:file|dummy)\b/i', $db_info->use_object_cache))
+			{
+				$handler = CacheHandler::getInstance('object');
+				if ($handler->isSupport())
+				{
+					return $handler;
+				}
+			}
+		}
+		
+		include_once __DIR__ . '/supercache.filedriver.php';
+		return new SuperCacheFileDriver;
+	}
+	
+	/**
 	 * Get information from the system cache.
 	 * 
 	 * @param string $key
@@ -104,18 +131,11 @@ class SuperCache extends ModuleObject
 	{
 		if (self::$_cache_handler_cache === null)
 		{
-			self::$_cache_handler_cache = CacheHandler::getInstance('object');
+			self::$_cache_handler_cache = $this->_getCacheHandler();
 		}
 		
-		if (self::$_cache_handler_cache->isSupport())
-		{
-			$group_key = $group_key ?: $this->module;
-			return self::$_cache_handler_cache->get(self::$_cache_handler_cache->getGroupKey($group_key, $key), $ttl);
-		}
-		else
-		{
-			return false;
-		}
+		$group_key = $group_key ?: $this->module;
+		return self::$_cache_handler_cache->get(self::$_cache_handler_cache->getGroupKey($group_key, $key), $ttl);
 	}
 	
 	/**
@@ -131,18 +151,11 @@ class SuperCache extends ModuleObject
 	{
 		if (self::$_cache_handler_cache === null)
 		{
-			self::$_cache_handler_cache = CacheHandler::getInstance('object');
+			self::$_cache_handler_cache = $this->_getCacheHandler();
 		}
 		
-		if (self::$_cache_handler_cache->isSupport())
-		{
-			$group_key = $group_key ?: $this->module;
-			return self::$_cache_handler_cache->put(self::$_cache_handler_cache->getGroupKey($group_key, $key), $value, $ttl);
-		}
-		else
-		{
-			return false;
-		}
+		$group_key = $group_key ?: $this->module;
+		return self::$_cache_handler_cache->put(self::$_cache_handler_cache->getGroupKey($group_key, $key), $value, $ttl);
 	}
 	
 	/**
@@ -156,18 +169,11 @@ class SuperCache extends ModuleObject
 	{
 		if (self::$_cache_handler_cache === null)
 		{
-			self::$_cache_handler_cache = CacheHandler::getInstance('object');
+			self::$_cache_handler_cache = $this->_getCacheHandler();
 		}
 		
-		if (self::$_cache_handler_cache->isSupport())
-		{
-			$group_key = $group_key ?: $this->module;
-			self::$_cache_handler_cache->delete(self::$_cache_handler_cache->getGroupKey($group_key, $key));
-		}
-		else
-		{
-			return false;
-		}
+		$group_key = $group_key ?: $this->module;
+		self::$_cache_handler_cache->delete(self::$_cache_handler_cache->getGroupKey($group_key, $key));
 	}
 	
 	/**
@@ -180,18 +186,11 @@ class SuperCache extends ModuleObject
 	{
 		if (self::$_cache_handler_cache === null)
 		{
-			self::$_cache_handler_cache = CacheHandler::getInstance('object');
+			self::$_cache_handler_cache = $this->_getCacheHandler();
 		}
 		
-		if (self::$_cache_handler_cache->isSupport())
-		{
-			$group_key = $group_key ?: $this->module;
-			return self::$_cache_handler_cache->invalidateGroupKey($group_key);
-		}
-		else
-		{
-			return false;
-		}
+		$group_key = $group_key ?: $this->module;
+		return self::$_cache_handler_cache->invalidateGroupKey($group_key);
 	}
 	
 	/**
