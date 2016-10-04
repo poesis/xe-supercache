@@ -57,8 +57,13 @@ class SuperCacheAdminView extends SuperCache
 		// Get module configuration.
 		Context::set('sc_config', $config = $this->getConfig());
 		
-		// Get current object cache settings.
-		Context::set('sc_object_cache', htmlspecialchars(Context::getDbInfo()->use_object_cache ?: 'default'));
+		// Get current object cache option and system environment.
+		$object_cache_option = htmlspecialchars(Context::getDbInfo()->use_object_cache);
+		if (!$object_cache_option || $object_cache_option === 'dummy')
+		{
+			$object_cache_option = 'default';
+		}
+		Context::set('sc_object_cache', $object_cache_option);
 		Context::set('is_rhymix', defined('RX_BASEDIR'));
 		Context::set('is_memcached_supported', getAdminModel('supercache')->isMemcachedSupported());
 		
