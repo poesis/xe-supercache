@@ -105,11 +105,11 @@ class SuperCacheModel extends SuperCache
 		// Invalidate the subgroup cache keys for the module and/or document.
 		if ($module_srl)
 		{
-			$this->_invalidateSubgroupCacheKey('module_' . $module_srl);
+			$this->_invalidateSubgroupCacheKey('fullpage_module:' . $module_srl);
 		}
 		if ($document_srl)
 		{
-			$this->_invalidateSubgroupCacheKey('document_' . $document_srl);
+			$this->_invalidateSubgroupCacheKey('fullpage_document:' . $document_srl);
 		}
 		
 		// We don't have any reason to return anything else here.
@@ -200,11 +200,11 @@ class SuperCacheModel extends SuperCache
 		{
 			if ($is_comment)
 			{
-				$this->_invalidateSubgroupCacheKey('search_module_' . intval($module_srl) . '_comment');
+				$this->_invalidateSubgroupCacheKey('module_search:' . intval($module_srl) . '_comment');
 			}
 			else
 			{
-				$this->_invalidateSubgroupCacheKey('search_module_' . intval($module_srl));
+				$this->_invalidateSubgroupCacheKey('module_search:' . intval($module_srl));
 			}
 		}
 		
@@ -369,8 +369,8 @@ class SuperCacheModel extends SuperCache
 		ksort($args);
 		
 		// Generate module and document subgroup keys.
-		$module_key = $this->_getSubgroupCacheKey('module_' . $module_srl);
-		$document_key = $document_srl ? $this->_getSubgroupCacheKey('document_' . $document_srl) : 'document_0';
+		$module_key = $this->_getSubgroupCacheKey('fullpage_module:' . $module_srl);
+		$document_key = $document_srl ? $this->_getSubgroupCacheKey('fullpage_document:' . $document_srl) : 'module_index';
 		
 		// Generate the arguments key.
 		if (!count($args))
@@ -387,7 +387,7 @@ class SuperCacheModel extends SuperCache
 		}
 		
 		// Generate the cache key.
-		return sprintf('fullpage:%s:%s:%s_%s', $module_key, $document_key, $user_agent_type, $argskey);
+		return sprintf('%s:%s:%s_%s', $module_key, $document_key, $user_agent_type, $argskey);
 	}
 	
 	/**
@@ -400,7 +400,7 @@ class SuperCacheModel extends SuperCache
 	{
 		// Generate module and category subgroup keys.
 		$comment_key = ($args->search_target === 'comment') ? '_comment' : '';
-		$module_key = $this->_getSubgroupCacheKey('search_module_' . intval($args->module_srl) . $comment_key);
+		$module_key = $this->_getSubgroupCacheKey('board_search:' . intval($args->module_srl) . $comment_key);
 		$category_key = 'category_' . intval($args->category_srl);
 		
 		// Generate the arguments key.
@@ -415,7 +415,7 @@ class SuperCacheModel extends SuperCache
 		)));
 		
 		// Generate the cache key.
-		return sprintf('board_search:%s:%s:%s:p%d', $module_key, $category_key, $search_key, max(1, intval($args->page)));
+		return sprintf('%s:%s:%s:p%d', $module_key, $category_key, $search_key, max(1, intval($args->page)));
 	}
 	
 	/**
@@ -428,11 +428,11 @@ class SuperCacheModel extends SuperCache
 	protected function _getDocumentCountCacheKey($module_srl, $category_srl)
 	{
 		// Generate module and category subgroup keys.
-		$module_key = $this->_getSubgroupCacheKey('dcount_module_' . intval($module_srl));
+		$module_key = $this->_getSubgroupCacheKey('document_count:' . intval($module_srl));
 		$category_key = 'category_' . ($category_srl ? ((is_array($category_srl) && count($category_srl)) ? end($category_srl) : $category_srl) : 'all');
 		
 		// Generate the cache key.
-		return sprintf('document_count:%s:%s', $module_key, $category_key);
+		return sprintf('%s:%s', $module_key, $category_key);
 	}
 	
 	/**
@@ -450,11 +450,11 @@ class SuperCacheModel extends SuperCache
 		}
 		else
 		{
-			$subgroup_key = intval($this->getCache($cache_key . '_sgkey'));
+			$subgroup_key = intval($this->getCache('subgroups:' . $cache_key));
 			if (!$subgroup_key)
 			{
 				$subgroup_key = 1;
-				$this->setCache($cache_key . '_sgkey', $subgroup_key, 0);
+				$this->setCache('subgroups:' . $cache_key, $subgroup_key, 0);
 			}
 			$this->_subgroup_keys[$cache_key] = $subgroup_key;
 		}
@@ -465,7 +465,7 @@ class SuperCacheModel extends SuperCache
 		}
 		else
 		{
-			return $cache_key . '_sg' . $subgroup_key;
+			return $cache_key . ':' . $subgroup_key;
 		}
 	}
 	
@@ -477,11 +477,16 @@ class SuperCacheModel extends SuperCache
 	 */
 	protected function _invalidateSubgroupCacheKey($cache_key)
 	{
-		$subgroup_key = $this->_getSubgroupCacheKey($cache_key, true);
-		$subgroup_key++;
+		$old_subgroup_key = $this->_getSubgroupCacheKey($cache_key, true);
+		$new_subgroup_key = $old_subgroup_key + 1;
 		
-		$this->setCache($cache_key . '_sgkey', $subgroup_key, 0);
-		$this->_subgroup_keys[$cache_key] = $subgroup_key;
+		$this->setCache('subgroups:' . $cache_key, $new_subgroup_key, 0);
+		$this->_subgroup_keys[$cache_key] = $new_subgroup_key;
+		
+		if (self::$_cache_handler_cache instanceof SuperCacheFileDriver)
+		{
+			self::$_cache_handler_cache->invalidateSubgroupKey($cache_key, $old_subgroup_key);
+		}
 		return true;
 	}
 	

@@ -194,25 +194,8 @@ class SuperCacheFileDriver
 			return false;
 		}
 		
-		// Try to delete the renamed directory using system commands.
-		if (function_exists('exec') && !preg_match('/(?<!_)exec/', ini_get('disable_functions')))
-		{
-			if (strncasecmp(\PHP_OS, 'win', 3) == 0)
-			{
-				@exec('rmdir /S /Q ' . escapeshellarg($tempdirname));
-			}
-			else
-			{
-				@exec('rm -rf ' . escapeshellarg($tempdirname));
-			}
-		}
-		
-		// Try to delete the renamed directory using XE functions.
-		clearstatcache($tempdirname);
-		if (file_exists($tempdirname))
-		{
-			FileHandler::removeDir($tempdirname);
-		}
+		// Delete the old cache directory.
+		return $this->deleteDirectory($tempdirname);
 	}
 	
 	/**
@@ -223,8 +206,8 @@ class SuperCacheFileDriver
 	 */
 	public function getFilename($key)
 	{
-		$hash = sha1($key);
-		return $this->_dir . '/' . substr($hash, 0, 2) . '/' . substr($hash, 2, 2) . '/' . $hash . '.php';
+		$key = strtr($key, ':', '/');
+		return $this->_dir . '/' . $key . '.php';
 	}
 	
 	/**
@@ -252,5 +235,64 @@ class SuperCacheFileDriver
 	public function invalidateGroupKey($group_key)
 	{
 		return $this->truncate();
+	}
+	
+	/**
+	 * Invalidate a subgroup key.
+	 * 
+	 * This method deletes the directory associated with the subgroup key.
+	 * 
+	 * @param string $subgroup_key
+	 * @param int $index
+	 * @return bool
+	 */
+	public function invalidateSubgroupKey($subgroup_key, $index)
+	{
+		return $this->deleteDirectory($this->_dir . '/' . strtr($subgroup_key, ':', '/') . '/' . $index, false);
+	}
+	
+	/**
+	 * Delete a directory.
+	 * 
+	 * This method tries to use system commands to delete a directory quickly,
+	 * but falls back to XE functions if this doesn't work.
+	 * 
+	 * @param string $dir
+	 * @param bool $fallback
+	 * @return bool
+	 */
+	public function deleteDirectory($dir, $fallback = true)
+	{
+		// Try to delete the renamed directory using system commands.
+		if (function_exists('exec') && !preg_match('/(?<!_)exec/', ini_get('disable_functions')))
+		{
+			if (strncasecmp(\PHP_OS, 'win', 3) == 0)
+			{
+				@exec('rmdir /S /Q ' . escapeshellarg($dir));
+			}
+			else
+			{
+				@exec('rm -rf ' . escapeshellarg($dir));
+			}
+		}
+		
+		// Try to delete the renamed directory using XE functions.
+		if (file_exists($dir))
+		{
+			if ($fallback)
+			{
+				FileHandler::removeDir($dir);
+				clearstatcache($dir);
+				return file_exists($dir);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
 	}
 }
