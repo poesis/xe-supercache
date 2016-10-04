@@ -483,10 +483,15 @@ class SuperCacheModel extends SuperCache
 		$this->setCache('subgroups:' . $cache_key, $new_subgroup_key, 0);
 		$this->_subgroup_keys[$cache_key] = $new_subgroup_key;
 		
-		if (self::$_cache_handler_cache instanceof SuperCacheFileDriver)
+		$config = $this->getConfig();
+		if ($config->auto_purge_cache_files)
 		{
-			self::$_cache_handler_cache->invalidateSubgroupKey($cache_key, $old_subgroup_key);
+			if (self::$_cache_handler_cache instanceof SuperCacheFileDriver)
+			{
+				self::$_cache_handler_cache->invalidateSubgroupKey($cache_key, $old_subgroup_key);
+			}
 		}
+		
 		return true;
 	}
 	

@@ -368,6 +368,14 @@
 		<value xml:lang="ko"><![CDATA[위와 같은 기능이나, 페이지 전체를 <span class="console_font">&lt;img&gt;</span> 태그로 다시 로딩하려고 시도하는 버그를 우회합니다.<br>이미지를 사용한 CSRF 공격 방지에 도움이 될 수 있으나, 일부 IE 구버전에서 오류가 발생한다는 제보가 있습니다.]]></value>
 		<value xml:lang="en"><![CDATA[Same as above, but blocks erroneous attempts to reload the current page in an <span class="console_font">&lt;img&gt;</span> tag.<br>This option may help defend against image-based CSRF attacks, but there are reports that it malfunctions under some versions of IE.]]></value>
 	</item>
+	<item name="cmd_supercache_auto_purge_cache_files">
+		<value xml:lang="ko"><![CDATA[캐시 파일 자동 정리]]></value>
+		<value xml:lang="en"><![CDATA[Auto-Purge Cache Files]]></value>
+	</item>
+	<item name="cmd_supercache_auto_purge_cache_files_help">
+		<value xml:lang="ko"><![CDATA[기본값 또는 파일 캐시 사용시 <span class="console_font">files/supercache</span> 폴더의 용량이 지나치게 커지지 않도록 오래된 파일을 자동 정리합니다.<br>글쓰기 또는 모듈 설정 변경시 지나치게 오래 걸리거나 오류가 발생한다면 이 옵션을 해제하십시오.]]></value>
+		<value xml:lang="en"><![CDATA[When using the default or file cache method, keep the size of the <span class="console_font">files/supercache</span> folder in check by automatically purging outdated files.<br>Caution: This might cause timeouts or errors when new posts are submitted.]]></value>
+	</item>
 	<item name="cmd_supercache_redirect_to_default_url">
 		<value xml:lang="ko"><![CDATA[항상 기본 URL로 리다이렉트]]></value>
 		<value xml:lang="en"><![CDATA[Always Redirect to Default URL]]></value>

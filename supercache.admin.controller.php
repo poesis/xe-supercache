@@ -321,6 +321,7 @@ class SuperCacheAdminController extends SuperCache
 		$config->disable_post_search = $vars->sc_disable_post_search === 'Y' ? true : false;
 		$config->block_css_request = $vars->sc_block_css_request === 'Y' ? true : false;
 		$config->block_img_request = $vars->sc_block_img_request === 'Y' ? true : false;
+		$config->auto_purge_cache_files = $vars->sc_auto_purge_cache_files === 'Y' ? true : false;
 		$config->redirect_to_default_url = $vars->sc_redirect_to_default_url === 'Y' ? true : false;
 		$config->use_gzip = trim($vars->sc_use_gzip);
 		

@@ -68,6 +68,23 @@
 		</div>
 	
 		<div class="x_control-group">
+			<label class="x_control-label">{$lang->cmd_supercache_auto_purge_cache_files}</label>
+			<div class="x_controls">
+				<label for="sc_auto_purge_cache_files_y" class="x_inline">
+					<input name="sc_auto_purge_cache_files" id="sc_auto_purge_cache_files_y" type="radio" value="Y" checked="checked"|cond="$sc_config->auto_purge_cache_files" />
+					{$lang->cmd_yes}
+				</label>
+				<label for="sc_auto_purge_cache_files_n" class="x_inline">
+					<input name="sc_auto_purge_cache_files" id="sc_auto_purge_cache_files_n" type="radio" value="N" checked="checked"|cond="!$sc_config->auto_purge_cache_files" />
+					{$lang->cmd_no}
+				</label>
+				<p class="x_help-block">
+					{$lang->cmd_supercache_auto_purge_cache_files_help}<br />
+				</p>
+			</div>
+		</div>
+	
+		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_redirect_to_default_url}</label>
 			<div class="x_controls">
 				<label for="sc_redirect_to_default_url_y" class="x_inline">
