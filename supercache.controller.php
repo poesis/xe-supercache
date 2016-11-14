@@ -572,6 +572,22 @@ class SuperCacheController extends SuperCache
 				return;
 			}
 			
+			// Do not store if a PC page was generated for a mobile request or vice versa.
+			if (substr($this->_cacheCurrentRequest[2], 0, 2) === 'pc')
+			{
+				if (Mobile::isFromMobilePhone())
+				{
+					return;
+				}
+			}
+			else
+			{
+				if (!Mobile::isFromMobilePhone())
+				{
+					return;
+				}
+			}
+			
 			// Collect extra data.
 			if ($this->_cacheCurrentRequest[1] && ($oDocument = Context::get('oDocument')) && ($oDocument->document_srl == $this->_cacheCurrentRequest[1]))
 			{
