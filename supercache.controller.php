@@ -48,7 +48,7 @@ class SuperCacheController extends SuperCache
 			{
 				return $this->terminateWithPlainText('/* block_css_request */');
 			}
-			if ($config->block_img_request && $accept_header && !strncmp($accept_header, 'image/', 6) && !preg_match('/\b(?:ht|x)ml\b/', $accept_header))
+			if ($config->block_img_request && $accept_header && !strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') && !strncmp($accept_header, 'image/', 6) && !preg_match('/\b(?:ht|x)ml\b/', $accept_header))
 			{
 				return $this->terminateWithPlainText('/* block_img_request */');
 			}
