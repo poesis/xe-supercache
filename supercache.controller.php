@@ -1090,7 +1090,7 @@ class SuperCacheController extends SuperCache
 				$widget_content = trim($widget_content);
 				if ($widget_content !== '')
 				{
-					$widget_content = preg_replace('@<\!--#Meta:@', '<!--Meta:', $widget_content);
+					$widget_content = str_replace('<!--#Meta:', '<!--Meta:', $widget_content);
 					$oModel->setWidgetCache($cache_key, $cache_duration, $widget_content);
 				}
 			}
