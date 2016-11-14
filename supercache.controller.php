@@ -603,6 +603,12 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
+		// Return if SimpleXML is not available.
+		if (!function_exists('simplexml_load_string'))
+		{
+			return;
+		}
+		
 		$content = preg_replace_callback('/<img\b(?:[^>]*?)\bwidget="(?:[^>]*?)>/i', array($this, 'procWidgetCache'), $content);
 	}
 	
