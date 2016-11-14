@@ -29,6 +29,8 @@
 					<input name="sc_widget_cache" id="sc_widget_cache_n" type="radio" value="N" checked="checked"|cond="!$sc_config->widget_cache" />
 					{$lang->cmd_no}
 				</label>
+				<label cond="function_exists('simplexml_load_string')" class="x_inline supported">&#10003; {$lang->cmd_supercache_widget_cache_supported}</label>
+				<label cond="!function_exists('simplexml_load_string')" class="x_inline unsupported">&#10007; {$lang->cmd_supercache_widget_cache_not_supported}</label>
 				<p class="x_help-block">
 					{$lang->cmd_supercache_widget_cache_use_help}
 				</p>

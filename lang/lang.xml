@@ -356,6 +356,14 @@
 		<value xml:lang="ko"><![CDATA['아니오'를 선택하면 아래의 모든 설정이 무시됩니다.]]></value>
 		<value xml:lang="en"><![CDATA[Selecting 'No' will disable all of the settings below.]]></value>
 	</item>
+	<item name="cmd_supercache_widget_cache_supported">
+		<value xml:lang="ko"><![CDATA[위젯 캐시를 사용할 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Widget cache is supported on this site.]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_not_supported">
+		<value xml:lang="ko"><![CDATA[위젯 캐시를 사용할 수 없습니다. SimpleXML을 설치하여 주십시오.]]></value>
+		<value xml:lang="en"><![CDATA[Widget cache is NOT supported on this site. Please install SimpleXML.]]></value>
+	</item>
 	<item name="cmd_supercache_widget_cache_per_widget">
 		<value xml:lang="ko"><![CDATA[위젯별 설정]]></value>
 		<value xml:lang="en"><![CDATA[Per-Widget Configuration]]></value>
