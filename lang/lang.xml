@@ -156,6 +156,14 @@
 		<value xml:lang="ko"><![CDATA[캐싱된 페이지가 만료되자마자 동시 요청이 한꺼번에 몰리는 현상을 방지합니다.<br>참고 문서: <a href="https://en.wikipedia.org/wiki/Cache_stampede" target="_blank">Cache Stampede</a>]]></value>
 		<value xml:lang="en"><![CDATA[Prevent surges in simultaneous requests as soon as a cached page expires.<br>See: <a href="https://en.wikipedia.org/wiki/Cache_stampede" target="_blank">Cache Stampede</a>]]></value>
 	</item>
+	<item name="cmd_supercache_full_cache_delay_trigger">
+		<value xml:lang="ko"><![CDATA[전체화면 캐시 처리 지연]]></value>
+		<value xml:lang="en"><![CDATA[Delay Cache Processing]]></value>
+	</item>
+	<item name="cmd_supercache_full_cache_delay_trigger_help">
+		<value xml:lang="ko"><![CDATA[전체화면 캐시 처리를 다소 지연시켜 <span class="console_font">before_module_init</span> 시점에 애드온이 실행될 수 있도록 합니다.<br>실행되는 애드온에 따라 성능이 크게 나빠질 수도 있으니 주의하시기 바랍니다.]]></value>
+		<value xml:lang="en"><![CDATA[Delay cache processing so that add-ons can execute at the <span class="console_font">before_module_init</span> point.<br>Depending on the add-on, this may result in significant loss of performance.]]></value>
+	</item>
 	<item name="cmd_supercache_full_cache_use_headers">
 		<value xml:lang="ko"><![CDATA[Cache-Control 헤더 사용]]></value>
 		<value xml:lang="en"><![CDATA[Use Cache-Control Headers]]></value>

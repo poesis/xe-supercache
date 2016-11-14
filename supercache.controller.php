@@ -24,6 +24,7 @@ class SuperCacheController extends SuperCache
 	/**
 	 * Flag to cache the current request.
 	 */
+	protected $_defaultUrlChecked = false;
 	protected $_cacheCurrentSearch = false;
 	protected $_cacheCurrentRequest = null;
 	protected $_cacheStartTimestamp = null;
@@ -64,18 +65,29 @@ class SuperCacheController extends SuperCache
 			}
 			else
 			{
-				$default_url_checked = true;
+				$this->_defaultUrlChecked = true;
 			}
 		}
-		else
-		{
-			$default_url_checked = false;
-		}
 		
-		// Check the full page cache.
-		if ($config->full_cache)
+		// Check the full page cache (if not delayed).
+		if ($config->full_cache && !$config->full_cache_delay_trigger)
 		{
-			$this->checkFullPageCache($obj, $config, $default_url_checked);
+			$this->checkFullPageCache($obj, $config);
+		}
+	}
+	
+	/**
+	 * Trigger called at moduleHandler.init (after)
+	 */
+	public function triggerAfterModuleHandlerInit($obj)
+	{
+		// Get module configuration.
+		$config = $this->getConfig();
+		
+		// Check the full page cache (if delayed).
+		if ($config->full_cache && $config->full_cache_delay_trigger)
+		{
+			$this->checkFullPageCache($obj, $config);
 		}
 		
 		// Fill the page variable for paging cache.
@@ -621,13 +633,12 @@ class SuperCacheController extends SuperCache
 	 * 
 	 * @param object $obj
 	 * @param object $config
-	 * @param object $default_url_checked (optional)
 	 * @return void
 	 */
-	public function checkFullPageCache($obj, $config, $default_url_checked = false)
+	public function checkFullPageCache($obj, $config)
 	{
 		// Abort if not an HTML GET request.
-		if (Context::getRequestMethod() !== 'GET')
+		if (Context::getRequestMethod() !== 'GET' || PHP_SAPI === 'cli')
 		{
 			return;
 		}
@@ -673,9 +684,8 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Abort if the current domain does not match the default domain.
-		$is_secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && $_SERVER['HTTPS'] !== 'off');
 		$site_module_info = Context::get('site_module_info');
-		if (!$default_url_checked)
+		if (!$this->_defaultUrlChecked)
 		{
 			$current_domain = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']);
 			$default_domain = parse_url(Context::getDefaultUrl(), PHP_URL_HOST);
@@ -685,8 +695,14 @@ class SuperCacheController extends SuperCache
 			}
 		}
 		
+		// Collect more information about the current request.
+		$mid = $obj->mid ?: Context::get('mid');
+		$act = Context::get('act');
+		$document_srl = Context::get('document_srl');
+		$is_secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && $_SERVER['HTTPS'] !== 'off');
+		
 		// Abort if the current act is excluded.
-		if (isset($config->full_cache_exclude_acts[$obj->act]))
+		if (isset($config->full_cache_exclude_acts[$act]))
 		{
 			return;
 		}
@@ -700,9 +716,9 @@ class SuperCacheController extends SuperCache
 		{
 			$module_srl = $obj->module_srl;
 		}
-		elseif ($obj->mid)
+		elseif ($mid)
 		{
-			$module_info = getModel('module')->getModuleInfoByMid($obj->mid, intval($site_module_info->site_srl) ?: 0);
+			$module_info = getModel('module')->getModuleInfoByMid($mid, intval($site_module_info->site_srl) ?: 0);
 			$module_srl = $module_info ? $module_info->module_srl : 0;
 		}
 		else
@@ -717,11 +733,11 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Determine the page type.
-		if ($obj->act)
+		if ($act)
 		{
 			$page_type = 'other';
 		}
-		elseif ($obj->document_srl)
+		elseif ($document_srl)
 		{
 			$page_type = 'document';
 		}
@@ -780,8 +796,8 @@ class SuperCacheController extends SuperCache
 				$cache = $oModel->getFullPageCache($module_srl, 0, $user_agent_type, $request_vars);
 				break;
 			case 'document':
-				$this->_cacheCurrentRequest = array($module_srl, $obj->document_srl, $user_agent_type, $request_vars);
-				$cache = $oModel->getFullPageCache($module_srl, $obj->document_srl, $user_agent_type, $request_vars);
+				$this->_cacheCurrentRequest = array($module_srl, $document_srl, $user_agent_type, $request_vars);
+				$cache = $oModel->getFullPageCache($module_srl, $document_srl, $user_agent_type, $request_vars);
 				break;
 			case 'other':
 				$this->_cacheCurrentRequest = array(0, 0, $user_agent_type, $request_vars);
@@ -808,10 +824,10 @@ class SuperCacheController extends SuperCache
 			// Increment the view count if required.
 			if ($page_type === 'document' && $config->full_cache_incr_view_count && isset($cache['extra_data']['view_count']))
 			{
-				if (!isset($_SESSION['readed_document'][$obj->document_srl]))
+				if (!isset($_SESSION['readed_document'][$document_srl]))
 				{
-					$oModel->updateDocumentViewCount($obj->document_srl, $cache['extra_data']);
-					$_SESSION['readed_document'][$obj->document_srl] = true;
+					$oModel->updateDocumentViewCount($document_srl, $cache['extra_data']);
+					$_SESSION['readed_document'][$document_srl] = true;
 				}
 			}
 			
@@ -928,7 +944,7 @@ class SuperCacheController extends SuperCache
 	public function fillPageVariable($obj, $config)
 	{
 		// Only work if there is a document_srl without a page variable and a suitable referer header.
-		if ($obj->mid && $obj->document_srl && !$obj->act && !$obj->module && !Context::get('page') && ($referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : false))
+		if ($obj->mid && Context::get('document_srl') && Context::get('act') && !Context::get('module') && !Context::get('page') && ($referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : false))
 		{
 			// Only guess the page number from the same module in the same site.
 			if (strpos($referer, '//' . $_SERVER['HTTP_HOST'] . '/') === false)

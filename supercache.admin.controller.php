@@ -175,6 +175,7 @@ class SuperCacheAdminController extends SuperCache
 		}
 		
 		$config->full_cache_duration = intval($vars->sc_full_cache_duration) ?: 300;
+		$config->full_cache_delay_trigger = $vars->sc_full_cache_delay_trigger === 'Y' ? true : false;
 		$config->full_cache_stampede_protection = $vars->sc_full_cache_stampede_protection === 'Y' ? true : false;
 		$config->full_cache_use_headers = $vars->sc_full_cache_use_headers === 'Y' ? true : false;
 		$config->full_cache_use_headers_proxy_too = $vars->sc_full_cache_use_headers_proxy_too === 'Y' ? true : false;
