@@ -341,8 +341,40 @@
 		<value xml:lang="en"><![CDATA[Widget Cache]]></value>
 	</item>
 	<item name="cmd_supercache_config_widget_cache_help">
-		<value xml:lang="ko"><![CDATA[이 기능은 아직 개발중입니다.]]></value>
-		<value xml:lang="en"><![CDATA[This feature is still under development.]]></value>
+		<value xml:lang="ko"><![CDATA[캐시를 설정하지 않았거나, 위젯 시퀀스 중복으로 캐시를 사용할 수 없는 위젯에도 모두 캐시를 적용하는 기능입니다.<br>위젯이 많은 화면의 로딩 속도와 서버 부하를 크게 줄일 수 있습니다.<br><span class="warning">사용자에 따라 내용이 달라져야 하는 위젯은 캐시를 적용하지 않거나 그룹별로 구분하도록 설정해 주십시오.</span>]]></value>
+		<value xml:lang="en"><![CDATA[Enable caching of all widgets, regardless of each widget's cache setting.<br>This helps reduce the load time for pages that contain a lot of widgets.<br><span class="warning">If a widget must vary by user, it must be either excluded from caching or separated by group.</span>]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_basic">
+		<value xml:lang="ko"><![CDATA[기본 설정]]></value>
+		<value xml:lang="en"><![CDATA[Basic Configuration]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_use">
+		<value xml:lang="ko"><![CDATA[위젯 캐시 사용]]></value>
+		<value xml:lang="en"><![CDATA[Use Widget Cache]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_use_help">
+		<value xml:lang="ko"><![CDATA['아니오'를 선택하면 아래의 모든 설정이 무시됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[Selecting 'No' will disable all of the settings below.]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_per_widget">
+		<value xml:lang="ko"><![CDATA[위젯별 설정]]></value>
+		<value xml:lang="en"><![CDATA[Per-Widget Configuration]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_duration">
+		<value xml:lang="ko"><![CDATA[캐시 기간 (초)]]></value>
+		<value xml:lang="en"><![CDATA[Duration (seconds)]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_duration_default">
+		<value xml:lang="ko"><![CDATA[기본 캐시 기간]]></value>
+		<value xml:lang="en"><![CDATA[Default Cache Duration]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_duration_help">
+		<value xml:lang="ko"><![CDATA[아래에서 별도로 캐시 기간을 지정하지 않은 위젯에는 기본 캐시 기간이 적용됩니다. 단위는 '초'입니다.]]></value>
+		<value xml:lang="en"><![CDATA[The duration above, in seconds, will be applied to any widget that does not have its own cache duration specified below.]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_group">
+		<value xml:lang="ko"><![CDATA[회원 그룹별 구분]]></value>
+		<value xml:lang="en"><![CDATA[Separate by Group]]></value>
 	</item>
 	<item name="cmd_supercache_config_thumbnail_cache">
 		<value xml:lang="ko"><![CDATA[섬네일 캐시]]></value>

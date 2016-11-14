@@ -31,6 +31,30 @@ class SuperCacheController extends SuperCache
 	protected $_cacheHttpStatusCode = 200;
 	
 	/**
+	 * Widget names to skip caching.
+	 */
+	protected $_skipWidgetNames = array(
+		'login_info' => true,
+		'widgetContent' => true,
+		'widgetBox' => true,
+	);
+	
+	/**
+	 * Widget attributes to skip decoding.
+	 */
+	protected $_skipWidgetAttrs = array(
+		'class' => true,
+		'document_srl' => true,
+		'style' => true,
+		'widget' => true,
+		'widget_padding_top' => true,
+		'widget_padding_right' => true,
+		'widget_padding_bottom' => true,
+		'widget_padding_left' => true,
+		'widgetstyle' => true,
+	);
+	
+	/**
 	 * Trigger called at moduleHandler.init (before)
 	 */
 	public function triggerBeforeModuleHandlerInit($obj)
@@ -559,15 +583,33 @@ class SuperCacheController extends SuperCache
 	/**
 	 * Trigger called at display (before)
 	 */
-	public function triggerBeforeDisplay($obj)
+	public function triggerBeforeDisplay(&$content)
 	{
+		// Return if widgets should not be cached for this request.
+		$config = $this->getConfig();
+		if (!$config->widget_cache || !$config->widget_cache_duration)
+		{
+			return;
+		}
+		if (Context::getResponseMethod() !== 'HTML' || preg_match('/^disp(?:Layout|Page)[A-Z]/', Context::get('act')))
+		{
+			return;
+		}
 		
+		// Return if widget compilation is in "Javascript Mode" for any reason.
+		$oWidgetController = getController('widget');
+		if ($oWidgetController->javascript_mode || $oWidgetController->layout_javascript_mode)
+		{
+			return;
+		}
+		
+		$content = preg_replace_callback('/<img\b(?:[^>]*?)\bwidget="(?:[^>]*?)>/i', array($this, 'procWidgetCache'), $content);
 	}
 	
 	/**
 	 * Trigger called at display (after)
 	 */
-	public function triggerAfterDisplay($obj)
+	public function triggerAfterDisplay($content)
 	{
 		// Store the output of the current request in the full-page cache.
 		if ($this->_cacheCurrentRequest)
@@ -619,7 +661,7 @@ class SuperCacheController extends SuperCache
 				$this->_cacheCurrentRequest[1],
 				$this->_cacheCurrentRequest[2],
 				$this->_cacheCurrentRequest[3],
-				$obj,
+				$content,
 				$extra_data,
 				$this->_cacheHttpStatusCode,
 				microtime(true) - $this->_cacheStartTimestamp
@@ -967,6 +1009,93 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Process widget cache.
+	 * 
+	 * @param string $match
+	 * @return string
+	 */
+	public function procWidgetCache($match)
+	{
+		// Get widget attributes.
+		$widget_attrs = new stdClass;
+		$widget_xml = @simplexml_load_string('<?xml version="1.0"?>' . $match[0]);
+		if (!$widget_xml)
+		{
+			return $match[0];
+		}
+		foreach ($widget_xml->attributes() as $key => $value)
+		{
+			if (isset($this->_skipWidgetAttrs[$key]))
+			{
+				$widget_attrs->{$key} = strval($value);
+			}
+			else
+			{
+				$widget_attrs->{$key} = preg_replace_callback('/%u([0-9a-f]+)/i', function($m) {
+					return html_entity_decode('&#x' . $m[1] . ';');
+				}, rawurldecode(strval($value)));
+			}
+		}
+		
+		// If this widget should not be cached, return.
+		if (!$widget_attrs->widget || isset($this->_skipWidgetNames[$widget_attrs->widget]))
+		{
+			return $match[0];
+		}
+		
+		// Get module configuration.
+		$config = $this->getConfig();
+		if (!isset($config->widget_config[$widget_attrs->widget]) || !$config->widget_config[$widget_attrs->widget]['enabled'])
+		{
+			return $match[0];
+		}
+		
+		// Generate the cache key and duration.
+		$oModel = getModel('supercache');
+		$cache_key = $oModel->getWidgetCacheKey($widget_attrs, $config->widget_config[$widget_attrs->widget]['group'] ? Context::get('logged_info') : false);
+		$cache_duration = $config->widget_config[$widget_attrs->widget]['duration'] ?: $config->widget_cache_duration;
+		
+		// Check the cache for previously rendered widget content.
+		$widget_content = $oModel->getWidgetCache($cache_key, $cache_duration);
+		
+		// If not found in cache, execute the widget.
+		if ($widget_content === false)
+		{
+			$oWidgetController = getController('widget');
+			$oWidget = $oWidgetController->getWidgetObject($widget_attrs->widget);
+			if ($oWidget && method_exists($oWidget, 'proc'))
+			{
+				$widget_content = $oWidget->proc($widget_attrs);
+				getController('module')->replaceDefinedLangCode($widget_content);
+				$widget_content = trim($widget_content);
+				if ($widget_content !== '')
+				{
+					$widget_content = preg_replace('@<\!--#Meta:@', '<!--Meta:', $widget_content);
+					$oModel->setWidgetCache($cache_key, $cache_duration, $widget_content);
+				}
+			}
+			else
+			{
+				return '';
+			}
+		}
+		
+		// Generate the widget HTML.
+		$inner_styles = sprintf('padding: %dpx %dpx %dpx %dpx !important;', $widget_attrs->widget_padding_top, $widget_attrs->widget_padding_right, $widget_attrs->widget_padding_bottom, $widget_attrs->widget_padding_left);
+		$widget_content = sprintf('<div style="*zoom:1;%s">%s</div>', $inner_styles, $widget_content);
+		if ($widget_attrs->widgetstyle)
+		{
+			$oWidgetController = isset($oWidgetController) ? $oWidgetController : getController('widget');
+			$widget_content = $oWidgetController->compileWidgetStyle($widget_attrs->widgetstyle, $widget_attrs->widget, $widget_content, $widget_attrs, false);
+		}
+		$outer_styles = preg_replace('/url\((.+)(\/?)none\)/is', '', $widget_attrs->style);
+		$output = sprintf('<div class="xe-widget-wrapper %s" %sstyle="%s">%s</div>', $widget_attrs->css_class, $widget_attrs->id, $outer_styles, $widget_content);
+		
+		// Return the result.
+		return $output;
 	}
 	
 	/**

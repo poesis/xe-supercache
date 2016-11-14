@@ -213,6 +213,42 @@ class SuperCacheModel extends SuperCache
 	}
 	
 	/**
+	 * Get a widget cache entry.
+	 * 
+	 * @param string $cache_key
+	 * @param int $cache_duration
+	 * @return string|false
+	 */
+	public function getWidgetCache($cache_key, $cache_duration)
+	{
+		return $this->getCache($cache_key, $cache_duration);
+	}
+	
+	/**
+	 * Set a widget cache entry.
+	 * 
+	 * @param string $cache_key
+	 * @param int $cache_duration
+	 * @param string $content
+	 * @return bool
+	 */
+	public function setWidgetCache($cache_key, $cache_duration, $content)
+	{
+		return $this->setCache($cache_key, $content, $cache_duration);
+	}
+	
+	/**
+	 * Delete a widget cache entry.
+	 * 
+	 * @param string $cache_key
+	 * @return bool
+	 */
+	public function deleteWidgetCache($cache_key)
+	{
+		return $this->deleteCache($cache_key);
+	}
+	
+	/**
 	 * Get the number of documents in a module.
 	 * 
 	 * @param int $module_srl
@@ -350,6 +386,34 @@ class SuperCacheModel extends SuperCache
 			$output = $oDB->_query(sprintf('UPDATE %sdocuments SET readed_count = readed_count + %d WHERE document_srl = %d', $oDB->prefix, $incr, $document_srl));
 			return $output ? true : false;
 		}
+	}
+	
+	/**
+	 * Generate a cache key for the widget cache.
+	 * 
+	 * @param object $widget_attr
+	 * @param object $logged_info
+	 * @return string
+	 */
+	public function getWidgetCacheKey($widget_attrs, $logged_info)
+	{
+		if (!$logged_info || !$logged_info->member_srl)
+		{
+			$group_key = 'nogroup';
+		}
+		elseif ($logged_info->is_admin === 'Y')
+		{
+			$group_key = 'admin';
+		}
+		else
+		{
+			$groups = $logged_info->group_list;
+			sort($groups);
+			$group_key = sha1(implode('|', $groups));
+		}
+		
+		$subgroup_key = $this->_getSubgroupCacheKey('widget');
+		return sprintf('%s:%s:%s:%s', $subgroup_key, $widget_attrs->widget, hash('sha256', serialize($widget_attrs)), $group_key);
 	}
 	
 	/**

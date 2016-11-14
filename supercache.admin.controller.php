@@ -297,6 +297,32 @@ class SuperCacheAdminController extends SuperCache
 		
 		// Fetch the new config.
 		$config->widget_cache = $vars->sc_widget_cache === 'Y' ? true : false;
+		$config->widget_cache_duration = intval($vars->sc_widget_cache_duration) ?: 300;
+		
+		// Organize per-widget config.
+		$widgets = array();
+		foreach (get_object_vars($vars) as $key => $value)
+		{
+			if (preg_match('/^sc_widget_cache_([a-zA-Z0-9_]+)_(enabled|group|duration)$/', $key, $matches))
+			{
+				$widget_name = $matches[1];
+				if (!isset($widgets[$widget_name]))
+				{
+					$widgets[$widget_name] = array(
+						'enabled' => false,
+						'group' => false,
+						'duration' => false,
+					);
+				}
+				switch ($matches[2])
+				{
+					case 'enabled': $widgets[$widget_name]['enabled'] = $value === 'Y' ? true : false; break;
+					case 'group': $widgets[$widget_name]['group'] = $value === 'Y' ? true : false; break;
+					case 'duration': $widgets[$widget_name]['duration'] = intval($value) ?: false;
+				}
+			}
+		}
+		$config->widget_config = $widgets;
 		
 		// Save the new config.
 		$output = $this->setConfig($config);

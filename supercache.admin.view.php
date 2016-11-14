@@ -121,6 +121,11 @@ class SuperCacheAdminView extends SuperCache
 		// Get module configuration.
 		Context::set('sc_config', $config = $this->getConfig());
 		
+		// Get the list of installed widgets.
+		$oWidgetModel = getModel('widget');
+		$widget_list = $oWidgetModel->getDownloadedWidgetList();
+		Context::set('widget_list', $widget_list);
+		
 		// Display the config page.
 		$this->setTemplateFile('widget_cache');
 	}
