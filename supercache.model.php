@@ -130,8 +130,17 @@ class SuperCacheModel extends SuperCache
 		// Check cache.
 		$cache_key = $this->_getSearchResultCacheKey($args);
 		$content = $this->getCache($cache_key, $config->search_cache_duration);
-		if (!$content)
+		if (!is_array($content))
 		{
+			return false;
+		}
+		
+		// Apply stampede protection.
+		$current_timestamp = time();
+		if ($content['expires'] <= $current_timestamp)
+		{
+			$content['expires'] = $current_timestamp + 60;
+			$this->setCache($cache_key, $content, 60);
 			return false;
 		}
 		
@@ -183,7 +192,7 @@ class SuperCacheModel extends SuperCache
 		
 		// Save to cache.
 		$cache_key = $this->_getSearchResultCacheKey($args);
-		return $this->setCache($cache_key, $content, $config->search_cache_duration);
+		return $this->setCache($cache_key, $content, $config->search_cache_duration + 60);
 	}
 	
 	/**
@@ -221,7 +230,24 @@ class SuperCacheModel extends SuperCache
 	 */
 	public function getWidgetCache($cache_key, $cache_duration)
 	{
-		return $this->getCache($cache_key, $cache_duration);
+		// Check cache.
+		$content = $this->getCache($cache_key, $cache_duration);
+		if (!is_array($content))
+		{
+			return false;
+		}
+		
+		// Apply stampede protection.
+		$current_timestamp = time();
+		if ($content['expires'] <= $current_timestamp)
+		{
+			$content['expires'] = $current_timestamp + 60;
+			$this->setCache($cache_key, $content, 60);
+			return false;
+		}
+		
+		// Return the cached content.
+		return $content['content'];
 	}
 	
 	/**
@@ -234,7 +260,14 @@ class SuperCacheModel extends SuperCache
 	 */
 	public function setWidgetCache($cache_key, $cache_duration, $content)
 	{
-		return $this->setCache($cache_key, $content, $cache_duration);
+		// Organize the content.
+		$content = array(
+			'content' => strval($content),
+			'expires' => time() + $cache_duration,
+		);
+		
+		// Save to cache.
+		return $this->setCache($cache_key, $content, $cache_duration + 60);
 	}
 	
 	/**
@@ -245,6 +278,7 @@ class SuperCacheModel extends SuperCache
 	 */
 	public function deleteWidgetCache($cache_key)
 	{
+		// Delete that thing.
 		return $this->deleteCache($cache_key);
 	}
 	
