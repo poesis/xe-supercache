@@ -642,7 +642,16 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		$is_mobile = Mobile::isFromMobilePhone() ? true : false;
-		if (($is_mobile && !isset($config->full_cache['mobile'])) || (!$is_mobile && !isset($config->full_cache['pc'])))
+		$is_pushapp = (strpos($_SERVER['HTTP_USER_AGENT'], 'XEPUSH') !== false) ? true : false;
+		if (!$is_mobile && !isset($config->full_cache['pc']))
+		{
+			return;
+		}
+		if ($is_mobile && !$is_pushapp && !isset($config->full_cache['mobile']))
+		{
+			return;
+		}
+		if ($is_mobile && $is_pushapp && !isset($config->full_cache['pushapp']))
 		{
 			return;
 		}
@@ -716,7 +725,8 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Compile the user agent type.
-		$user_agent_type = ($is_mobile ? 'mo' : 'pc') . ($is_secure ? '_secure' : '') . '_' . Context::getLangType();
+		$device_type = ($is_mobile ? ($is_pushapp ? 'mp' : 'mo') : 'pc');
+		$user_agent_type = $device_type . ($is_secure ? '_secure' : '') . '_' . Context::getLangType();
 		
 		// Remove unnecessary request variables.
 		$request_vars = Context::getRequestVars();
@@ -772,11 +782,11 @@ class SuperCacheController extends SuperCache
 			// Print Cache-Control headers.
 			if ($this->useCacheControlHeaders($config))
 			{
-				$this->printCacheControlHeaders($page_type, $expires, $config->full_cache_stampede_protection ? 10 : 0);
+				$this->printCacheControlHeaders($page_type, $device_type, 'HIT', $expires, $config->full_cache_stampede_protection ? 10 : 0);
 			}
 			else
 			{
-				header('X-SuperCache: type=' . $page_type . '; expires=' . $expires);
+				header('X-SuperCache: HIT, type=' . $page_type . ', dev=' . $device_type . ', expires=' . $expires);
 			}
 			
 			// Increment the view count if required.
@@ -815,11 +825,11 @@ class SuperCacheController extends SuperCache
 		// Otherwise, prepare headers to cache the current request.
 		if ($this->useCacheControlHeaders($config))
 		{
-			$this->printCacheControlHeaders($page_type, $config->full_cache_duration, $config->full_cache_stampede_protection ? 10 : 0);
+			$this->printCacheControlHeaders($page_type, $device_type, 'MISS', $config->full_cache_duration, $config->full_cache_stampede_protection ? 10 : 0);
 		}
 		else
 		{
-			header('X-SuperCache: type=' . $page_type . '; expires=' . $config->full_cache_duration);
+			header('X-SuperCache: MISS, type=' . $page_type . ', dev=' . $device_type . ', expires=' . $config->full_cache_duration);
 		}
 		$this->_cacheStartTimestamp = microtime(true);
 	}
@@ -850,15 +860,17 @@ class SuperCacheController extends SuperCache
 	 * Print cache control headers.
 	 * 
 	 * @param string $page_type
+	 * @param string $device_type
+	 * @param string $action_type
 	 * @param int $expires
 	 * @param int $scatter
 	 * @return void
 	 */
-	public function printCacheControlHeaders($page_type, $expires, $scatter)
+	public function printCacheControlHeaders($page_type, $device_type, $action_type, $expires, $scatter)
 	{
 		$scatter = intval($expires * ($scatter / 100));
 		$expires = intval($expires - mt_rand(0, $scatter));
-		header('X-SuperCache: type=' . $page_type . '; expires=' . $config->full_cache_duration);
+		header('X-SuperCache: ' . $action_type . ', type=' . $page_type . ', dev=' . $device_type . ', expires=' . $config->full_cache_duration);
 		header('Cache-Control: max-age=' . $expires);
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
 		header_remove('Pragma');

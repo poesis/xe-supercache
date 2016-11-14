@@ -29,6 +29,10 @@
 					<input name="sc_full_cache[]" id="sc_full_cache_mobile" type="checkbox" value="mobile" checked="checked"|cond="isset($sc_config->full_cache['mobile'])" />
 					{$lang->cmd_supercache_full_cache_use_mobile}
 				</label>
+				<label for="sc_full_cache_pushapp" class="x_inline">
+					<input name="sc_full_cache[]" id="sc_full_cache_pushapp" type="checkbox" value="pushapp" checked="checked"|cond="isset($sc_config->full_cache['pushapp'])" />
+					{$lang->cmd_supercache_full_cache_use_pushapp}
+				</label>
 				<label for="sc_full_cache_robot" class="x_inline">
 					<input name="sc_full_cache[]" id="sc_full_cache_robot" type="checkbox" value="robot" checked="checked"|cond="isset($sc_config->full_cache['robot'])" />
 					{$lang->cmd_supercache_full_cache_use_robot}
