@@ -63,7 +63,7 @@
 			<tbody>
 				<!--@foreach($widget_list as $widget_info)-->
 					{@ $widget_is_disabled = in_array($widget_info->widget, array('login_info'))}
-					<tr>
+					<tr class="disabled_widget"|cond="$widget_is_disabled">
 						<td>{htmlspecialchars($widget_info->title, ENT_COMPAT, 'UTF-8', false)}</td>
 						<td>
 							<label for="sc_widget_cache_{$widget_info->widget}_enabled_y" class="x_inline">
@@ -77,21 +77,32 @@
 						</td>
 						<td>
 							<label for="sc_widget_cache_{$widget_info->widget}_group_y" class="x_inline">
-								<input name="sc_widget_cache_{$widget_info->widget}_group" id="sc_widget_cache_{$widget_info->widget}_group_y" type="radio" value="Y" checked="checked"|cond="!$widget_is_disabled && $sc_config->widget_config[$widget_info->widget]['group'] !== false" disabled="disabled"|cond="$widget_is_disabled" />
+								<input name="sc_widget_cache_{$widget_info->widget}_group" id="sc_widget_cache_{$widget_info->widget}_group_y" type="radio" value="Y" checked="checked"|cond="!$widget_is_disabled && $sc_config->widget_config[$widget_info->widget]['group']" disabled="disabled"|cond="$widget_is_disabled" />
 								{$lang->cmd_yes}
 							</label>
 							<label for="sc_widget_cache_{$widget_info->widget}_group_n" class="x_inline">
-								<input name="sc_widget_cache_{$widget_info->widget}_group" id="sc_widget_cache_{$widget_info->widget}_group_n" type="radio" value="N" checked="checked"|cond="!$widget_is_disabled && $sc_config->widget_config[$widget_info->widget]['group'] === false" disabled="disabled"|cond="$widget_is_disabled" />
+								<input name="sc_widget_cache_{$widget_info->widget}_group" id="sc_widget_cache_{$widget_info->widget}_group_n" type="radio" value="N" checked="checked"|cond="!$widget_is_disabled && !$sc_config->widget_config[$widget_info->widget]['group']" disabled="disabled"|cond="$widget_is_disabled" />
 								{$lang->cmd_no}
 							</label>
 						</td>
 						<td>
 							<input name="sc_widget_cache_{$widget_info->widget}_duration" id="sc_full_cache_{$widget_info->widget}_duration" type="number" value="{$sc_config->widget_config[$widget_info->widget]['duration']}" style="width:100px" disabled="disabled"|cond="$widget_is_disabled" />
+							&nbsp;
+							<label for="sc_widget_cache_{$widget_info->widget}_force" class="x_inline">
+								<input name="sc_widget_cache_{$widget_info->widget}_force" id="sc_widget_cache_{$widget_info->widget}_force" type="checkbox" value="Y" checked="checked"|cond="!$widget_is_disabled && $sc_config->widget_config[$widget_info->widget]['force']" disabled="disabled"|cond="$widget_is_disabled" />
+								{$lang->cmd_supercache_widget_cache_duration_force}
+							</label>
 						</td>
 					</tr>
 				<!--@endforeach-->
 			</tbody>
 		</table>
+		<p class="x_help-block">
+			{$lang->cmd_supercache_widget_cache_group_help}
+		</p>
+		<p class="x_help-block">
+			{$lang->cmd_supercache_widget_cache_duration_force_help}
+		</p>
 		
 	</section>
 	

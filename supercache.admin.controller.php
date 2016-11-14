@@ -303,7 +303,7 @@ class SuperCacheAdminController extends SuperCache
 		$widgets = array();
 		foreach (get_object_vars($vars) as $key => $value)
 		{
-			if (preg_match('/^sc_widget_cache_([a-zA-Z0-9_]+)_(enabled|group|duration)$/', $key, $matches))
+			if (preg_match('/^sc_widget_cache_([a-zA-Z0-9_]+)_(enabled|group|duration|force)$/', $key, $matches))
 			{
 				$widget_name = $matches[1];
 				if (!isset($widgets[$widget_name]))
@@ -312,6 +312,7 @@ class SuperCacheAdminController extends SuperCache
 						'enabled' => false,
 						'group' => false,
 						'duration' => false,
+						'force' => false,
 					);
 				}
 				switch ($matches[2])
@@ -319,6 +320,7 @@ class SuperCacheAdminController extends SuperCache
 					case 'enabled': $widgets[$widget_name]['enabled'] = $value === 'Y' ? true : false; break;
 					case 'group': $widgets[$widget_name]['group'] = $value === 'Y' ? true : false; break;
 					case 'duration': $widgets[$widget_name]['duration'] = intval($value) ?: false;
+					case 'force': $widgets[$widget_name]['force'] = $value === 'Y' ? true : false; break;
 				}
 			}
 		}

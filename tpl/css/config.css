@@ -83,3 +83,11 @@ ul.inside_help_block li {
 	color: #595959 !important;
 	margin-top: 8px !important;
 }
+
+tr.disabled_widget td {
+	color: #999 !important;
+}
+
+tr.disabled_widget td label {
+	color: #999 !important;
+}

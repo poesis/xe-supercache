@@ -372,9 +372,21 @@
 		<value xml:lang="ko"><![CDATA[아래에서 별도로 캐시 기간을 지정하지 않은 위젯에는 기본 캐시 기간이 적용됩니다. 단위는 '초'입니다.]]></value>
 		<value xml:lang="en"><![CDATA[The duration above, in seconds, will be applied to any widget that does not have its own cache duration specified below.]]></value>
 	</item>
+	<item name="cmd_supercache_widget_cache_duration_force">
+		<value xml:lang="ko"><![CDATA[일괄 적용]]></value>
+		<value xml:lang="en"><![CDATA[Force Apply]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_duration_force_help">
+		<value xml:lang="ko"><![CDATA['일괄 적용'을 선택하면 이미 캐시 기간이 따로 지정되어 있는 위젯에도 위에서 설정한 캐시 기간을 강제로 적용합니다.]]></value>
+		<value xml:lang="en"><![CDATA[If 'Force Apply' is selected, the cache duration set above will be applied even to widgets that already have their own cache duration.]]></value>
+	</item>
 	<item name="cmd_supercache_widget_cache_group">
 		<value xml:lang="ko"><![CDATA[회원 그룹별 구분]]></value>
 		<value xml:lang="en"><![CDATA[Separate by Group]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_group_help">
+		<value xml:lang="ko"><![CDATA['회원 그룹별 구분'을 선택하면 소속 그룹이 같은 회원들끼리 모아서 각각 캐싱합니다. 권한에 따라 위젯 내용이 달라져야 하는 경우 유용하나, 캐시 효율이 다소 떨어질 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[If 'Separate by Group' is selected, widgets will be cached separately for members who belong to different groups. This may reduce cache efficiency.]]></value>
 	</item>
 	<item name="cmd_supercache_config_thumbnail_cache">
 		<value xml:lang="ko"><![CDATA[섬네일 캐시]]></value>
