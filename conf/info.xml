@@ -8,8 +8,8 @@
 	<description xml:lang="en">
 		Use various caching methods to improve XE execution speed.
 	</description>
-	<version>1.1.0</version>
-	<date>2016-10-04</date>
+	<version>1.2.0</version>
+	<date>2016-11-14</date>
 	<category>service</category>
 	<author email_address="kijin@kijinsung.com" link="https://github.com/kijin">
 		<name xml:lang="ko">Kijin Sung</name>
