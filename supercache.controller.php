@@ -1181,7 +1181,10 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Randomize the cache duration for stampede protection.
-		$cache_duration = intval(($cache_duration * 0.8) + ($cache_duration * (crc32($cache_key) % 256) / 1024));
+		if ($config->widget_cache_stampede_protection !== false)
+		{
+			$cache_duration = intval(($cache_duration * 0.8) + ($cache_duration * (crc32($cache_key) % 256) / 1024));
+		}
 		
 		// Check the cache for previously rendered widget content.
 		$widget_content = $oModel->getWidgetCache($cache_key, $cache_duration);

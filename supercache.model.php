@@ -43,17 +43,18 @@ class SuperCacheModel extends SuperCache
 		// Check cache.
 		$cache_key = $this->_getFullPageCacheKey($module_srl, $document_srl, $user_agent_type, $args);
 		$content = $this->getCache($cache_key, $config->full_cache_duration + 60);
+		if (!is_array($content))
+		{
+			return false;
+		}
 		
 		// Apply stampede protection.
-		if ($config->full_cache_stampede_protection && $content)
+		$current_timestamp = time();
+		if ($config->full_cache_stampede_protection !== false && $content['expires'] <= $current_timestamp)
 		{
-			$current_timestamp = time();
-			if ($content['expires'] <= $current_timestamp)
-			{
-				$content['expires'] = $current_timestamp + 60;
-				$this->setCache($cache_key, $content, 60);
-				return false;
-			}
+			$content['expires'] = $current_timestamp + 60;
+			$this->setCache($cache_key, $content, 60);
+			return false;
 		}
 		
 		// Return the cached content.
@@ -90,7 +91,8 @@ class SuperCacheModel extends SuperCache
 		
 		// Save to cache.
 		$cache_key = $this->_getFullPageCacheKey($module_srl, $document_srl, $user_agent_type, $args);
-		return $this->setCache($cache_key, $content, $config->full_cache_duration + 60);
+		$extra_duration = ($config->full_cache_stampede_protection !== false) ? 60 : 0;
+		return $this->setCache($cache_key, $content, $config->full_cache_duration + $extra_duration);
 	}
 	
 	/**
@@ -230,6 +232,9 @@ class SuperCacheModel extends SuperCache
 	 */
 	public function getWidgetCache($cache_key, $cache_duration)
 	{
+		// Get module configuration.
+		$config = $this->getConfig();
+		
 		// Check cache.
 		$content = $this->getCache($cache_key, $cache_duration);
 		if (!is_array($content))
@@ -239,7 +244,7 @@ class SuperCacheModel extends SuperCache
 		
 		// Apply stampede protection.
 		$current_timestamp = time();
-		if ($content['expires'] <= $current_timestamp)
+		if ($config->widget_cache_stampede_protection !== false && $content['expires'] <= $current_timestamp)
 		{
 			$content['expires'] = $current_timestamp + 60;
 			$this->setCache($cache_key, $content, 60);
@@ -261,6 +266,9 @@ class SuperCacheModel extends SuperCache
 	 */
 	public function setWidgetCache($cache_key, $cache_duration, $content, $target_modules)
 	{
+		// Get module configuration.
+		$config = $this->getConfig();
+		
 		// Organize the content.
 		$content = array(
 			'content' => strval($content),
@@ -268,7 +276,8 @@ class SuperCacheModel extends SuperCache
 		);
 		
 		// Save widget content to cache.
-		$result = $this->setCache($cache_key, $content, $cache_duration + 60);
+		$extra_duration = ($config->widget_cache_stampede_protection !== false) ? 60 : 0;
+		$result = $this->setCache($cache_key, $content, $cache_duration + $extra_duration);
 		
 		// Save target modules.
 		$target_key_base = $this->_getSubgroupCacheKey('widget_target');
@@ -295,6 +304,9 @@ class SuperCacheModel extends SuperCache
 	 */
 	public function invalidateWidgetCache($target_module_srl)
 	{
+		// Get module configuration.
+		$config = $this->getConfig();
+		
 		// Stop if target module_srl is empty.
 		if (!$target_module_srl)
 		{
@@ -309,12 +321,19 @@ class SuperCacheModel extends SuperCache
 		// Adjust the expiry date of all affected cache keys.
 		foreach ($target_list as $cache_key => $unused)
 		{
-			$content = $this->getCache($cache_key);
-			if (is_array($content) && $content['expires'] > time() + 5)
+			if ($config->widget_cache_stampede_protection !== false)
 			{
-				$content['expires'] = time();
-				$this->setCache($cache_key, $content, 30);
-				$target_count++;
+				$content = $this->getCache($cache_key);
+				if (is_array($content) && $content['expires'] > time() + 5)
+				{
+					$content['expires'] = time();
+					$this->setCache($cache_key, $content, 30);
+					$target_count++;
+				}
+			}
+			else
+			{
+				$this->deleteCache($cache_key);
 			}
 		}
 		
