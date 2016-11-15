@@ -263,7 +263,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Refresh widgets referencing the current module.
-		if ($config->widget_cache_autoinvalidate_document)
+		if ($config->widget_cache_autoinvalidate_document && $obj->module_srl)
 		{
 			$oModel->invalidateWidgetCache($obj->module_srl);
 		}
@@ -323,10 +323,13 @@ class SuperCacheController extends SuperCache
 		// Refresh search result cache for the current module.
 		if ($config->search_cache && $config->search_cache_document_action)
 		{
-			if (isset($config->search_cache_document_action['refresh_module']) && $obj->module_srl)
+			if (isset($config->search_cache_document_action['refresh_module']))
 			{
-				$oModel->deleteSearchResultCache($original_module_srl, false);
-				if ($original_module_srl !== $new_module_srl)
+				if ($original_module_srl)
+				{
+					$oModel->deleteSearchResultCache($original_module_srl, false);
+				}
+				if ($new_module_srl && ($original_module_srl !== $new_module_srl))
 				{
 					$oModel->deleteSearchResultCache($new_module_srl, false);
 				}
@@ -336,8 +339,11 @@ class SuperCacheController extends SuperCache
 		// Refresh widgets referencing the current module.
 		if ($config->widget_cache_autoinvalidate_document)
 		{
-			$oModel->invalidateWidgetCache($original_module_srl);
-			if ($original_module_srl !== $new_module_srl)
+			if ($original_module_srl)
+			{
+				$oModel->invalidateWidgetCache($original_module_srl);
+			}
+			if ($new_module_srl && ($original_module_srl !== $new_module_srl))
 			{
 				$oModel->invalidateWidgetCache($new_module_srl);
 			}
@@ -390,7 +396,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Refresh widgets referencing the current module.
-		if ($config->widget_cache_autoinvalidate_document)
+		if ($config->widget_cache_autoinvalidate_document && $obj->module_srl)
 		{
 			$oModel->invalidateWidgetCache($obj->module_srl);
 		}
@@ -469,7 +475,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Refresh widgets referencing the current module.
-		if ($config->widget_cache_autoinvalidate_comment)
+		if ($config->widget_cache_autoinvalidate_comment && $obj->module_srl)
 		{
 			$oModel = isset($oModel) ? $oModel : getModel('supercache');
 			$oModel->invalidateWidgetCache($obj->module_srl);
@@ -513,18 +519,26 @@ class SuperCacheController extends SuperCache
 		// Refresh search result cache for the current module.
 		if ($config->search_cache && $config->search_cache_comment_action)
 		{
-			if (isset($config->search_cache_comment_action['refresh_module']) && $module_srl)
+			if (isset($config->search_cache_comment_action['refresh_module']))
 			{
-				$oModel = isset($oModel) ? $oModel : getModel('supercache');
-				$oModel->deleteSearchResultCache($module_srl, true);
+				$module_srl = isset($module_srl) ? $module_srl : ($obj->module_srl ?: getModel('comment')->getComment($obj->comment_srl)->module_srl);
+				if ($module_srl)
+				{
+					$oModel = isset($oModel) ? $oModel : getModel('supercache');
+					$oModel->deleteSearchResultCache($module_srl, true);
+				}
 			}
 		}
 		
 		// Refresh widgets referencing the current module.
 		if ($config->widget_cache_autoinvalidate_comment)
 		{
-			$oModel = isset($oModel) ? $oModel : getModel('supercache');
-			$oModel->invalidateWidgetCache($module_srl);
+			$module_srl = isset($module_srl) ? $module_srl : ($obj->module_srl ?: getModel('comment')->getComment($obj->comment_srl)->module_srl);
+			if ($module_srl)
+			{
+				$oModel = isset($oModel) ? $oModel : getModel('supercache');
+				$oModel->invalidateWidgetCache($module_srl);
+			}
 		}
 	}
 	
@@ -535,6 +549,7 @@ class SuperCacheController extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
+		$module_srl = $obj->module_srl ?: (method_exists($obj, 'get') ? $obj->get('module_srl'): 0);
 		
 		// Refresh full page cache for the current document, module, and/or index module.
 		if ($config->full_cache && $config->full_cache_comment_action)
@@ -544,14 +559,14 @@ class SuperCacheController extends SuperCache
 			{
 				$oModel->deleteFullPageCache(0, $obj->document_srl);
 			}
-			if (isset($config->full_cache_comment_action['refresh_module']) && $obj->module_srl)
+			if (isset($config->full_cache_comment_action['refresh_module']) && $module_srl)
 			{
-				$oModel->deleteFullPageCache($obj->module_srl, 0);
+				$oModel->deleteFullPageCache($module_srl, 0);
 			}
 			if (isset($config->full_cache_comment_action['refresh_index']))
 			{
 				$index_module_srl = Context::get('site_module_info')->index_module_srl ?: 0;
-				if ($index_module_srl != $obj->module_srl || !isset($config->full_cache_comment_action['refresh_module']))
+				if ($index_module_srl != $module_srl || !isset($config->full_cache_comment_action['refresh_module']))
 				{
 					$oModel->deleteFullPageCache($index_module_srl, 0);
 				}
@@ -561,18 +576,18 @@ class SuperCacheController extends SuperCache
 		// Refresh search result cache for the current module.
 		if ($config->search_cache && $config->search_cache_comment_action)
 		{
-			if (isset($config->search_cache_comment_action['refresh_module']) && $obj->module_srl)
+			if (isset($config->search_cache_comment_action['refresh_module']) && $module_srl)
 			{
 				$oModel = isset($oModel) ? $oModel : getModel('supercache');
-				$oModel->deleteSearchResultCache($obj->module_srl, true);
+				$oModel->deleteSearchResultCache($module_srl, true);
 			}
 		}
 		
 		// Refresh widgets referencing the current module.
-		if ($config->widget_cache_autoinvalidate_comment)
+		if ($config->widget_cache_autoinvalidate_comment && $module_srl)
 		{
 			$oModel = isset($oModel) ? $oModel : getModel('supercache');
-			$oModel->invalidateWidgetCache($obj->module_srl);
+			$oModel->invalidateWidgetCache($module_srl);
 		}
 	}
 	
