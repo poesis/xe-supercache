@@ -1019,8 +1019,11 @@ class SuperCacheController extends SuperCache
 	 */
 	public function getDeviceType()
 	{
+		// Prioritize XE official mobile device detection.
+		$is_mobile_enabled = Mobile::isMobileEnabled();
+		
 		// Check the session for cached data.
-		if (isset($_SESSION['supercache_device_type']))
+		if (!$is_mobile_enabled && isset($_SESSION['supercache_device_type']))
 		{
 			list($device_type, $checksum) = explode('|', $_SESSION['supercache_device_type']);
 			if (strlen($checksum) && ($checksum === md5($_SERVER['HTTP_USER_AGENT'])))
@@ -1030,7 +1033,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Detect mobile devices and Android Push App.
-		$is_mobile = Mobile::isMobileEnabled() ? Mobile::isFromMobilePhone() : Mobile::isMobileCheckByAgent();
+		$is_mobile = $is_mobile_enabled ? Mobile::isFromMobilePhone() : Mobile::isMobileCheckByAgent();
 		$is_tablet = $is_mobile ? Mobile::isMobilePadCheckByAgent() : false;
 		$is_pushapp = $is_mobile ? (strpos($_SERVER['HTTP_USER_AGENT'], 'XEPUSH') !== false) : false;
 		
@@ -1045,7 +1048,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Save the device type in the session for future reference.
-		if (!method_exists('Context', 'getSessionStatus') || Context::getSessionStatus())
+		if (!$is_mobile_enabled && !method_exists('Context', 'getSessionStatus') || Context::getSessionStatus())
 		{
 			$_SESSION['supercache_device_type'] = sprintf('%s|%s', $device_type, md5($_SERVER['HTTP_USER_AGENT']));
 		}
