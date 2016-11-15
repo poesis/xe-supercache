@@ -261,6 +261,12 @@ class SuperCacheController extends SuperCache
 				$oModel->deleteSearchResultCache($obj->module_srl, false);
 			}
 		}
+		
+		// Refresh widgets referencing the current module.
+		if ($config->widget_cache_autoinvalidate_document)
+		{
+			$oModel->invalidateWidgetCache($obj->module_srl);
+		}
 	}
 	
 	/**
@@ -326,6 +332,16 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
+		
+		// Refresh widgets referencing the current module.
+		if ($config->widget_cache_autoinvalidate_document)
+		{
+			$oModel->invalidateWidgetCache($original_module_srl);
+			if ($original_module_srl !== $new_module_srl)
+			{
+				$oModel->invalidateWidgetCache($new_module_srl);
+			}
+		}
 	}
 	
 	/**
@@ -371,6 +387,12 @@ class SuperCacheController extends SuperCache
 			{
 				$oModel->deleteSearchResultCache($obj->module_srl, false);
 			}
+		}
+		
+		// Refresh widgets referencing the current module.
+		if ($config->widget_cache_autoinvalidate_document)
+		{
+			$oModel->invalidateWidgetCache($obj->module_srl);
 		}
 	}
 	
@@ -445,6 +467,13 @@ class SuperCacheController extends SuperCache
 				$oModel->deleteSearchResultCache($obj->module_srl, true);
 			}
 		}
+		
+		// Refresh widgets referencing the current module.
+		if ($config->widget_cache_autoinvalidate_comment)
+		{
+			$oModel = isset($oModel) ? $oModel : getModel('supercache');
+			$oModel->invalidateWidgetCache($obj->module_srl);
+		}
 	}
 	
 	/**
@@ -490,6 +519,13 @@ class SuperCacheController extends SuperCache
 				$oModel->deleteSearchResultCache($module_srl, true);
 			}
 		}
+		
+		// Refresh widgets referencing the current module.
+		if ($config->widget_cache_autoinvalidate_comment)
+		{
+			$oModel = isset($oModel) ? $oModel : getModel('supercache');
+			$oModel->invalidateWidgetCache($module_srl);
+		}
 	}
 	
 	/**
@@ -530,6 +566,13 @@ class SuperCacheController extends SuperCache
 				$oModel = isset($oModel) ? $oModel : getModel('supercache');
 				$oModel->deleteSearchResultCache($obj->module_srl, true);
 			}
+		}
+		
+		// Refresh widgets referencing the current module.
+		if ($config->widget_cache_autoinvalidate_comment)
+		{
+			$oModel = isset($oModel) ? $oModel : getModel('supercache');
+			$oModel->invalidateWidgetCache($obj->module_srl);
 		}
 	}
 	
@@ -1070,6 +1113,20 @@ class SuperCacheController extends SuperCache
 			return $match[0];
 		}
 		
+		// Get the list of target modules for this widget.
+		$target_modules = array();
+		if ($config->widget_cache_autoinvalidate_document || $config->widget_cache_autoinvalidate_comment)
+		{
+			if ($widget_attrs->module_srl)
+			{
+				$target_modules[] = intval($widget_attrs->module_srl);
+			}
+			if ($widget_attrs->module_srls)
+			{
+				$target_modules = array_unique($target_modules + array_map('intval', explode(',', $widget_attrs->module_srls)));
+			}
+		}
+		
 		// Generate the cache key and duration.
 		$oModel = getModel('supercache');
 		$cache_key = $oModel->getWidgetCacheKey($widget_attrs, $config->widget_config[$widget_attrs->widget]['group'] ? Context::get('logged_info') : false);
@@ -1105,7 +1162,7 @@ class SuperCacheController extends SuperCache
 				if ($widget_content !== '')
 				{
 					$widget_content = str_replace('<!--#Meta:', '<!--Meta:', $widget_content);
-					$oModel->setWidgetCache($cache_key, $cache_duration, $widget_content);
+					$oModel->setWidgetCache($cache_key, $cache_duration, $widget_content, $target_modules);
 				}
 			}
 			else

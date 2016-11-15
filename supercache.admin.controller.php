@@ -298,6 +298,8 @@ class SuperCacheAdminController extends SuperCache
 		// Fetch the new config.
 		$config->widget_cache = $vars->sc_widget_cache === 'Y' ? true : false;
 		$config->widget_cache_duration = intval($vars->sc_widget_cache_duration) ?: 300;
+		$config->widget_cache_autoinvalidate_document = $vars->sc_widget_cache_autoinvalidate_document === 'Y' ? true : false;
+		$config->widget_cache_autoinvalidate_comment = $vars->sc_widget_cache_autoinvalidate_comment === 'Y' ? true : false;
 		
 		// Organize per-widget config.
 		$widgets = array();

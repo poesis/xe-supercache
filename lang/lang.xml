@@ -314,19 +314,19 @@
 	</item>
 	<item name="cmd_supercache_search_cache_document_action">
 		<value xml:lang="ko"><![CDATA[문서 작성시 자동 갱신]]></value>
-		<value xml:lang="en"><![CDATA[Action on Document Change]]></value>
+		<value xml:lang="en"><![CDATA[Refresh on Document Change]]></value>
 	</item>
 	<item name="cmd_supercache_search_cache_document_action_help">
 		<value xml:lang="ko"><![CDATA[새 글 작성, 수정, 삭제 등이 일어나면 해당 게시판의 검색 결과 캐시를 자동으로 갱신합니다.<br>주의: 회원들의 활동이 많은 사이트에서는 캐시 효율이 낮아질 수 있습니다.]]></value>
-		<value xml:lang="en"><![CDATA[Automatically regenerate the selected cache entries when new document is created, edited, or deleted.<br>Caution: This can reduce cache effectiveness in a site with frequent activity.]]></value>
+		<value xml:lang="en"><![CDATA[Automatically regenerate the search result cache when new document is created, edited, or deleted.<br>Caution: This can reduce cache effectiveness in a site with frequent activity.]]></value>
 	</item>
 	<item name="cmd_supercache_search_cache_comment_action">
 		<value xml:lang="ko"><![CDATA[댓글 작성시 자동 갱신]]></value>
-		<value xml:lang="en"><![CDATA[Action on Comment Change]]></value>
+		<value xml:lang="en"><![CDATA[Refresh on Comment Change]]></value>
 	</item>
 	<item name="cmd_supercache_search_cache_comment_action_help">
 		<value xml:lang="ko"><![CDATA[새 댓글 작성, 수정, 삭제 등이 일어나면 해당 게시판의 검색 결과 캐시를 자동으로 갱신합니다.<br>주의: 회원들의 활동이 많은 사이트에서는 캐시 효율이 낮아질 수 있습니다.]]></value>
-		<value xml:lang="en"><![CDATA[Automatically regenerate the selected cache entries when new comment is created, edited, or deleted.<br>Caution: This can reduce cache effectiveness in a site with frequent activity.]]></value>
+		<value xml:lang="en"><![CDATA[Automatically regenerate the search result cache when new comment is created, edited, or deleted.<br>Caution: This can reduce cache effectiveness in a site with frequent activity.]]></value>
 	</item>
 	<item name="cmd_supercache_search_cache_exclude_modules">
 		<value xml:lang="ko"><![CDATA[검색 결과 캐시 예외 모듈]]></value>
@@ -363,6 +363,22 @@
 	<item name="cmd_supercache_widget_cache_not_supported">
 		<value xml:lang="ko"><![CDATA[위젯 캐시를 사용할 수 없습니다. SimpleXML을 설치하여 주십시오.]]></value>
 		<value xml:lang="en"><![CDATA[Widget cache is NOT supported on this site. Please install SimpleXML.]]></value>
+	</item>
+	<item name="cmd_supercache_widget_autoinvalidate_document">
+		<value xml:lang="ko"><![CDATA[문서 작성시 자동 갱신]]></value>
+		<value xml:lang="en"><![CDATA[Refresh on Document Change]]></value>
+	</item>
+	<item name="cmd_supercache_widget_autoinvalidate_document_help">
+		<value xml:lang="ko"><![CDATA[새 글 작성, 수정, 삭제 등이 일어나면 해당 게시판을 참조하는 위젯을 자동으로 갱신합니다.<br>주의: 회원들의 활동이 많은 사이트에서는 캐시 효율이 낮아질 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[If a document is created, edited, or deleted in a module, automatically refresh widgets referencing it.<br>Caution: This can reduce cache effectiveness in a site with frequent activity.]]></value>
+	</item>
+	<item name="cmd_supercache_widget_autoinvalidate_comment">
+		<value xml:lang="ko"><![CDATA[댓글 작성시 자동 갱신]]></value>
+		<value xml:lang="en"><![CDATA[Refresh on Comment Change]]></value>
+	</item>
+	<item name="cmd_supercache_widget_autoinvalidate_comment_help">
+		<value xml:lang="ko"><![CDATA[새 댓글 작성, 수정, 삭제 등이 일어나면 해당 게시판을 참조하는 위젯을 자동으로 갱신합니다.<br>주의: 회원들의 활동이 많은 사이트에서는 캐시 효율이 낮아질 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[If a comment is created, edited, or deleted in a module, automatically refresh widgets referencing it.<br>Caution: This can reduce cache effectiveness in a site with frequent activity.]]></value>
 	</item>
 	<item name="cmd_supercache_widget_cache_per_widget">
 		<value xml:lang="ko"><![CDATA[위젯별 설정]]></value>

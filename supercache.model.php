@@ -256,9 +256,10 @@ class SuperCacheModel extends SuperCache
 	 * @param string $cache_key
 	 * @param int $cache_duration
 	 * @param string $content
+	 * @param array $target_modules
 	 * @return bool
 	 */
-	public function setWidgetCache($cache_key, $cache_duration, $content)
+	public function setWidgetCache($cache_key, $cache_duration, $content, $target_modules)
 	{
 		// Organize the content.
 		$content = array(
@@ -266,20 +267,61 @@ class SuperCacheModel extends SuperCache
 			'expires' => time() + $cache_duration,
 		);
 		
-		// Save to cache.
-		return $this->setCache($cache_key, $content, $cache_duration + 60);
+		// Save widget content to cache.
+		$result = $this->setCache($cache_key, $content, $cache_duration + 60);
+		
+		// Save target modules.
+		$target_key_base = $this->_getSubgroupCacheKey('widget_target');
+		foreach ($target_modules as $target_module_srl)
+		{
+			if (!$target_module_srl)
+			{
+				continue;
+			}
+			
+			$target_key = $target_key_base . ':' . $target_module_srl;
+			$target_list = $this->getCache($target_key) ?: array();
+			$target_list[$cache_key] = true;
+			$this->setCache($target_key, $target_list);
+		}
+		
+		// Return the result.
+		return $result;
 	}
 	
 	/**
-	 * Delete a widget cache entry.
+	 * Invalidate widget cache entries for a target module.
 	 * 
-	 * @param string $cache_key
+	 * @param int $target_module_srl
 	 * @return bool
 	 */
-	public function deleteWidgetCache($cache_key)
+	public function invalidateWidgetCache($target_module_srl)
 	{
-		// Delete that thing.
-		return $this->deleteCache($cache_key);
+		// Stop if target module_srl is empty.
+		if (!$target_module_srl)
+		{
+			return false;
+		}
+		
+		// Get the list of affected cache keys.
+		$target_key = $this->_getSubgroupCacheKey('widget_target') . ':' . $target_module_srl;
+		$target_list = $this->getCache($target_key) ?: array();
+		$target_count = 0;
+		
+		// Adjust the expiry date of all affected cache keys.
+		foreach ($target_list as $cache_key => $unused)
+		{
+			$content = $this->getCache($cache_key);
+			if ($content && $content['expires'] > time() + 5)
+			{
+				$content['expires'] = time();
+				$this->setCache($cache_key, $content, 30);
+				$target_count++;
+			}
+		}
+		
+		// Return true if any keys were invalidated.
+		return $target_count ? true : false;
 	}
 	
 	/**
