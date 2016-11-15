@@ -65,7 +65,7 @@
 			<tbody>
 				<!--@foreach($widget_list as $widget_info)-->
 					{@ if (!$widget_info->widget) continue}
-					{@ $widget_is_disabled = in_array($widget_info->widget, array('login_info'))}
+					{@ $widget_is_disabled = isset($widget_blacklist[$widget_info->widget])}
 					<tr class="disabled_widget"|cond="$widget_is_disabled">
 						<td>{htmlspecialchars($widget_info->title, ENT_COMPAT, 'UTF-8', false)}</td>
 						<td>

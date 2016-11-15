@@ -1019,6 +1019,16 @@ class SuperCacheController extends SuperCache
 	}
 	
 	/**
+	 * Get blacklisted widget names.
+	 * 
+	 * @return array
+	 */
+	public function getWidgetBlacklist()
+	{
+		return $this->_skipWidgetNames;
+	}
+	
+	/**
 	 * Process widget cache.
 	 * 
 	 * @param string $match

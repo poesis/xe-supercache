@@ -126,6 +126,11 @@ class SuperCacheAdminView extends SuperCache
 		$widget_list = $oWidgetModel->getDownloadedWidgetList();
 		Context::set('widget_list', $widget_list);
 		
+		// Get the list of blacklisted widgets.
+		$oController = getController('supercache');
+		$widget_blacklist = $oController->getWidgetBlacklist();
+		Context::set('widget_blacklist', $widget_blacklist);
+		
 		// Display the config page.
 		$this->setTemplateFile('widget_cache');
 	}
