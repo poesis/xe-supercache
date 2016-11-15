@@ -89,8 +89,8 @@
 		<value xml:lang="en"><![CDATA[Actions to Exclude]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_exclude_acts_help">
-		<value xml:lang="ko"><![CDATA[여기에 나열한 액션은 캐싱하지 않습니다. 쉼표, 공백, 줄바꿈 등으로 구분하여 작성할 수 있습니다.<br><span class="warning">경고: 위에서 &quot;기타 화면&quot;을 선택한 경우에만 적용됩니다.</span>]]></value>
-		<value xml:lang="en"><![CDATA[Actions listed here will be excluded from the full page cache. Please separate actions using commas, spaces, or newlines.<br><span class="warning">Warning: This setting is only effective when &quot;Other pages&quot; is selected above.</span>]]></value>
+		<value xml:lang="ko"><![CDATA[여기에 나열한 액션은 캐싱하지 않습니다. 쉼표, 공백, 줄바꿈 등으로 구분하여 작성할 수 있습니다.<br>주의: 위에서 &quot;기타 화면&quot;을 선택한 경우에만 적용됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[Actions listed here will be excluded from the full page cache. Please separate actions using commas, spaces, or newlines.<br>Caution: This setting is only effective when &quot;Other pages&quot; is selected above.]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_exclude_cookies">
 		<value xml:lang="ko"><![CDATA[캐시 예외 쿠키]]></value>
