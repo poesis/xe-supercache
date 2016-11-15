@@ -52,6 +52,31 @@ class SuperCache extends ModuleObject
 	);
 	
 	/**
+	 * Widget names to skip caching.
+	 */
+	protected static $_skipWidgetNames = array(
+		'login_info' => true,
+		'soo_xerstory' => true,
+		'widgetContent' => true,
+		'widgetBox' => true,
+	);
+	
+	/**
+	 * Widget attributes to skip decoding.
+	 */
+	protected static $_skipWidgetAttrs = array(
+		'class' => true,
+		'document_srl' => true,
+		'style' => true,
+		'widget' => true,
+		'widget_padding_top' => true,
+		'widget_padding_right' => true,
+		'widget_padding_bottom' => true,
+		'widget_padding_left' => true,
+		'widgetstyle' => true,
+	);
+	
+	/**
 	 * Module configuration cache.
 	 */
 	protected static $_config_cache = null;

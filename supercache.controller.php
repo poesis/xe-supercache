@@ -31,31 +31,6 @@ class SuperCacheController extends SuperCache
 	protected $_cacheHttpStatusCode = 200;
 	
 	/**
-	 * Widget names to skip caching.
-	 */
-	protected $_skipWidgetNames = array(
-		'login_info' => true,
-		'soo_xerstory' => true,
-		'widgetContent' => true,
-		'widgetBox' => true,
-	);
-	
-	/**
-	 * Widget attributes to skip decoding.
-	 */
-	protected $_skipWidgetAttrs = array(
-		'class' => true,
-		'document_srl' => true,
-		'style' => true,
-		'widget' => true,
-		'widget_padding_top' => true,
-		'widget_padding_right' => true,
-		'widget_padding_bottom' => true,
-		'widget_padding_left' => true,
-		'widgetstyle' => true,
-	);
-	
-	/**
 	 * Trigger called at moduleHandler.init (before)
 	 */
 	public function triggerBeforeModuleHandlerInit($obj)
@@ -164,7 +139,7 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
-		// Abort if this request is for any page greater than 1.
+		// Abort if this request is for any page greater than 1, unless offset queries are enabled.
 		if ($obj->page > 1 && !$config->paging_cache_use_offset)
 		{
 			return;
@@ -207,18 +182,13 @@ class SuperCacheController extends SuperCache
 	 */
 	public function triggerAfterGetDocumentList($obj)
 	{
-		// Abort if the current search is not cacheable.
-		if (!$this->_cacheCurrentSearch)
-		{
-			return;
-		}
-		
 		// Cache the current search.
-		$oModel = getModel('supercache');
-		$oModel->setSearchResultCache($this->_cacheCurrentSearch, $obj);
-		
-		// Deactivate the search result cache.
-		$this->_cacheCurrentSearch = false;
+		if ($this->_cacheCurrentSearch)
+		{
+			$oModel = getModel('supercache');
+			$oModel->setSearchResultCache($this->_cacheCurrentSearch, $obj);
+			$this->_cacheCurrentSearch = false;
+		}
 	}
 	
 	/**
@@ -668,6 +638,7 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
+		// Convert widgets into HTML output using Super Cache's own widget cache.
 		$content = preg_replace_callback('/<img\b(?:[^>]*?)\bwidget="(?:[^>]*?)>/i', array($this, 'procWidgetCache'), $content);
 	}
 	
@@ -900,14 +871,11 @@ class SuperCacheController extends SuperCache
 			// Find out how much time is left until this content expires.
 			$expires = max(0, $cache['expires'] - time());
 			
-			// Print Cache-Control headers.
+			// Print X-SuperCache and Cache-Control headers.
+			header('X-SuperCache: HIT, dev=' . $device_type . ', type=' . $page_type . ', expires=' . $expires);
 			if ($this->useCacheControlHeaders($config))
 			{
-				$this->printCacheControlHeaders($page_type, $device_type, 'HIT', $expires, $config->full_cache_stampede_protection ? 10 : 0);
-			}
-			else
-			{
-				header('X-SuperCache: HIT, type=' . $page_type . ', dev=' . $device_type . ', expires=' . $expires);
+				$this->printCacheControlHeaders($expires, $config->full_cache_stampede_protection ? 10 : 0);
 			}
 			
 			// Increment the view count if required.
@@ -944,13 +912,10 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Otherwise, prepare headers to cache the current request.
+		header('X-SuperCache: MISS, dev=' . $device_type . ', type=' . $page_type . ', expires=' . $config->full_cache_duration);
 		if ($this->useCacheControlHeaders($config))
 		{
-			$this->printCacheControlHeaders($page_type, $device_type, 'MISS', $config->full_cache_duration, $config->full_cache_stampede_protection ? 10 : 0);
-		}
-		else
-		{
-			header('X-SuperCache: MISS, type=' . $page_type . ', dev=' . $device_type . ', expires=' . $config->full_cache_duration);
+			$this->printCacheControlHeaders($config->full_cache_duration, $config->full_cache_stampede_protection ? 10 : 0);
 		}
 		$this->_cacheStartTimestamp = microtime(true);
 	}
@@ -980,18 +945,14 @@ class SuperCacheController extends SuperCache
 	/**
 	 * Print cache control headers.
 	 * 
-	 * @param string $page_type
-	 * @param string $device_type
-	 * @param string $action_type
 	 * @param int $expires
 	 * @param int $scatter
 	 * @return void
 	 */
-	public function printCacheControlHeaders($page_type, $device_type, $action_type, $expires, $scatter)
+	public function printCacheControlHeaders($expires, $scatter)
 	{
 		$scatter = intval($expires * ($scatter / 100));
 		$expires = intval($expires - mt_rand(0, $scatter));
-		header('X-SuperCache: ' . $action_type . ', type=' . $page_type . ', dev=' . $device_type . ', expires=' . $config->full_cache_duration);
 		header('Cache-Control: max-age=' . $expires);
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
 		header_remove('Pragma');
@@ -1007,14 +968,7 @@ class SuperCacheController extends SuperCache
 	{
 		if ($config->full_cache_use_headers)
 		{
-			if ($config->full_cache_use_headers_proxy_too)
-			{
-				return true;
-			}
-			else
-			{
-				return !(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']);
-			}
+			return $config->full_cache_use_headers_proxy_too ? true : !(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']);
 		}
 		else
 		{
@@ -1099,16 +1053,6 @@ class SuperCacheController extends SuperCache
 	}
 	
 	/**
-	 * Get blacklisted widget names.
-	 * 
-	 * @return array
-	 */
-	public function getWidgetBlacklist()
-	{
-		return $this->_skipWidgetNames;
-	}
-	
-	/**
 	 * Process widget cache.
 	 * 
 	 * @param string $match
@@ -1118,14 +1062,14 @@ class SuperCacheController extends SuperCache
 	{
 		// Get widget attributes.
 		$widget_attrs = new stdClass;
-		$widget_xml = @simplexml_load_string('<?xml version="1.0"?>' . $match[0]);
+		$widget_xml = @simplexml_load_string($match[0]);
 		if (!$widget_xml)
 		{
 			return $match[0];
 		}
 		foreach ($widget_xml->attributes() as $key => $value)
 		{
-			if (isset($this->_skipWidgetAttrs[$key]))
+			if (isset(self::$_skipWidgetAttrs[$key]))
 			{
 				$widget_attrs->{$key} = strval($value);
 			}
@@ -1138,7 +1082,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// If this widget should not be cached, return.
-		if (!$widget_attrs->widget || isset($this->_skipWidgetNames[$widget_attrs->widget]))
+		if (!$widget_attrs->widget || isset(self::$_skipWidgetNames[$widget_attrs->widget]))
 		{
 			return $match[0];
 		}
@@ -1275,6 +1219,7 @@ class SuperCacheController extends SuperCache
 		header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 		header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
 		header_remove('Pragma');
+		Context::close();
 		exit;
 	}
 }
