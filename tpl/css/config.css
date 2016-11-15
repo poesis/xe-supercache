@@ -16,6 +16,26 @@ section h2 {
 	padding-bottom: 8px;
 }
 
+span.caution_block {
+	display: inline-block;
+	background: #FFA000;
+	color: #fff;
+	font-weight: bold;
+	line-height: 16px;
+	padding: 0 4px 1px 4px;
+	border-radius: 2px;
+}
+
+span.warning_block {
+	display: inline-block;
+	background: #e00;
+	color: #fff;
+	font-weight: bold;
+	line-height: 16px;
+	padding: 0 4px 1px 4px;
+	border-radius: 2px;
+}
+
 span.console_font {
 	display: inline-block;
 	margin: 0 2px;
