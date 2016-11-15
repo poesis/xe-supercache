@@ -1065,13 +1065,13 @@ class SuperCacheController extends SuperCache
 		$cache_duration = $config->widget_config[$widget_attrs->widget]['duration'] ?: $config->widget_cache_duration;
 		if ($widget_attrs->widget_cache && !$config->widget_config[$widget_attrs->widget]['force'])
 		{
-			if (preg_match('/^([0-9\.]+)([smhd])$/i', $widget_attrs->widget_cache, $matches))
+			if (preg_match('/^([0-9\.]+)([smhd])$/i', $widget_attrs->widget_cache, $matches) && $matches[1] > 0)
 			{
 				$cache_duration = intval(floatval($matches[1]) * intval(strtr(strtolower($matches[2]), array('s' => 1, 'm' => 60, 'h' => 3600, 'd' => 86400))));
 			}
 			else
 			{
-				$cache_duration = intval(floatval($widget_attrs->widget_cache) * 60);
+				$cache_duration = intval(floatval($widget_attrs->widget_cache) * 60) ?: $cache_duration;
 			}
 		}
 		
