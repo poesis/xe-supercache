@@ -35,6 +35,7 @@ class SuperCacheController extends SuperCache
 	 */
 	protected $_skipWidgetNames = array(
 		'login_info' => true,
+		'soo_xerstory' => true,
 		'widgetContent' => true,
 		'widgetBox' => true,
 	);
