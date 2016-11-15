@@ -691,22 +691,6 @@ class SuperCacheController extends SuperCache
 				return;
 			}
 			
-			// Do not store if a PC page was generated for a mobile request or vice versa.
-			if (substr($this->_cacheCurrentRequest[2], 0, 2) === 'pc')
-			{
-				if (Mobile::isFromMobilePhone())
-				{
-					return;
-				}
-			}
-			else
-			{
-				if (!Mobile::isFromMobilePhone())
-				{
-					return;
-				}
-			}
-			
 			// Collect extra data.
 			if ($this->_cacheCurrentRequest[1] && ($oDocument = Context::get('oDocument')) && ($oDocument->document_srl == $this->_cacheCurrentRequest[1]))
 			{
@@ -769,23 +753,24 @@ class SuperCacheController extends SuperCache
 			}
 		}
 		
-		// Abort if the user agent is excluded.
+		// Detect robots.
 		$is_crawler = isCrawler();
 		if ($is_crawler && !isset($config->full_cache['robot']))
 		{
 			return;
 		}
-		$is_mobile = Mobile::isFromMobilePhone() ? true : false;
-		$is_pushapp = (strpos($_SERVER['HTTP_USER_AGENT'], 'XEPUSH') !== false) ? true : false;
-		if (!$is_mobile && !isset($config->full_cache['pc']))
+		
+		// Detect mobile devices and Android Push App.
+		$device_type = $this->getDeviceType();
+		if ($device_type === 'pc' && !isset($config->full_cache['pc']))
 		{
 			return;
 		}
-		if ($is_mobile && !$is_pushapp && !isset($config->full_cache['mobile']))
+		if ($device_type[1] === 'o' && !isset($config->full_cache['mobile']))
 		{
 			return;
 		}
-		if ($is_mobile && $is_pushapp && !isset($config->full_cache['pushapp']))
+		if ($device_type[1] === 'p' && !isset($config->full_cache['pushapp']))
 		{
 			return;
 		}
@@ -864,7 +849,6 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Compile the user agent type.
-		$device_type = ($is_mobile ? ($is_pushapp ? 'mp' : 'mo') : 'pc');
 		$user_agent_type = $device_type . ($is_secure ? '_secure' : '') . '_' . Context::getLangType();
 		
 		// Remove unnecessary request variables.
@@ -1074,6 +1058,46 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Get the device type for full-page cache.
+	 * 
+	 * @return string
+	 */
+	public function getDeviceType()
+	{
+		// Check the session for cached data.
+		if (isset($_SESSION['supercache_device_type']))
+		{
+			list($device_type, $checksum) = explode('|', $_SESSION['supercache_device_type']);
+			if (strlen($checksum) && ($checksum === md5($_SERVER['HTTP_USER_AGENT'])))
+			{
+				return $device_type;
+			}
+		}
+		
+		// Detect mobile devices and Android Push App.
+		$is_mobile = Mobile::isMobileEnabled() ? Mobile::isFromMobilePhone() : Mobile::isMobileCheckByAgent();
+		$is_tablet = $is_mobile ? Mobile::isMobilePadCheckByAgent() : false;
+		$is_pushapp = $is_mobile ? (strpos($_SERVER['HTTP_USER_AGENT'], 'XEPUSH') !== false) : false;
+		
+		// Compose the device type string.
+		if ($is_mobile)
+		{
+			$device_type = ($is_tablet ? 't' : 'm') . ($is_pushapp ? 'p' : 'o');
+		}
+		else
+		{
+			$device_type = 'pc';
+		}
+		
+		// Save the device type in the session for future reference.
+		if (!method_exists('Context', 'getSessionStatus') || Context::getSessionStatus())
+		{
+			$_SESSION['supercache_device_type'] = sprintf('%s|%s', $device_type, md5($_SERVER['HTTP_USER_AGENT']));
+		}
+		return $device_type;
 	}
 	
 	/**
