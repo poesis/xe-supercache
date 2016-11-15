@@ -274,15 +274,13 @@ class SuperCacheModel extends SuperCache
 		$target_key_base = $this->_getSubgroupCacheKey('widget_target');
 		foreach ($target_modules as $target_module_srl)
 		{
-			if (!$target_module_srl)
+			if ($target_module_srl)
 			{
-				continue;
+				$target_key = $target_key_base . ':' . $target_module_srl;
+				$target_list = $this->getCache($target_key) ?: array();
+				$target_list[$cache_key] = true;
+				$this->setCache($target_key, $target_list);
 			}
-			
-			$target_key = $target_key_base . ':' . $target_module_srl;
-			$target_list = $this->getCache($target_key) ?: array();
-			$target_list[$cache_key] = true;
-			$this->setCache($target_key, $target_list);
 		}
 		
 		// Return the result.
@@ -312,7 +310,7 @@ class SuperCacheModel extends SuperCache
 		foreach ($target_list as $cache_key => $unused)
 		{
 			$content = $this->getCache($cache_key);
-			if ($content && $content['expires'] > time() + 5)
+			if (is_array($content) && $content['expires'] > time() + 5)
 			{
 				$content['expires'] = time();
 				$this->setCache($cache_key, $content, 30);
