@@ -74,7 +74,7 @@
 								{$lang->cmd_yes}
 							</label>
 							<label for="sc_widget_cache_{$widget_info->widget}_enabled_n" class="x_inline">
-								<input name="sc_widget_cache_{$widget_info->widget}_enabled" id="sc_widget_cache_{$widget_info->widget}_enabled_n" type="radio" value="N" checked="checked"|cond="!$widget_is_disabled && $sc_config->widget_config[$widget_info->widget]['enabled'] === false" disabled="disabled"|cond="$widget_is_disabled" />
+								<input name="sc_widget_cache_{$widget_info->widget}_enabled" id="sc_widget_cache_{$widget_info->widget}_enabled_n" type="radio" value="N" checked="checked"|cond="$widget_is_disabled || $sc_config->widget_config[$widget_info->widget]['enabled'] === false" disabled="disabled"|cond="$widget_is_disabled" />
 								{$lang->cmd_no}
 							</label>
 						</td>
@@ -84,7 +84,7 @@
 								{$lang->cmd_yes}
 							</label>
 							<label for="sc_widget_cache_{$widget_info->widget}_group_n" class="x_inline">
-								<input name="sc_widget_cache_{$widget_info->widget}_group" id="sc_widget_cache_{$widget_info->widget}_group_n" type="radio" value="N" checked="checked"|cond="!$widget_is_disabled && !$sc_config->widget_config[$widget_info->widget]['group']" disabled="disabled"|cond="$widget_is_disabled" />
+								<input name="sc_widget_cache_{$widget_info->widget}_group" id="sc_widget_cache_{$widget_info->widget}_group_n" type="radio" value="N" checked="checked"|cond="$widget_is_disabled || !$sc_config->widget_config[$widget_info->widget]['group']" disabled="disabled"|cond="$widget_is_disabled" />
 								{$lang->cmd_no}
 							</label>
 						</td>
