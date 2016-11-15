@@ -8,6 +8,14 @@ div.supercache_help {
 	border-radius: 4px;
 }
 
+div.supercache_help ul {
+	margin-bottom: 0;
+}
+
+section div.supercache_help {
+	margin-top: 20px;	
+}
+
 input.console_font, span.console_font, textarea.console_font {
 	font-family: Consolas, Courier New, Courier, monospace !important;
 }
