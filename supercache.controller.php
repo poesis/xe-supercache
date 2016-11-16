@@ -95,6 +95,14 @@ class SuperCacheController extends SuperCache
 		{
 			$this->fillPageVariable($obj, $config);
 		}
+		
+		// Register autoloaders for documentItem and commentItem, because some versions of XE fail to autoload them.
+		spl_autoload_register(function($class) {
+			if (preg_match('/^(document|comment)item$/', strtolower($class), $matches))
+			{
+				include_once sprintf('%1$smodules/%2$s/%2$s.item.php', _XE_PATH_, $matches[1]);
+			}
+		});
 	}
 	
 	/**
