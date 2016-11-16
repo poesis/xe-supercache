@@ -1048,7 +1048,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Save the device type in the session for future reference.
-		if (!$is_mobile_enabled && !method_exists('Context', 'getSessionStatus') || Context::getSessionStatus())
+		if (!$is_mobile_enabled && (!method_exists('Context', 'getSessionStatus') || Context::getSessionStatus()))
 		{
 			$_SESSION['supercache_device_type'] = sprintf('%s|%s', $device_type, md5($_SERVER['HTTP_USER_AGENT']));
 		}
