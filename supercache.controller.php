@@ -621,6 +621,14 @@ class SuperCacheController extends SuperCache
 					break;
 			}
 		}
+		
+		// Remove Android Push App trigger that causes issue #9 when using the full-page cache.
+		if ($this->_cacheCurrentRequest && $this->getConfig()->full_cache['pushapp'])
+		{
+			$GLOBALS['__triggers__']['display']['before'] = array_filter($GLOBALS['__triggers__']['display']['before'], function($entry) {
+				return $entry->module !== 'androidpushapp';
+			});
+		}
 	}
 	
 	/**
@@ -628,8 +636,10 @@ class SuperCacheController extends SuperCache
 	 */
 	public function triggerBeforeDisplay(&$content)
 	{
-		// Return if widgets should not be cached for this request.
+		// Get module configuration.
 		$config = $this->getConfig();
+		
+		// Return if widgets should not be cached for this request.
 		if (!$config->widget_cache || !$config->widget_cache_duration)
 		{
 			return;
