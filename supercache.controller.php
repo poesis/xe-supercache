@@ -103,12 +103,6 @@ class SuperCacheController extends SuperCache
 				include_once sprintf('%1$smodules/%2$s/%2$s.item.php', _XE_PATH_, $matches[1]);
 			}
 		});
-		
-		// Set a constant to indicate whether the current page is pending for storage in the full-page cache.
-		if (!defined('XE_SUPERCACHE_FULLPAGE_PENDING'))
-		{
-			define('XE_SUPERCACHE_FULLPAGE_PENDING', false);
-		}
 	}
 	
 	/**
@@ -580,18 +574,37 @@ class SuperCacheController extends SuperCache
 	 */
 	public function triggerAfterModuleHandlerProc($obj)
 	{
-		// Capture the HTTP status code of the current request.
-		if (!is_object($obj) || !method_exists($obj, 'getHttpStatusCode'))
+		// Get module configuration.
+		$config = $this->getConfig();
+		
+		// Store the output of the current request in the full-page cache.
+		if ($this->_cacheCurrentRequest)
 		{
-			$this->_cacheHttpStatusCode = 404;
-		}
-		elseif (($status_code = $obj->getHttpStatusCode()) > 200)
-		{
-			$this->_cacheHttpStatusCode = intval($status_code);
+			// Capture the HTTP status code of the current request.
+			if (!is_object($obj) || !method_exists($obj, 'getHttpStatusCode'))
+			{
+				$this->_cacheHttpStatusCode = 404;
+			}
+			elseif (($status_code = $obj->getHttpStatusCode()) > 200)
+			{
+				$this->_cacheHttpStatusCode = intval($status_code);
+			}
+			
+			// Do not store redirects.
+			if ($this->_cacheHttpStatusCode >= 300 && $this->_cacheHttpStatusCode <= 399)
+			{
+				$this->_cacheCurrentRequest = false;
+			}
+			
+			// Do not store error codes unless include_404 is true.
+			if ($this->_cacheHttpStatusCode !== 200 && !$config->full_cache_include_404)
+			{
+				$this->_cacheCurrentRequest = false;
+			}
 		}
 		
 		// Change gzip setting.
-		if (is_object($obj) && $gzip = $this->getConfig()->use_gzip)
+		if (is_object($obj) && $gzip = $config->use_gzip)
 		{
 			if ($gzip !== 'none' && $gzip !== 'default')
 			{
@@ -674,18 +687,6 @@ class SuperCacheController extends SuperCache
 		// Store the output of the current request in the full-page cache.
 		if ($this->_cacheCurrentRequest)
 		{
-			// Do not store redirects.
-			if ($this->_cacheHttpStatusCode >= 300 && $this->_cacheHttpStatusCode <= 399)
-			{
-				return;
-			}
-			
-			// Do not store error codes unless include_404 is true.
-			if ($this->_cacheHttpStatusCode !== 200 && !$this->getConfig()->full_cache_include_404)
-			{
-				return;
-			}
-			
 			// Collect extra data.
 			if ($this->_cacheCurrentRequest[1] && ($oDocument = Context::get('oDocument')) && ($oDocument->document_srl == $this->_cacheCurrentRequest[1]))
 			{
@@ -958,7 +959,6 @@ class SuperCacheController extends SuperCache
 		{
 			$this->printCacheControlHeaders($config->full_cache_duration, $config->full_cache_stampede_protection ? 10 : 0);
 		}
-		define('XE_SUPERCACHE_FULLPAGE_PENDING', true);
 		$this->_cacheStartTimestamp = microtime(true);
 	}
 	
@@ -1052,6 +1052,16 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Get the status of the full-page cache. This method returns true if the current page will be cached.
+	 * 
+	 * @return bool
+	 */
+	public function getFullPageCacheStatus()
+	{
+		return $this->_cacheCurrentRequest ? true : false;
 	}
 	
 	/**
