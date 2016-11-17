@@ -103,6 +103,12 @@ class SuperCacheController extends SuperCache
 				include_once sprintf('%1$smodules/%2$s/%2$s.item.php', _XE_PATH_, $matches[1]);
 			}
 		});
+		
+		// Set a constant to indicate whether the current page is pending for storage in the full-page cache.
+		if (!defined('XE_SUPERCACHE_FULLPAGE_PENDING'))
+		{
+			define('XE_SUPERCACHE_FULLPAGE_PENDING', false);
+		}
 	}
 	
 	/**
@@ -925,6 +931,7 @@ class SuperCacheController extends SuperCache
 		{
 			$this->printCacheControlHeaders($config->full_cache_duration, $config->full_cache_stampede_protection ? 10 : 0);
 		}
+		define('XE_SUPERCACHE_FULLPAGE_PENDING', true);
 		$this->_cacheStartTimestamp = microtime(true);
 	}
 	
