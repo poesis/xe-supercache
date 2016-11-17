@@ -699,6 +699,13 @@ class SuperCacheController extends SuperCache
 				$extra_data = array();
 			}
 			
+			// Call a trigger to pre-process the content.
+			$trigger_output = ModuleHandler::triggerCall('supercache.storeFullPageCache', 'before', $content);
+			if (is_object($trigger_output) && method_exists($trigger_output, 'toBool') && !$trigger_output->toBool())
+			{
+				return $trigger_output;
+			}
+			
 			// Set the full-page cache.
 			getModel('supercache')->setFullPageCache(
 				$this->_cacheCurrentRequest[0],
@@ -887,6 +894,16 @@ class SuperCacheController extends SuperCache
 				$this->_cacheCurrentRequest = array(0, 0, $user_agent_type, $request_vars);
 				$cache = $oModel->getFullPageCache(0, 0, $user_agent_type, $request_vars);
 				break;
+		}
+		
+		// Call a trigger to post-process the content.
+		if ($cache)
+		{
+			$trigger_output = ModuleHandler::triggerCall('supercache.fetchFullPageCache', 'after', $cache['content']);
+			if (is_object($trigger_output) && method_exists($trigger_output, 'toBool') && !$trigger_output->toBool())
+			{
+				$cache = false;
+			}
 		}
 		
 		// If cached content is available, display it and exit.
