@@ -41,20 +41,20 @@
 		<value xml:lang="en"><![CDATA[Desktop]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_use_mobile">
-		<value xml:lang="ko"><![CDATA[모바일(브라우저)]]></value>
-		<value xml:lang="en"><![CDATA[Mobile Browser]]></value>
+		<value xml:lang="ko"><![CDATA[모바일]]></value>
+		<value xml:lang="en"><![CDATA[Mobile]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_use_pushapp">
-		<value xml:lang="ko"><![CDATA[모바일(푸시앱)]]></value>
-		<value xml:lang="en"><![CDATA[Mobile Push App]]></value>
+		<value xml:lang="ko"><![CDATA[푸시앱]]></value>
+		<value xml:lang="en"><![CDATA[Push App]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_use_robot">
 		<value xml:lang="ko"><![CDATA[로봇]]></value>
 		<value xml:lang="en"><![CDATA[Robot]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_use_help">
-		<value xml:lang="ko"><![CDATA[로그인하지 않은 사용자나 검색로봇에게는 페이지 전체를 캐싱하여 보여 줍니다.<br>새로 등록된 글, 스킨 및 레이아웃 수정 내역 등이 즉시 반영되지 않을 수도 있습니다.]]></value>
-		<value xml:lang="en"><![CDATA[Cache the entire page for visitors who are not logged in, such as search engine robots.<br>They will not see the latest posts or recent changes to the design of your site.]]></value>
+		<value xml:lang="ko"><![CDATA[선택한 종류의 방문자 중 로그인하지 않은 방문자에게는 캐시된 화면을 표시합니다.<br>새로 등록된 글과 댓글, 스킨 및 레이아웃 수정 내역 등이 즉시 반영되지 않을 수도 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Display cached content for selected types of visitors who are not logged in.<br>They will not see the latest posts or recent changes to the design of your site.]]></value>
 	</item>
 	<item name="cmd_supercache_full_cache_type">
 		<value xml:lang="ko"><![CDATA[전체화면 캐시 대상]]></value>

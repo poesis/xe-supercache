@@ -3,7 +3,7 @@ jQuery(function() {
 	
 	var $ = jQuery;
 	
-	$("a.sc_enable_other_pages").on("click", function(event) {
+	$("p.x_help-block").on("click", "a.sc_enable_other_pages", function(event) {
 		event.preventDefault();
 		$("#sc_full_cache_type_other").removeAttr("disabled");
 	});
