@@ -19,7 +19,7 @@
 		<h2>{$lang->cmd_supercache_full_cache_basic}</h2>
 		
 		<div class="x_control-group">
-			<label class="x_control-label">{$lang->cmd_supercache_full_cache_use}</label>
+			<label class="x_control-label"><span class="important_block">★</span> {$lang->cmd_supercache_full_cache_use}</label>
 			<div class="x_controls">
 				<label for="sc_full_cache_pc" class="x_inline">
 					<input name="sc_full_cache[]" id="sc_full_cache_pc" type="checkbox" value="pc" checked="checked"|cond="isset($sc_config->full_cache['pc'])" />
@@ -44,7 +44,7 @@
 		</div>
 		
 		<div class="x_control-group">
-			<label class="x_control-label">{$lang->cmd_supercache_full_cache_type}</label>
+			<label class="x_control-label"><span class="important_block">★</span> {$lang->cmd_supercache_full_cache_type}</label>
 			<div class="x_controls">
 				<label for="sc_full_cache_type_module" class="checkbox_wrapper">
 					<input name="sc_full_cache_type[]" id="sc_full_cache_type_module" type="checkbox" value="module" checked="checked"|cond="isset($sc_config->full_cache_type['module'])" />
@@ -222,7 +222,7 @@
 		</div>
 		
 		<div class="x_control-group">
-			<label class="x_control-label">{$lang->cmd_supercache_full_cache_exclude_modules}</label>
+			<label class="x_control-label"><span class="important_block">★</span> {$lang->cmd_supercache_full_cache_exclude_modules}</label>
 			<div class="x_controls">
 				<div loop="$sc_modules => $sc_module">
 					<label for="sc_full_cache_exclude_modules_{$sc_module->module_srl}" class="checkbox_wrapper x_inline">
