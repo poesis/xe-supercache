@@ -1075,19 +1075,13 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Detect mobile devices and Android Push App.
-		$is_mobile = $is_mobile_enabled ? Mobile::isFromMobilePhone() : Mobile::isMobileCheckByAgent();
-		$is_tablet = $is_mobile ? Mobile::isMobilePadCheckByAgent() : false;
-		$is_pushapp = $is_mobile ? (strpos($_SERVER['HTTP_USER_AGENT'], 'XEPUSH') !== false) : false;
+		$is_mobile1 = Mobile::isFromMobilePhone();
+		$is_mobile2 = Mobile::isMobileCheckByAgent();
+		$is_pushapp = (strpos($_SERVER['HTTP_USER_AGENT'], 'XEPUSH') !== false) ? true : false;
+		$is_tablet = ($is_mobile1 || $is_mobile2 || $is_pushapp) ? Mobile::isMobilePadCheckByAgent() : false;
 		
-		// Compose the device type string.
-		if ($is_mobile)
-		{
-			$device_type = ($is_tablet ? 't' : 'm') . ($is_pushapp ? 'p' : 'o');
-		}
-		else
-		{
-			$device_type = 'pc';
-		}
+		// Compose the device type string: pc/mo/po/mc + push + tab
+		$device_type = ($is_mobile1 ? 'm' : 'p') . ($is_mobile2 ? 'o' : 'c') . ($is_pushapp ? 'push' : '') . ($is_tablet ? 'tab' : '');
 		
 		// Save the device type in the session for future reference.
 		if (!$is_mobile_enabled && (!method_exists('Context', 'getSessionStatus') || Context::getSessionStatus()))
