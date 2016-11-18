@@ -9,7 +9,11 @@ jQuery(function() {
 	});
 	
 	$("span.console_font").on("click", function() {
-		$("#sc_core_object_cache").val($(this).text());
+		if ($(this).siblings("span.is_disabled").size()) {
+			alert($(this).parents("ul").data("is-disabled"));
+		} else {
+			$("#sc_core_object_cache").val($(this).text());
+		}
 	});
 	
 	$("p.x_help-block").each(function() {

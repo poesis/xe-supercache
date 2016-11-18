@@ -25,7 +25,7 @@
 				</p>
 				<p class="x_help-block" cond="!$is_rhymix && $lang_type === 'ko'">
 					사용 가능한 설정 문법은 아래와 같습니다. 필요에 따라 변경하시기 바랍니다.
-					<ul class="inside_help_block">
+					<ul class="inside_help_block" data-is-disabled="{$lang->msg_supercache_core_object_cache_is_disabled}">
 						<li>기본값: <span class="console_font link">default</span><br>
 							대부분의 중소규모 사이트에 적합한 방법입니다.<br>
 							캐시 파일이 저장되는 <span class="console_font">files/supercache</span> 폴더의 용량이 다소 커질 수 있습니다.
@@ -49,7 +49,7 @@
 				</p>
 				<p class="x_help-block" cond="!$is_rhymix && $lang_type !== 'ko'">
 					You can use the following syntax. Please adjust to your needs.
-					<ul class="inside_help_block">
+					<ul class="inside_help_block" data-is-disabled="{$lang->msg_supercache_core_object_cache_is_disabled}">
 						<li>Default: <span class="console_font link">default</span><br>
 							Best choice for most small and medium-sized sites.<br>
 							Caution: This can cause a large amount of files to be stored in the <span class="console_font">files/supercache</span> folder.
@@ -58,15 +58,15 @@
 							Second-best choice for large sites where Memcached is not an option for whatever reason.<br>
 							Caution: This can cause a VERY large amount of files to be stored in the <span class="console_font">files/supercache</span> and <span class="console_font">files/cache/store</span> folders.
 						</li>
-						<li>Memcached: <span class="console_font link">memcache://127.0.0.1:11211</span><br>
+						<li>Memcached: <span class="console_font link">memcache://127.0.0.1:11211</span> <span class="is_disabled" cond="!$is_memcached_supported">({$lang->msg_supercache_not_available})</span><br>
 							Best choice for large sites or load-balanced environments.<br>
 							Please change the IP address and port if Memcached is running on a different server.
 						</li>
-						<li>APC: <span class="console_font link">apc</span><br>
+						<li>APC: <span class="console_font link">apc</span> <span class="is_disabled" cond="!function_exists('apc_store')">({$lang->msg_supercache_not_available})</span><br>
 							Not recommended, especially in PHP 5.5 or higher.<br>
 							Caution: Some versions of APC are known to become unstable when the cache size is too small.
 						</li>
-						<li>WinCache: <span class="console_font link">wincache</span><br>
+						<li>WinCache: <span class="console_font link">wincache</span> <span class="is_disabled" cond="!function_exists('wincache_ucache_set')">({$lang->msg_supercache_not_available})</span><br>
 							Not recommended unless there is no other choice. Only for Windows servers.
 						</li>
 					</ul>
@@ -77,7 +77,7 @@
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_flush_cache}</label>
 			<div class="x_controls">
-				<button type="button" class="x_btn" id="sc_flush_cache" data-success="{$lang->cmd_supercache_flush_cache_ok}" data-error="{$lang->cmd_supercache_flush_cache_error}">{$lang->cmd_supercache_flush_cache}</button>
+				<button type="button" class="x_btn" id="sc_flush_cache" data-success="{$lang->msg_supercache_flush_cache_ok}" data-error="{$lang->msg_supercache_flush_cache_error}">{$lang->cmd_supercache_flush_cache}</button>
 				<p class="x_help-block more_margin">{$lang->cmd_supercache_flush_cache_help}</p>
 			</div>
 		</div>
