@@ -20,6 +20,22 @@
 		<value xml:lang="ko"><![CDATA[캐시 방식 설정]]></value>
 		<value xml:lang="en"><![CDATA[Cache Method]]></value>
 	</item>
+	<item name="cmd_supercache_flush_cache">
+		<value xml:lang="ko"><![CDATA[캐시 비우기]]></value>
+		<value xml:lang="en"><![CDATA[Flush Cache]]></value>
+	</item>
+	<item name="cmd_supercache_flush_cache_help">
+		<value xml:lang="ko"><![CDATA[시스템 설정, 모듈 설정, 스킨 등을 변경한 후 문제가 발생한다면 위의 단추를 클릭해 주십시오.<br>주의: 문제가 있을 때만 클릭하세요. 평상시에 자주 사용하면 캐시 효율이 떨어질 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Please click the button above if you experience problems after changing system settings, module settings, etc.<br>Caution: Only click if there are problems. Overuse may redeuce cache effectiveness.]]></value>
+	</item>
+	<item name="cmd_supercache_flush_cache_ok">
+		<value xml:lang="ko"><![CDATA[캐시를 비웠습니다.]]></value>
+		<value xml:lang="en"><![CDATA[The cache has been flushed.]]></value>
+	</item>
+	<item name="cmd_supercache_flush_cache_error">
+		<value xml:lang="ko"><![CDATA[캐시를 비우는 데 실패했습니다. 캐시 폴더를 직접 삭제하거나 캐시 서비스를 재시작해 주십시오.]]></value>
+		<value xml:lang="en"><![CDATA[The flush has been unsuccessful. Please delete the cache folder or restart the cache service manually.]]></value>
+	</item>
 	<item name="cmd_supercache_config_full_cache">
 		<value xml:lang="ko"><![CDATA[전체화면 캐시]]></value>
 		<value xml:lang="en"><![CDATA[Full Page Cache]]></value>

@@ -367,4 +367,12 @@ class SuperCacheAdminController extends SuperCache
 		// Redirect to the main config page.
 		$this->setRedirectUrl(getNotEncodedUrl('', 'module', 'admin', 'act', 'dispSupercacheAdminConfigOther'));
 	}
+	
+	/**
+	 * Flush the cache.
+	 */
+	public function procSupercacheAdminFlushCache()
+	{
+		$this->add('flushed', $this->clearCache());
+	}
 }

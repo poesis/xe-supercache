@@ -12,6 +12,7 @@
 		<action name="procSupercacheAdminInsertBoardCache" type="controller" />
 		<action name="procSupercacheAdminInsertWidgetCache" type="controller" />
 		<action name="procSupercacheAdminInsertOther" type="controller" />
+		<action name="procSupercacheAdminFlushCache" type="controller" />
 	</actions>
 	<menus>
 		<menu name="supercache" type="all">

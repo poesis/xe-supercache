@@ -18,4 +18,20 @@ jQuery(function() {
 		content = content.replace(/(주의|Caution): /, '<span class="caution_block">$1</span> ');
 		$(this).html(content);
 	});
+
+	$("#sc_flush_cache").on("click", function(event) {
+		event.preventDefault();
+		var success_msg = $(this).data("success");
+		var error_msg = $(this).data("error");
+		exec_json("supercache.procSupercacheAdminFlushCache", {}, function(response) {
+			if (response.flushed) {
+				alert(success_msg);
+			} else {
+				alert(error_msg);
+			}
+		}, function(response) {
+			alert(error_msg);
+		});
+	});
+
 });
