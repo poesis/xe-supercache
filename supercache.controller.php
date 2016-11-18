@@ -757,21 +757,21 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Abort if the current user agent type is excluded.
-		$is_crawler = isCrawler();
-		if ($is_crawler && !isset($config->full_cache['robot']))
+		if (isCrawler() && !isset($config->full_cache['robot']))
 		{
 			return;
+			
 		}
 		$device_type = $this->getDeviceType();
 		if ($device_type === 'pc' && !isset($config->full_cache['pc']))
 		{
 			return;
 		}
-		if ($device_type[1] === 'o' && !isset($config->full_cache['mobile']))
+		if ($device_type !== 'pc' && !isset($config->full_cache['mobile']))
 		{
 			return;
 		}
-		if ($device_type[1] === 'p' && !isset($config->full_cache['pushapp']))
+		if (strpos($device_type, 'push') !== false && !isset($config->full_cache['pushapp']))
 		{
 			return;
 		}
