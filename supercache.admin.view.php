@@ -129,6 +129,16 @@ class SuperCacheAdminView extends SuperCache
 		// Get the list of blacklisted widgets.
 		Context::set('widget_blacklist', self::$_skipWidgetNames);
 		
+		// Get the list of default-on widgets.
+		Context::set('widget_default_on', array(
+			'best_content' => true,
+			'content' => true,
+			'cameronListOne' => true,
+			'doorweb_content' => true,
+			'opageWidget' => true,
+			'treasurej_popular' => true,
+		));
+		
 		// Display the config page.
 		$this->setTemplateFile('widget_cache');
 	}

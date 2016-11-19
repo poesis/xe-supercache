@@ -117,15 +117,16 @@
 				<!--@foreach($widget_list as $widget_info)-->
 					{@ if (!$widget_info->widget) continue}
 					{@ $widget_is_disabled = isset($widget_blacklist[$widget_info->widget])}
+					{@ $widget_is_default_on = isset($widget_default_on[$widget_info->widget])}
 					<tr class="disabled_widget"|cond="$widget_is_disabled">
 						<td>{htmlspecialchars($widget_info->title, ENT_COMPAT, 'UTF-8', false)}</td>
 						<td>
 							<label for="sc_widget_cache_{$widget_info->widget}_enabled_y" class="x_inline">
-								<input name="sc_widget_cache_{$widget_info->widget}_enabled" id="sc_widget_cache_{$widget_info->widget}_enabled_y" type="radio" value="Y" checked="checked"|cond="!$widget_is_disabled && $sc_config->widget_config[$widget_info->widget]['enabled'] !== false" disabled="disabled"|cond="$widget_is_disabled" />
+								<input name="sc_widget_cache_{$widget_info->widget}_enabled" id="sc_widget_cache_{$widget_info->widget}_enabled_y" type="radio" value="Y" checked="checked"|cond="!$widget_is_disabled && ($sc_config->widget_config[$widget_info->widget]['enabled'] || $widget_is_default_on)" disabled="disabled"|cond="$widget_is_disabled" />
 								{$lang->cmd_yes}
 							</label>
 							<label for="sc_widget_cache_{$widget_info->widget}_enabled_n" class="x_inline">
-								<input name="sc_widget_cache_{$widget_info->widget}_enabled" id="sc_widget_cache_{$widget_info->widget}_enabled_n" type="radio" value="N" checked="checked"|cond="$widget_is_disabled || $sc_config->widget_config[$widget_info->widget]['enabled'] === false" disabled="disabled"|cond="$widget_is_disabled" />
+								<input name="sc_widget_cache_{$widget_info->widget}_enabled" id="sc_widget_cache_{$widget_info->widget}_enabled_n" type="radio" value="N" checked="checked"|cond="$widget_is_disabled || $sc_config->widget_config[$widget_info->widget]['enabled'] === false || (!isset($sc_config->widget_config[$widget_info->widget]['enabled']) && !$widget_is_default_on)" disabled="disabled"|cond="$widget_is_disabled" />
 								{$lang->cmd_no}
 							</label>
 						</td>

@@ -56,6 +56,8 @@ class SuperCache extends ModuleObject
 	 */
 	protected static $_skipWidgetNames = array(
 		'login_info' => true,
+		'language_select' => true,
+		'point_status' => true,
 		'soo_xerstory' => true,
 		'widgetContent' => true,
 		'widgetBox' => true,
