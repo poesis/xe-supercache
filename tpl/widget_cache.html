@@ -98,6 +98,22 @@
 			</div>
 		</div>
 	
+		<div class="x_control-group">
+			<label class="x_control-label">{$lang->cmd_supercache_widget_cache_exclude_modules}</label>
+			<div class="x_controls">
+				<div loop="$sc_modules => $sc_module">
+					<label for="sc_widget_cache_exclude_modules_{$sc_module->module_srl}" class="checkbox_wrapper x_inline">
+						<input name="sc_widget_cache_exclude_modules[]" id="sc_widget_cache_exclude_modules_{$sc_module->module_srl}" type="checkbox" value="{$sc_module->module_srl}" checked="checked"|cond="isset($sc_config->widget_cache_exclude_modules[$sc_module->module_srl])" />
+						{$sc_module->browser_title}
+					</label>
+					<span class="mid">({$sc_module->mid})</span>
+				</div>
+				<p class="x_help-block more_margin">
+					{$lang->cmd_supercache_widget_cache_exclude_modules_help}
+				</p>
+			</div>
+		</div>
+		
 	</section>
 	
 	<section class="section">

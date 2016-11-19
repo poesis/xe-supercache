@@ -661,6 +661,10 @@ class SuperCacheController extends SuperCache
 		{
 			return;
 		}
+		if (isset($config->widget_cache_exclude_modules[Context::get('module_info')->module_srl]))
+		{
+			return;
+		}
 		
 		// Return if widget compilation is in "Javascript Mode" for any reason.
 		$oWidgetController = getController('widget');

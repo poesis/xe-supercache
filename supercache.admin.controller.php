@@ -302,6 +302,17 @@ class SuperCacheAdminController extends SuperCache
 		$config->widget_cache_autoinvalidate_document = $vars->sc_widget_cache_autoinvalidate_document === 'Y' ? true : false;
 		$config->widget_cache_autoinvalidate_comment = $vars->sc_widget_cache_autoinvalidate_comment === 'Y' ? true : false;
 		
+		if ($vars->sc_widget_cache_exclude_modules)
+		{
+			$keys = array_map('intval', $vars->sc_widget_cache_exclude_modules);
+			$values = array_fill(0, count($keys), true);
+			$config->widget_cache_exclude_modules = array_combine($keys, $values);
+		}
+		else
+		{
+			$config->widget_cache_exclude_modules = array();
+		}
+
 		// Organize per-widget config.
 		$widgets = array();
 		foreach (get_object_vars($vars) as $key => $value)

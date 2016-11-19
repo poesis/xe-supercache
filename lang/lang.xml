@@ -361,8 +361,8 @@
 		<value xml:lang="en"><![CDATA[Use Widget Cache]]></value>
 	</item>
 	<item name="cmd_supercache_widget_cache_use_help">
-		<value xml:lang="ko"><![CDATA[XE의 위젯 캐시를 슈퍼 캐시로 대체하고, 별도로 캐시를 설정하지 않은 모든 위젯에 아래의 기본값을 적용합니다.]]></value>
-		<value xml:lang="en"><![CDATA[Replace XE's widget cache with Super Cache, and apply the default below to all widgets that don't have their own cache setting.]]></value>
+		<value xml:lang="ko"><![CDATA[XE의 위젯 캐시를 슈퍼 캐시로 대체하고, 모든 위젯에 강제로 캐시를 적용합니다.<br>캐시를 적용할 위젯의 종류는 아래에서 자세히 선택할 수 있습니다.]]></value>
+		<value xml:lang="en"><![CDATA[Replace XE's widget cache with Super Cache, and cache all widgets that don't have their own cache setting.<br>You can select the types of widgets to cache below.]]></value>
 	</item>
 	<item name="cmd_supercache_widget_cache_supported">
 		<value xml:lang="ko"><![CDATA[위젯 캐시를 사용할 수 있습니다.]]></value>
@@ -401,7 +401,7 @@
 		<value xml:lang="en"><![CDATA[Default Cache Duration]]></value>
 	</item>
 	<item name="cmd_supercache_widget_cache_duration_help">
-		<value xml:lang="ko"><![CDATA[단위는 '초'입니다. 아래에서 위젯별로 더 자세히 설정할 수 있습니다.]]></value>
+		<value xml:lang="ko"><![CDATA[단위는 '초'입니다. 아래에서 별도로 설정한 위젯은 아래의 설정을 따릅니다.]]></value>
 		<value xml:lang="en"><![CDATA[Please enter the number of seconds to use as the default cache duration. You can override this with per-widget configuration below.]]></value>
 	</item>
 	<item name="cmd_supercache_widget_cache_duration_force">
@@ -419,6 +419,14 @@
 	<item name="cmd_supercache_widget_cache_group_help">
 		<value xml:lang="ko"><![CDATA[&quot;회원 그룹별 구분&quot;을 선택하면 소속 그룹이 같은 회원들끼리 모아서 각각 따로 캐시 처리합니다. 권한에 따라 위젯 내용이 달라져야 하는 경우 유용하나, 캐시 효율이 다소 떨어질 수 있습니다.]]></value>
 		<value xml:lang="en"><![CDATA[If &quot;Separate by Group&quot; is selected, widgets will be cached separately for members who belong to different groups. This may reduce cache efficiency.]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_exclude_modules">
+		<value xml:lang="ko"><![CDATA[위젯 캐시 예외 모듈]]></value>
+		<value xml:lang="en"><![CDATA[Modules to Exclude]]></value>
+	</item>
+	<item name="cmd_supercache_widget_cache_exclude_modules_help">
+		<value xml:lang="ko"><![CDATA[선택한 모듈(게시판)에서는 위젯 캐시를 사용하지 않습니다. 캐시 사용시 문제가 발생하는 모듈은 제외하시기 바랍니다.]]></value>
+		<value xml:lang="en"><![CDATA[The widget cache will be turned off in the selected modules (boards). Please check all modules that cause a problem when cached.]]></value>
 	</item>
 	<item name="cmd_supercache_widget_cache_duration_per_widget_help">
 		<value xml:lang="ko"><![CDATA[&quot;캐시 기간&quot;을 비워 두면 위에서 설정한 기본 캐시 기간이 적용됩니다.]]></value>

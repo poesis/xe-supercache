@@ -139,6 +139,11 @@ class SuperCacheAdminView extends SuperCache
 			'treasurej_popular' => true,
 		));
 		
+		// Get the list of modules.
+		$site_srl = intval(Context::get('site_module_info')->site_srl) ?: 0;
+		$module_list = getModel('module')->getMidList((object)array('site_srl' => $site_srl));
+		Context::set('sc_modules', $module_list);
+		
 		// Display the config page.
 		$this->setTemplateFile('widget_cache');
 	}
