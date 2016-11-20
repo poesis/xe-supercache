@@ -27,9 +27,15 @@ jQuery(function() {
 		event.preventDefault();
 		var success_msg = $(this).data("success");
 		var error_msg = $(this).data("error");
+		var fast_msg = $(this).data("fast");
+		var start_time = new Date().getTime();
 		exec_json("supercache.procSupercacheAdminFlushCache", {}, function(response) {
 			if (response.flushed) {
-				alert(success_msg);
+				if (new Date().getTime() < start_time + 2000) {
+					alert(success_msg + " " + fast_msg);
+				} else {
+					alert(success_msg);
+				}
 			} else {
 				alert(error_msg);
 			}

@@ -568,4 +568,8 @@
 		<value xml:lang="ko"><![CDATA[캐시를 비우는 데 실패했습니다. 캐시 폴더를 직접 삭제하거나 캐시 서비스를 재시작해 주십시오.]]></value>
 		<value xml:lang="en"><![CDATA[The flush has been unsuccessful. Please delete the cache folder or restart the cache service manually.]]></value>
 	</item>
+	<item name="msg_supercache_flush_cache_fast">
+		<value xml:lang="ko"><![CDATA[참 빠르죠? ㅎㅎ]]></value>
+		<value xml:lang="en"><![CDATA[Ain't that fast?]]></value>
+	</item>
 </lang>
