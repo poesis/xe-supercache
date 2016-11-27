@@ -384,6 +384,6 @@ class SuperCacheAdminController extends SuperCache
 	 */
 	public function procSupercacheAdminFlushCache()
 	{
-		$this->add('flushed', $this->clearCache());
+		$this->add('flushed', $this->clearCache() !== false);
 	}
 }
