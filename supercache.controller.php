@@ -1076,7 +1076,14 @@ class SuperCacheController extends SuperCache
 	public function getDeviceType()
 	{
 		// Prioritize XE official mobile device detection.
-		$is_mobile_enabled = Mobile::isMobileEnabled();
+		if (method_exists('Mobile', 'isMobileEnabled'))
+		{
+			$is_mobile_enabled = Mobile::isMobileEnabled();
+		}
+		else
+		{
+			$is_mobile_enabled = (Context::getDBInfo()->use_mobile_view === 'Y');
+		}
 		
 		// Check the session for cached data.
 		if (!$is_mobile_enabled && isset($_SESSION['supercache_device_type']))
