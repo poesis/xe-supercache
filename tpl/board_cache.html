@@ -59,7 +59,7 @@
 		<div class="x_control-group">
 			<label class="x_control-label" for="sc_paging_cache_threshold">{$lang->cmd_supercache_paging_cache_threshold}</label>
 			<div class="x_controls">
-				<input name="sc_paging_cache_threshold" id="sc_paging_cache_threshold" type="number" value="{intval($sc_config->paging_cache_threshold) ?: 1200}" style="width:100px" />
+				<input name="sc_paging_cache_threshold" id="sc_paging_cache_threshold" type="number" value="{intval(isset($sc_config->paging_cache_threshold) ? $sc_config->paging_cache_threshold : 1200)}" style="width:100px" />
 				<p class="x_help-block">
 					{$lang->cmd_supercache_paging_cache_threshold_help}
 				</p>

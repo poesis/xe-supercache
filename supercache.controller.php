@@ -169,10 +169,13 @@ class SuperCacheController extends SuperCache
 		
 		// Abort if the module/category has fewer documents than the threshold.
 		$oModel = getModel('supercache');
-		$document_count = $oModel->getDocumentCount($args->module_srl, $args->category_srl);
-		if ($document_count < $config->paging_cache_threshold)
+		if ($config->paging_cache_threshold)
 		{
-			return;
+			$document_count = $oModel->getDocumentCount($args->module_srl, $args->category_srl);
+			if ($document_count < $config->paging_cache_threshold)
+			{
+				return;
+			}
 		}
 		
 		// Add offset to simulate paging.
