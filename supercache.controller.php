@@ -680,6 +680,8 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Convert widgets into HTML output using Super Cache's own widget cache.
+		$oWidgetController = getController('widget');
+		$content = preg_replace_callback('/<div\b([^>]*?)\bwidget=([^>]*?)><div><div>((<img\b[^>]*?>)*)/i', array($oWidgetController, 'transWidgetBox'), $content);
 		$content = preg_replace_callback('/<img\b(?:[^>]*?)\bwidget="(?:[^>]*?)>/i', array($this, 'procWidgetCache'), $content);
 	}
 	
