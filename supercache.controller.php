@@ -1160,7 +1160,7 @@ class SuperCacheController extends SuperCache
 		{
 			if ($widget_attrs->module_srl)
 			{
-				$target_modules[] = array_map('intval', explode(',', $widget_attrs->module_srl));
+				$target_modules = array_map('intval', explode(',', $widget_attrs->module_srl));
 			}
 			if ($widget_attrs->module_srls)
 			{
