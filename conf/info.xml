@@ -8,8 +8,8 @@
 	<description xml:lang="en">
 		Use various caching methods to improve XE execution speed.
 	</description>
-	<version>1.3.2</version>
-	<date>2016-11-20</date>
+	<version>1.3.3</version>
+	<date>2016-12-14</date>
 	<category>service</category>
 	<author link="https://www.poesis.org">
 		<name xml:lang="ko">포에시스</name>
