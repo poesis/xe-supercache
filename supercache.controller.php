@@ -601,6 +601,12 @@ class SuperCacheController extends SuperCache
 			{
 				$this->_cacheCurrentRequest = false;
 			}
+			
+			// Do not store page if XE_VALIDATOR_MESSAGE exists.
+			if ($_SESSION['XE_VALIDATOR_MESSAGE'] || Context::get('XE_VALIDATOR_MESSAGE'))
+			{
+				$this->_cacheCurrentRequest = false;
+			}
 		}
 		
 		// Change gzip setting.
