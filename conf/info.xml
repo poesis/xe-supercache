@@ -11,8 +11,8 @@
 	<version>1.3.2</version>
 	<date>2016-11-20</date>
 	<category>service</category>
-	<author email_address="kijin@kijinsung.com" link="https://github.com/kijin">
-		<name xml:lang="ko">Kijin Sung</name>
-		<name xml:lang="en">Kijin Sung</name>
+	<author link="https://www.poesis.org">
+		<name xml:lang="ko">포에시스</name>
+		<name xml:lang="en">POESIS</name>
 	</author>
 </module>
