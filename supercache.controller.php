@@ -756,6 +756,12 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
+		// Abort if XE_VALIDATOR_MESSAGE exists.
+		if ($_SESSION['XE_VALIDATOR_MESSAGE'] || Context::get('XE_VALIDATOR_MESSAGE'))
+		{
+			return;
+		}
+		
 		// Abort if the visitor has an excluded cookie.
 		if ($config->full_cache_exclude_cookies)
 		{
