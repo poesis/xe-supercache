@@ -112,6 +112,7 @@ class SuperCacheController extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
+		$this->_cacheCurrentSearch = false;
 		if ((!$config->paging_cache && !$config->search_cache) || (!$obj->mid && !$obj->module_srl))
 		{
 			return;
