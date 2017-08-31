@@ -135,7 +135,7 @@ class SuperCacheController extends SuperCache
 		{
 			if ($config->search_cache && $obj->search_target && Context::getRequestMethod() === 'GET' && Context::get('module') !== 'admin' && !Context::get('act'))
 			{
-				if (!in_array($obj->module_srl, $config->search_cache_exclude_modules))
+				if (!isset($config->search_cache_exclude_modules[$obj->module_srl]))
 				{
 					$oModel = getModel('supercache');
 					if ($cached_search_result = $oModel->getSearchResultCache($obj))
