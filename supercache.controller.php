@@ -645,11 +645,32 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Remove Android Push App trigger that causes issue #9 when using the full-page cache.
-		if ($this->_cacheCurrentRequest && $this->getConfig()->full_cache['pushapp'])
+		if ($this->_cacheCurrentRequest && $config->full_cache['pushapp'])
 		{
 			$GLOBALS['__triggers__']['display']['before'] = array_filter($GLOBALS['__triggers__']['display']['before'], function($entry) {
 				return $entry->module !== 'androidpushapp';
 			});
+		}
+		
+		// Reorder itemshop trigger that causes the widget cache to not work at all.
+		if ($config->widget_cache)
+		{
+			$pop_triggers = array();
+			$GLOBALS['__triggers__']['display']['before'] = array_filter($GLOBALS['__triggers__']['display']['before'], function($entry) use(&$pop_triggers) {
+				if ($entry->module === 'itemshop')
+				{
+					$pop_triggers[] = $entry;
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			});
+			foreach ($pop_triggers as $entry)
+			{
+				$GLOBALS['__triggers__']['display']['before'][] = $entry;
+			}
 		}
 	}
 	
