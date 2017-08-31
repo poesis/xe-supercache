@@ -134,14 +134,17 @@ class SuperCacheController extends SuperCache
 		{
 			if ($config->search_cache && $obj->search_target && Context::getRequestMethod() === 'GET' && Context::get('module') !== 'admin' && !Context::get('act'))
 			{
-				$oModel = getModel('supercache');
-				if ($cached_search_result = $oModel->getSearchResultCache($obj))
+				if (!in_array($obj->module_srl, $config->search_cache_exclude_modules))
 				{
-					$obj->use_alternate_output = $cached_search_result;
-				}
-				else
-				{
-					$this->_cacheCurrentSearch = $obj;
+					$oModel = getModel('supercache');
+					if ($cached_search_result = $oModel->getSearchResultCache($obj))
+					{
+						$obj->use_alternate_output = $cached_search_result;
+					}
+					else
+					{
+						$this->_cacheCurrentSearch = $obj;
+					}
 				}
 			}
 			return;
@@ -913,6 +916,14 @@ class SuperCacheController extends SuperCache
 				$this->_cacheCurrentRequest = array(0, 0, $user_agent_type, $request_vars);
 				$cache = $oModel->getFullPageCache(0, 0, $user_agent_type, $request_vars);
 				break;
+		}
+		
+		// Replace the CSRF token.
+		if ($cache && class_exists('Rhymix\\Framework\\Session', false) && method_exists('Rhymix\\Framework\\Session', 'getGenericToken'))
+		{
+			$cache['content'] = preg_replace_callback('#(<meta name="csrf-token" content=")[^"]*(" />)#', function($match) {
+				return $match[1] . \Rhymix\Framework\Session::getGenericToken() . $match[2];
+			}, $cache['content']);
 		}
 		
 		// Call a trigger to post-process the content.
