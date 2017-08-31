@@ -128,7 +128,6 @@ class SuperCacheModel extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
 		// Check cache.
 		$cache_key = $this->_getSearchResultCacheKey($args);
 		$content = $this->getCache($cache_key, $config->search_cache_duration);
@@ -161,6 +160,16 @@ class SuperCacheModel extends SuperCache
 		// Fill in pagination data to emulate XE search results.
 		$this->_fillPaginationData($output, $content['total_count'], $content['list_count'] ?: 20, $args->page_count ?: 10, $args->page ?: 1);
 		
+		// Fill in division data to emulate XE search results.
+		if (isset($content['division']) && $content['division'])
+		{
+			Context::set('division', $content['division']);
+		}
+		if (isset($content['last_division']) && $content['last_division'])
+		{
+			Context::set('last_division', $content['last_division']);
+		}
+		
 		// Return the result.
 		return $output;
 	}
@@ -184,6 +193,8 @@ class SuperCacheModel extends SuperCache
 			'list_count' => intval($args->list_count),
 			'sort_index' => trim($args->sort_index) ?: 'list_order',
 			'order_type' => trim($args->order_type) ?: 'asc',
+			'division' => intval(Context::get('division')),
+			'last_division' => intval(Context::get('last_division')),
 			'cached' => time(),
 			'expires' => time() + $config->search_cache_duration,
 		);
