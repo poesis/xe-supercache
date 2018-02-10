@@ -1286,7 +1286,7 @@ class SuperCacheController extends SuperCache
 	 */
 	public function terminateRequest($reason = '', $data = array())
 	{
-		$output = new Object;
+		$output = class_exists('BaseObject') ? new BaseObject : new Object;
 		$output->add('supercache_terminated', $reason);
 		foreach ($data as $key => $value)
 		{

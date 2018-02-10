@@ -237,7 +237,7 @@ class SuperCache extends ModuleObject
 			array_shift($args);
 			$message = vsprintf($lang->$message, $args);
 		}
-		return new Object(-1, $message);
+		return class_exists('BaseObject') ? new BaseObject(-1, $message) : new Object(-1, $message);
 	}
 	
 	/**
@@ -288,7 +288,7 @@ class SuperCache extends ModuleObject
 				$oModuleController->deleteTrigger($trigger[0], $this->module, $trigger[2], $trigger[3], $trigger[1]);
 			}
 		}
-		return new Object(0, 'success_updated');
+		return class_exists('BaseObject') ? new BaseObject(0, 'success_updated') : new Object(0, 'success_updated');
 	}
 	
 	/**
