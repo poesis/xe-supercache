@@ -50,6 +50,11 @@ class SuperCacheAdminModel extends SuperCache
 	 */
 	public function isOffsetQuerySupported()
 	{
+		if (version_compare(__XE_VERSION__, '1.8.42', '>='))
+		{
+			return 1;
+		}
+		
 		if (defined('RX_VERSION') && version_compare(RX_VERSION, '1.8.25', '>='))
 		{
 			return 1;

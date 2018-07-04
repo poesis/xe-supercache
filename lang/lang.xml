@@ -257,8 +257,8 @@
 		<value xml:lang="en"><![CDATA[Use Offset Queries]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_use_offset_query_help">
-		<value xml:lang="ko"><![CDATA[모든 페이지에 페이징 캐시를 적용합니다. 사용하지 않을 경우 각 게시판의 1페이지에만 적용됩니다.<br>2페이지 이후의 게시판 목록이 잘못 표시될 경우 이 기능을 사용하지 마십시오.]]></value>
-		<value xml:lang="en"><![CDATA[Enable the pagination cache on all pages of a board. Without offset queries, it will only be enabled on the first page.<br>Please disable this feature if you see any errors on page 2 or higher.]]></value>
+		<value xml:lang="ko"><![CDATA[2페이지 이상의 목록에도 캐시를 적용합니다. 사용하지 않을 경우 각 게시판의 1페이지에만 적용됩니다.<br>오프셋 쿼리를 지원하는 XE 1.8.42 이상 버전이라면 사용을 권장합니다.]]></value>
+		<value xml:lang="en"><![CDATA[Enable the pagination cache on all pages of a board. Without offset queries, it will only be enabled on the first page.<br>It is recommended that you enable this option if you are using XE 1.8.42 or higher.]]></value>
 	</item>
 	<item name="cmd_supercache_paging_cache_exclude_modules">
 		<value xml:lang="ko"><![CDATA[페이징 캐시 예외 모듈]]></value>
