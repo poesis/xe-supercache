@@ -113,7 +113,7 @@ class SuperCacheController extends SuperCache
 		// Get module configuration.
 		$config = $this->getConfig();
 		$this->_cacheCurrentSearch = false;
-		if ((!$config->paging_cache && !$config->search_cache) || (!$obj->mid && !$obj->module_srl))
+		if ((!$config->paging_cache && !$config->search_cache) || ((!isset($obj->mid) || !$obj->mid) && (!isset($obj->module_srl) || !$obj->module_srl)))
 		{
 			return;
 		}
@@ -125,15 +125,21 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Abort if an alternate list has already been set.
-		if ($obj->use_alternate_output)
+		if (isset($obj->use_alternate_output) && $obj->use_alternate_output)
 		{
 			return;
 		}
 		
 		// Abort if there are search queries, but activate the search result cache.
-		if ($obj->search_target || $obj->search_keyword || $obj->exclude_module_srl || $obj->start_date || $obj->end_date || $obj->member_srl)
+		$search_target = isset($obj->search_target) ? $obj->search_target : null;
+		$search_keyword = isset($obj->search_keyword) ? $obj->search_keyword : null;
+		$exclude_module_srl = isset($obj->exclude_module_srl) ? $obj->exclude_module_srl : array();
+		$start_date = isset($obj->start_date) ? $obj->start_date : null;
+		$end_date = isset($obj->end_date) ? $obj->end_date : 0;
+		$member_srl = isset($obj->member_srl) ? $obj->member_srl : null;
+		if ($search_target || $search_keyword || $exclude_module_srl || $start_date || $end_date || $member_srl)
 		{
-			if ($config->search_cache && $obj->search_target && Context::getRequestMethod() === 'GET' && Context::get('module') !== 'admin' && !Context::get('act'))
+			if ($config->search_cache && $search_target && Context::getRequestMethod() === 'GET' && Context::get('module') !== 'admin' && !Context::get('act'))
 			{
 				if (!isset($config->search_cache_exclude_modules[$obj->module_srl]))
 				{
@@ -692,7 +698,10 @@ class SuperCacheController extends SuperCache
 		{
 			return;
 		}
-		if (isset($config->widget_cache_exclude_modules[Context::get('module_info')->module_srl]))
+		
+		$module_info = Context::get('module_info');
+		$module_srl = (isset($module_info) && isset($module_info->module_srl)) ? $module_info->module_srl : 0;
+		if (isset($config->widget_cache_exclude_modules[$module_srl]))
 		{
 			return;
 		}
@@ -1219,7 +1228,7 @@ class SuperCacheController extends SuperCache
 		$oModel = getModel('supercache');
 		$cache_key = $oModel->getWidgetCacheKey($widget_attrs, $config->widget_config[$widget_attrs->widget]['group'] ? Context::get('logged_info') : false);
 		$cache_duration = $config->widget_config[$widget_attrs->widget]['duration'] ?: $config->widget_cache_duration;
-		if ($widget_attrs->widget_cache && !$config->widget_config[$widget_attrs->widget]['force'])
+		if (isset($widget_attrs->widget_cache) && $widget_attrs->widget_cache && !($config->widget_config[$widget_attrs->widget]['force'] ?? false))
 		{
 			if (preg_match('/^([0-9\.]+)([smhd])$/i', $widget_attrs->widget_cache, $matches) && $matches[1] > 0)
 			{
@@ -1263,15 +1272,15 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Generate the widget HTML.
-		$inner_styles = sprintf('padding: %dpx %dpx %dpx %dpx !important;', $widget_attrs->widget_padding_top, $widget_attrs->widget_padding_right, $widget_attrs->widget_padding_bottom, $widget_attrs->widget_padding_left);
+		$inner_styles = sprintf('padding: %dpx %dpx %dpx %dpx !important;', $widget_attrs->widget_padding_top ?? 0, $widget_attrs->widget_padding_right ?? 0, $widget_attrs->widget_padding_bottom ?? 0, $widget_attrs->widget_padding_left ?? 0);
 		$widget_content = sprintf('<div style="*zoom:1;%s">%s</div>', $inner_styles, $widget_content);
-		if ($widget_attrs->widgetstyle)
+		if (isset($widget_attrs->widgetstyle) && $widget_attrs->widgetstyle)
 		{
 			$oWidgetController = isset($oWidgetController) ? $oWidgetController : getController('widget');
 			$widget_content = $oWidgetController->compileWidgetStyle($widget_attrs->widgetstyle, $widget_attrs->widget, $widget_content, $widget_attrs, false);
 		}
 		$outer_styles = preg_replace('/url\((.+)(\/?)none\)/is', '', $widget_attrs->style);
-		$output = sprintf('<div class="xe-widget-wrapper %s" %sstyle="%s">%s</div>', $widget_attrs->css_class, $widget_attrs->id, $outer_styles, $widget_content);
+		$output = sprintf('<div class="xe-widget-wrapper %s" %sstyle="%s">%s</div>', $widget_attrs->css_class ?? '', $widget_attrs->id ?? '', $outer_styles, $widget_content);
 		
 		// Return the result.
 		return $output;
