@@ -121,6 +121,26 @@ class SuperCache extends ModuleObject
 	}
 	
 	/**
+	 * Get the current cache type.
+	 * 
+	 * This works for both XE and Rhymix.
+	 * 
+	 * @return string
+	 */
+	protected function _getCacheType()
+	{
+		if(defined('RX_BASEDIR'))
+		{
+			return config('cache.type') ?: '';
+		}
+		else
+		{
+			$db_info = Context::getDbInfo();
+			return isset($db_info->use_object_cache) ? $db_info->use_object_cache : '';
+		}
+	}
+	
+	/**
 	 * Get the cache handler from XE Core.
 	 * 
 	 * This automatically falls back to the built-in file cache driver
@@ -130,16 +150,13 @@ class SuperCache extends ModuleObject
 	 */
 	protected function _getCacheHandler()
 	{
-		$db_info = Context::getDbInfo();
-		if ($db_info->use_object_cache)
+		$cache_type = $this->_getCacheType();
+		if ($cache_type && !preg_match('/^(?:file|dummy)\b/i', $cache_type))
 		{
-			if (!preg_match('/^(?:file|dummy)\b/i', $db_info->use_object_cache))
+			$handler = CacheHandler::getInstance('object');
+			if ($handler->isSupport())
 			{
-				$handler = CacheHandler::getInstance('object');
-				if ($handler->isSupport())
-				{
-					return $handler;
-				}
+				return $handler;
 			}
 		}
 		

@@ -58,7 +58,7 @@ class SuperCacheAdminView extends SuperCache
 		Context::set('sc_config', $config = $this->getConfig());
 		
 		// Get current object cache option and system environment.
-		$object_cache_option = htmlspecialchars(Context::getDbInfo()->use_object_cache);
+		$object_cache_option = $this->_getCacheType();
 		if (!$object_cache_option || $object_cache_option === 'dummy')
 		{
 			$object_cache_option = 'default';

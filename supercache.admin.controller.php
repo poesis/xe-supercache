@@ -31,8 +31,8 @@ class SuperCacheAdminController extends SuperCache
 		$vars->sc_core_object_cache = trim($vars->sc_core_object_cache);
 		
 		// Save the new config.
-		$db_info = Context::getDbInfo();
-		if ($db_info->use_object_cache !== $vars->sc_core_object_cache)
+		$cache_type = $this->_getCacheType();
+		if ($cache_type !== $vars->sc_core_object_cache)
 		{
 			// Don't change Rhymix config.
 			if (defined('RX_BASEDIR'))
@@ -60,7 +60,8 @@ class SuperCacheAdminController extends SuperCache
 				$vars->sc_core_object_cache = '';
 			}
 			
-			// Update system config.
+			// Update system config. (XE only)
+			$db_info = Context::getDbInfo();
 			$db_info->use_object_cache = $vars->sc_core_object_cache;
 			Context::setDbInfo($db_info);
 			if (!getController('install')->makeConfigFile())
