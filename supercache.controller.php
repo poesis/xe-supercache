@@ -113,7 +113,7 @@ class SuperCacheController extends SuperCache
 		// Get module configuration.
 		$config = $this->getConfig();
 		$this->_cacheCurrentSearch = false;
-		if ((!$config->paging_cache && !$config->search_cache) || ((!isset($obj->mid) || !$obj->mid) && (!isset($obj->module_srl) || !$obj->module_srl)))
+		if (($config->paging_cache === false && !$config->search_cache) || ((!isset($obj->mid) || !$obj->mid) && (!isset($obj->module_srl) || !$obj->module_srl)))
 		{
 			return;
 		}
@@ -143,6 +143,12 @@ class SuperCacheController extends SuperCache
 			{
 				if (!isset($config->search_cache_exclude_modules[$obj->module_srl]))
 				{
+					$oTimelineModel = getModel('timeline');
+					if ($oTimelineModel && $oTimelineModel->getTimelineInfo($obj->module_srl))
+					{
+						return;
+					}
+					
 					$oModel = getModel('supercache');
 					if ($cached_search_result = $oModel->getSearchResultCache($obj))
 					{
@@ -157,8 +163,14 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
+		// Remove page number if the visitor is a robot.
+		if (isCrawler())
+		{
+			$obj->page = 1;
+		}
+		
 		// Abort if this request is for any page greater than 1, unless offset queries are enabled.
-		if ($obj->page > 1 && !$config->paging_cache_use_offset)
+		if ($obj->page > 1 && ($config->paging_cache_use_offset === false || !isset($config->paging_cache_use_offset) && version_compare(__XE_VERSION__, '1.8.42', '>=')))
 		{
 			return;
 		}
