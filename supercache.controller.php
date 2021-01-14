@@ -163,8 +163,8 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
-		// Remove page number if the visitor is a robot.
-		if (isCrawler())
+		// Remove page number if a robot requests an old page.
+		if ($obj->page > 100 && Context::get('oDocument') && isCrawler())
 		{
 			$obj->page = 1;
 		}
