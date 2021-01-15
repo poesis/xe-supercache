@@ -1110,7 +1110,14 @@ class SuperCacheController extends SuperCache
 			}
 			elseif (preg_match('/\/([a-zA-Z0-9_-]+)(?:\?|(?:\/\d+)?$)/', $referer, $matches) && $matches[1] === $obj->mid)
 			{
-				Context::set('page', 1);
+				if (isCrawler())
+				{
+					Context::set('page', 1);
+				}
+				else
+				{
+					return;
+				}
 			}
 			elseif (preg_match('/\bmid=([a-zA-Z0-9_-]+)\b/', $referer, $matches) && $matches[1] === $obj->mid)
 			{
