@@ -151,10 +151,10 @@ class SuperCacheModel extends SuperCache
 		$query_args->list_count = $content['list_count'];
 		$query_args->sort_index = $content['sort_index'];
 		$query_args->order_type = $content['order_type'];
-		$output = executeQuery('supercache.getDocumentList', $query_args);
-		if (is_object($output->data))
+		$output = executeQueryArray('supercache.getDocumentList', $query_args);
+		if (!$output->data)
 		{
-			$output->data = array($output->data);
+			$output->data = array();
 		}
 		
 		// Fill in pagination data to emulate XE search results.
@@ -418,10 +418,10 @@ class SuperCacheModel extends SuperCache
 		unset($args->page);
 		
 		// Execute the query.
-		$output = executeQuery('supercache.getDocumentList', $args);
-		if (is_object($output->data))
+		$output = executeQueryArray('supercache.getDocumentList', $args);
+		if (!$output->data)
 		{
-			$output->data = array($output->data);
+			$output->data = array();
 		}
 		
 		// Fill in pagination data to emulate XE search results.
