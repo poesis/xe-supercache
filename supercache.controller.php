@@ -139,7 +139,7 @@ class SuperCacheController extends SuperCache
 		$member_srl = isset($obj->member_srl) ? $obj->member_srl : null;
 		if ($search_target || $search_keyword || $exclude_module_srl || $start_date || $end_date || $member_srl)
 		{
-			if ($config->search_cache && $search_target && Context::getRequestMethod() === 'GET' && Context::get('module') !== 'admin' && !Context::get('act'))
+			if ($config->search_cache && $search_target && Context::getRequestMethod() === 'GET' && Context::get('module') !== 'admin' && (!Context::get('act') || Context::get('act') === 'dispBoardContent'))
 			{
 				if (!isset($config->search_cache_exclude_modules[$obj->module_srl]))
 				{
@@ -890,7 +890,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Determine the page type.
-		if ($act)
+		if ($act && $act !== 'dispBoardContent')
 		{
 			$page_type = 'other';
 		}
