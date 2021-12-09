@@ -486,8 +486,17 @@ class SuperCacheModel extends SuperCache
 		if ($incr)
 		{
 			$oDB = DB::getInstance();
-			$oDB->query_id = 'supercache.updateReadedCount';
-			$output = $oDB->_query(sprintf('UPDATE %sdocuments SET readed_count = readed_count + %d WHERE document_srl = %d', $oDB->prefix, $incr, $document_srl));
+			if (method_exists($oDB, 'addPrefixes'))
+			{
+				$querystring = sprintf('UPDATE documents SET readed_count = readed_count + %d WHERE document_srl = %d', $incr, $document_srl);
+				$output = $oDB->_query($oDB->addPrefixes($querystring));
+			}
+			else
+			{
+				$oDB->query_id = 'supercache.updateReadedCount';
+				$querystring = sprintf('UPDATE %sdocuments SET readed_count = readed_count + %d WHERE document_srl = %d', $oDB->prefix, $incr, $document_srl);
+				$output = $oDB->_query($querystring);
+			}
 			return $output ? true : false;
 		}
 	}
