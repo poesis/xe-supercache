@@ -141,7 +141,7 @@ class SuperCacheController extends SuperCache
 		{
 			if ($config->search_cache && $search_target && Context::getRequestMethod() === 'GET' && Context::get('module') !== 'admin' && (!Context::get('act') || Context::get('act') === 'dispBoardContent'))
 			{
-				if (!isset($config->search_cache_exclude_modules[$obj->module_srl]))
+				if (!$obj->module_srl || !isset($config->search_cache_exclude_modules[$obj->module_srl]))
 				{
 					$oTimelineModel = getModel('timeline');
 					if ($oTimelineModel && $oTimelineModel->getTimelineInfo($obj->module_srl))
