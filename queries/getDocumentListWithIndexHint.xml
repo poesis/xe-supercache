@@ -1,0 +1,19 @@
+<query id="getDocumentListWithIndexHint" action="select">
+	<tables>
+		<table name="documents" />
+	</tables>
+	<index_hint for="mysql">
+		<index table="documents" name="PRIMARY" type="USE" />
+	</index_hint>
+	<columns>
+		<column name="*" />
+	</columns>
+	<conditions>
+		<condition operation="in" column="document_srl" var="document_srl" />
+	</conditions>
+	<navigation>
+		<index var="sort_index" default="list_order" order="order_type" />
+		<list_count var="list_count" default="20" />
+		<offset var="list_offset" default="0" />
+	</navigation>
+</query>

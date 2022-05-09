@@ -151,7 +151,7 @@ class SuperCacheModel extends SuperCache
 		$query_args->list_count = $content['list_count'];
 		$query_args->sort_index = $content['sort_index'];
 		$query_args->order_type = $content['order_type'];
-		$output = executeQueryArray('supercache.getDocumentList', $query_args);
+		$output = executeQueryArray('supercache.getDocumentListWithIndexHint', $query_args);
 		if (!$output->data)
 		{
 			$output->data = array();
