@@ -183,6 +183,12 @@ class SuperCacheController extends SuperCache
 			return;
 		}
 		
+		// Normalize module_srl into a single number.
+		if (is_array($args->module_srl) && count($args->module_srl) === 1)
+		{
+			$args->module_srl = reset($args->module_srl);
+		}
+		
 		// Abort if the module is excluded by configuration.
 		if (!$args->module_srl || isset($config->paging_cache_exclude_modules[$args->module_srl]))
 		{
