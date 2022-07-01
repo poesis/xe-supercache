@@ -184,7 +184,7 @@ class SuperCacheController extends SuperCache
 		}
 		
 		// Abort if the module is excluded by configuration.
-		if (isset($config->paging_cache_exclude_modules[$args->module_srl]))
+		if (!$args->module_srl || isset($config->paging_cache_exclude_modules[$args->module_srl]))
 		{
 			return;
 		}
