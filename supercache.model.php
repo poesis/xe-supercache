@@ -215,7 +215,7 @@ class SuperCacheModel extends SuperCache
 	 * @param bool $is_comment
 	 * @return bool
 	 */
-	public function deleteSearchResultCache($module_srl = 0, $is_comment)
+	public function deleteSearchResultCache($module_srl = 0, $is_comment = false)
 	{
 		// Invalidate the subgroup cache keys for the module.
 		if ($module_srl)
