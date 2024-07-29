@@ -2,20 +2,20 @@
 
 /**
  * Super Cache module: controller class
- * 
+ *
  * Copyright (c) 2016 Kijin Sung <kijin@kijinsung.com>
  * All rights reserved.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,7 +29,7 @@ class SuperCacheController extends SuperCache
 	protected $_cacheCurrentRequest = null;
 	protected $_cacheStartTimestamp = null;
 	protected $_cacheHttpStatusCode = 200;
-	
+
 	/**
 	 * Trigger called at moduleHandler.init (before)
 	 */
@@ -39,7 +39,7 @@ class SuperCacheController extends SuperCache
 		$config = $this->getConfig();
 		$current_domain = preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST']);
 		$request_method = Context::getRequestMethod();
-		
+
 		// Check the Accept: header for erroneous CSS and image requests.
 		if ($request_method === 'GET' && isset($_SERVER['HTTP_REFERER']) && parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) === $current_domain)
 		{
@@ -53,7 +53,7 @@ class SuperCacheController extends SuperCache
 				return $this->terminateWithPlainText('/* block_img_request */');
 			}
 		}
-		
+
 		// Check the default URL.
 		if ($config->redirect_to_default_url && $request_method === 'GET')
 		{
@@ -68,14 +68,14 @@ class SuperCacheController extends SuperCache
 				$this->_defaultUrlChecked = true;
 			}
 		}
-		
+
 		// Check the full page cache (if not delayed).
 		if ($config->full_cache && !$config->full_cache_delay_trigger)
 		{
 			$this->checkFullPageCache($obj, $config);
 		}
 	}
-	
+
 	/**
 	 * Trigger called at moduleHandler.init (after)
 	 */
@@ -83,19 +83,19 @@ class SuperCacheController extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Check the full page cache (if delayed).
 		if ($config->full_cache && $config->full_cache_delay_trigger)
 		{
 			$this->checkFullPageCache($obj, $config);
 		}
-		
+
 		// Fill the page variable for paging cache.
 		if ($config->paging_cache)
 		{
 			$this->fillPageVariable($obj, $config);
 		}
-		
+
 		// Register autoloaders for documentItem and commentItem, because some versions of XE fail to autoload them.
 		spl_autoload_register(function($class) {
 			if (preg_match('/^(document|comment)item$/', strtolower($class), $matches))
@@ -104,7 +104,7 @@ class SuperCacheController extends SuperCache
 			}
 		});
 	}
-	
+
 	/**
 	 * Trigger called at document.getDocumentList (before)
 	 */
@@ -117,19 +117,19 @@ class SuperCacheController extends SuperCache
 		{
 			return;
 		}
-		
+
 		// If this is a POST search request (often caused by sketchbook skin), abort to prevent double searching.
 		if ($config->disable_post_search && $_SERVER['REQUEST_METHOD'] === 'POST' && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' && !$_POST['act'] && $obj->search_keyword)
 		{
 			return $this->terminateRequest('disable_post_search');
 		}
-		
+
 		// Abort if an alternate list has already been set.
 		if (isset($obj->use_alternate_output) && $obj->use_alternate_output)
 		{
 			return;
 		}
-		
+
 		// Abort if there are search queries, but activate the search result cache.
 		$search_target = isset($obj->search_target) ? $obj->search_target : null;
 		$search_keyword = isset($obj->search_keyword) ? $obj->search_keyword : null;
@@ -141,14 +141,14 @@ class SuperCacheController extends SuperCache
 		{
 			if ($config->search_cache && $search_target && Context::getRequestMethod() === 'GET' && Context::get('module') !== 'admin' && (!Context::get('act') || Context::get('act') === 'dispBoardContent'))
 			{
-				if (!$obj->module_srl || !isset($config->search_cache_exclude_modules[$obj->module_srl]))
+				if (!$obj->module_srl || (is_scalar($obj->module_srl) && !isset($config->search_cache_exclude_modules[$obj->module_srl])))
 				{
 					$oTimelineModel = getModel('timeline');
 					if ($oTimelineModel && $oTimelineModel->getTimelineInfo($obj->module_srl))
 					{
 						return;
 					}
-					
+
 					$oModel = getModel('supercache');
 					if ($cached_search_result = $oModel->getSearchResultCache($obj))
 					{
@@ -162,19 +162,19 @@ class SuperCacheController extends SuperCache
 			}
 			return;
 		}
-		
+
 		// Remove page number if a robot requests an old page.
 		if ($obj->page > 100 && Context::get('oDocument') && isCrawler())
 		{
 			$obj->page = 1;
 		}
-		
+
 		// Abort if this request is for any page greater than 1, unless offset queries are enabled.
 		if ($obj->page > 1 && ($config->paging_cache_use_offset === false || !isset($config->paging_cache_use_offset) && version_compare(__XE_VERSION__, '1.8.42', '>=')))
 		{
 			return;
 		}
-		
+
 		// Abort if there are any other unusual search options.
 		$oDocumentModel = getModel('document');
 		$oDocumentModel->_setSearchOption($obj, $args, $query_id, $use_division);
@@ -182,19 +182,19 @@ class SuperCacheController extends SuperCache
 		{
 			return;
 		}
-		
+
 		// Normalize module_srl into a single number.
 		if (is_array($args->module_srl) && count($args->module_srl) === 1)
 		{
 			$args->module_srl = reset($args->module_srl);
 		}
-		
+
 		// Abort if the module is excluded by configuration.
 		if (!$args->module_srl || isset($config->paging_cache_exclude_modules[$args->module_srl]))
 		{
 			return;
 		}
-		
+
 		// Abort if the module/category has fewer documents than the threshold.
 		$oModel = getModel('supercache');
 		$document_count = $oModel->getDocumentCount($args->module_srl, $args->category_srl);
@@ -202,17 +202,17 @@ class SuperCacheController extends SuperCache
 		{
 			return;
 		}
-		
+
 		// Add offset to simulate paging.
 		if ($config->paging_cache_use_offset && $args->page > 1)
 		{
 			$args->list_offset = ($args->page - 1) * $args->list_count;
 		}
-		
+
 		// Get documents and replace the output.
 		$obj->use_alternate_output = $oModel->getDocumentList($args, $document_count);
 	}
-	
+
 	/**
 	 * Trigger called at document.getDocumentList (after)
 	 */
@@ -226,7 +226,7 @@ class SuperCacheController extends SuperCache
 			$this->_cacheCurrentSearch = false;
 		}
 	}
-	
+
 	/**
 	 * Trigger called at document.insertDocument (after)
 	 */
@@ -234,14 +234,14 @@ class SuperCacheController extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Update document count for pagination cache.
 		$oModel = getModel('supercache');
 		if ($config->paging_cache)
 		{
 			$oModel->updateDocumentCount($obj->module_srl, $obj->category_srl, 1);
 		}
-		
+
 		// Refresh full page cache for the current module and/or index module.
 		if ($config->full_cache && $config->full_cache_document_action)
 		{
@@ -258,7 +258,7 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
-		
+
 		// Refresh search result cache for the current module.
 		if ($config->search_cache && $config->search_cache_document_action)
 		{
@@ -267,14 +267,14 @@ class SuperCacheController extends SuperCache
 				$oModel->deleteSearchResultCache($obj->module_srl, false);
 			}
 		}
-		
+
 		// Refresh widgets referencing the current module.
 		if ($config->widget_cache_autoinvalidate_document && $obj->module_srl)
 		{
 			$oModel->invalidateWidgetCache($obj->module_srl);
 		}
 	}
-	
+
 	/**
 	 * Trigger called at document.updateDocument (after)
 	 */
@@ -282,14 +282,14 @@ class SuperCacheController extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Get the old and new values of module_srl and category_srl.
 		$original = getModel('document')->getDocument($obj->document_srl);
 		$original_module_srl = intval($original->get('module_srl'));
 		$original_category_srl = intval($original->get('category_srl'));
 		$new_module_srl = intval($obj->module_srl) ?: $original_module_srl;
 		$new_category_srl = intval($obj->category_srl) ?: $original_category_srl;
-		
+
 		// Update document count for pagination cache.
 		$oModel = getModel('supercache');
 		if ($config->paging_cache && ($original_module_srl !== $new_module_srl || $original_category_srl !== $new_category_srl))
@@ -300,7 +300,7 @@ class SuperCacheController extends SuperCache
 				$oModel->updateDocumentCount($original_module_srl, $original_category_srl, -1);
 			}
 		}
-		
+
 		// Refresh full page cache for the current document, module, and/or index module.
 		if ($config->full_cache && $config->full_cache_document_action)
 		{
@@ -325,7 +325,7 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
-		
+
 		// Refresh search result cache for the current module.
 		if ($config->search_cache && $config->search_cache_document_action)
 		{
@@ -341,7 +341,7 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
-		
+
 		// Refresh widgets referencing the current module.
 		if ($config->widget_cache_autoinvalidate_document)
 		{
@@ -355,7 +355,7 @@ class SuperCacheController extends SuperCache
 			}
 		}
 	}
-	
+
 	/**
 	 * Trigger called at document.deleteDocument (after)
 	 */
@@ -363,14 +363,14 @@ class SuperCacheController extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Update document count for pagination cache.
 		$oModel = getModel('supercache');
 		if ($config->paging_cache)
 		{
 			$oModel->updateDocumentCount($obj->module_srl, $obj->category_srl, -1);
 		}
-		
+
 		// Refresh full page cache for the current document, module, and/or index module.
 		if ($config->full_cache && $config->full_cache_document_action)
 		{
@@ -391,7 +391,7 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
-		
+
 		// Refresh search result cache for the current module.
 		if ($config->search_cache && $config->search_cache_document_action)
 		{
@@ -400,14 +400,14 @@ class SuperCacheController extends SuperCache
 				$oModel->deleteSearchResultCache($obj->module_srl, false);
 			}
 		}
-		
+
 		// Refresh widgets referencing the current module.
 		if ($config->widget_cache_autoinvalidate_document && $obj->module_srl)
 		{
 			$oModel->invalidateWidgetCache($obj->module_srl);
 		}
 	}
-	
+
 	/**
 	 * Trigger called at document.copyDocumentModule (after)
 	 */
@@ -415,7 +415,7 @@ class SuperCacheController extends SuperCache
 	{
 		$this->triggerAfterUpdateDocument($obj);
 	}
-	
+
 	/**
 	 * Trigger called at document.moveDocumentModule (after)
 	 */
@@ -423,7 +423,7 @@ class SuperCacheController extends SuperCache
 	{
 		$this->triggerAfterUpdateDocument($obj);
 	}
-	
+
 	/**
 	 * Trigger called at document.moveDocumentToTrash (after)
 	 */
@@ -431,7 +431,7 @@ class SuperCacheController extends SuperCache
 	{
 		$this->triggerAfterDeleteDocument($obj);
 	}
-	
+
 	/**
 	 * Trigger called at document.restoreTrash (after)
 	 */
@@ -439,7 +439,7 @@ class SuperCacheController extends SuperCache
 	{
 		$this->triggerAfterUpdateDocument($obj);
 	}
-	
+
 	/**
 	 * Trigger called at comment.insertComment (after)
 	 */
@@ -447,7 +447,7 @@ class SuperCacheController extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Refresh full page cache for the current document, module, and/or index module.
 		if ($config->full_cache && $config->full_cache_comment_action)
 		{
@@ -469,7 +469,7 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
-		
+
 		// Refresh search result cache for the current module.
 		if ($config->search_cache && $config->search_cache_comment_action)
 		{
@@ -479,7 +479,7 @@ class SuperCacheController extends SuperCache
 				$oModel->deleteSearchResultCache($obj->module_srl, true);
 			}
 		}
-		
+
 		// Refresh widgets referencing the current module.
 		if ($config->widget_cache_autoinvalidate_comment && $obj->module_srl)
 		{
@@ -487,7 +487,7 @@ class SuperCacheController extends SuperCache
 			$oModel->invalidateWidgetCache($obj->module_srl);
 		}
 	}
-	
+
 	/**
 	 * Trigger called at comment.updateComment (after)
 	 */
@@ -495,14 +495,14 @@ class SuperCacheController extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Refresh full page cache for the current document, module, and/or index module.
 		if ($config->full_cache && $config->full_cache_comment_action)
 		{
 			$original = getModel('comment')->getComment($obj->comment_srl);
 			$document_srl = $obj->document_srl ?: $original->document_srl;
 			$module_srl = $obj->module_srl ?: $original->module_srl;
-			
+
 			$oModel = getModel('supercache');
 			if (isset($config->full_cache_comment_action['refresh_document']) && $document_srl)
 			{
@@ -521,7 +521,7 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
-		
+
 		// Refresh search result cache for the current module.
 		if ($config->search_cache && $config->search_cache_comment_action)
 		{
@@ -535,7 +535,7 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
-		
+
 		// Refresh widgets referencing the current module.
 		if ($config->widget_cache_autoinvalidate_comment)
 		{
@@ -547,7 +547,7 @@ class SuperCacheController extends SuperCache
 			}
 		}
 	}
-	
+
 	/**
 	 * Trigger called at comment.deleteComment (after)
 	 */
@@ -556,7 +556,7 @@ class SuperCacheController extends SuperCache
 		// Get module configuration.
 		$config = $this->getConfig();
 		$module_srl = $obj->module_srl ?: (method_exists($obj, 'get') ? $obj->get('module_srl'): 0);
-		
+
 		// Refresh full page cache for the current document, module, and/or index module.
 		if ($config->full_cache && $config->full_cache_comment_action)
 		{
@@ -578,7 +578,7 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
-		
+
 		// Refresh search result cache for the current module.
 		if ($config->search_cache && $config->search_cache_comment_action)
 		{
@@ -588,7 +588,7 @@ class SuperCacheController extends SuperCache
 				$oModel->deleteSearchResultCache($module_srl, true);
 			}
 		}
-		
+
 		// Refresh widgets referencing the current module.
 		if ($config->widget_cache_autoinvalidate_comment && $module_srl)
 		{
@@ -596,7 +596,7 @@ class SuperCacheController extends SuperCache
 			$oModel->invalidateWidgetCache($module_srl);
 		}
 	}
-	
+
 	/**
 	 * Trigger called at moduleHandler.proc (after)
 	 */
@@ -604,7 +604,7 @@ class SuperCacheController extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Store the output of the current request in the full-page cache.
 		if ($this->_cacheCurrentRequest)
 		{
@@ -617,26 +617,26 @@ class SuperCacheController extends SuperCache
 			{
 				$this->_cacheHttpStatusCode = intval($status_code);
 			}
-			
+
 			// Do not store redirects.
 			if ($this->_cacheHttpStatusCode >= 300 && $this->_cacheHttpStatusCode <= 399)
 			{
 				$this->_cacheCurrentRequest = false;
 			}
-			
+
 			// Do not store error codes unless include_404 is true.
 			if ($this->_cacheHttpStatusCode !== 200 && !$config->full_cache_include_404)
 			{
 				$this->_cacheCurrentRequest = false;
 			}
-			
+
 			// Do not store page if XE_VALIDATOR_MESSAGE exists.
 			if ($_SESSION['XE_VALIDATOR_MESSAGE'] || Context::get('XE_VALIDATOR_MESSAGE'))
 			{
 				$this->_cacheCurrentRequest = false;
 			}
 		}
-		
+
 		// Change gzip setting.
 		if (is_object($obj) && $gzip = $config->use_gzip)
 		{
@@ -651,7 +651,7 @@ class SuperCacheController extends SuperCache
 					define('__OB_GZHANDLER_ENABLE__', 1);
 				}
 			}
-			
+
 			switch ($gzip)
 			{
 				case 'except_robots':
@@ -668,7 +668,7 @@ class SuperCacheController extends SuperCache
 					break;
 			}
 		}
-		
+
 		// Remove Android Push App trigger that causes issue #9 when using the full-page cache.
 		if ($this->_cacheCurrentRequest && $config->full_cache['pushapp'])
 		{
@@ -676,7 +676,7 @@ class SuperCacheController extends SuperCache
 				return $entry->module !== 'androidpushapp';
 			});
 		}
-		
+
 		// Reorder itemshop trigger that causes the widget cache to not work at all.
 		if ($config->widget_cache)
 		{
@@ -698,7 +698,7 @@ class SuperCacheController extends SuperCache
 			}
 		}
 	}
-	
+
 	/**
 	 * Trigger called at display (before)
 	 */
@@ -706,7 +706,7 @@ class SuperCacheController extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Return if widgets should not be cached for this request.
 		if (!$config->widget_cache || !$config->widget_cache_duration)
 		{
@@ -716,33 +716,33 @@ class SuperCacheController extends SuperCache
 		{
 			return;
 		}
-		
+
 		$module_info = Context::get('module_info');
 		$module_srl = (isset($module_info) && isset($module_info->module_srl)) ? $module_info->module_srl : 0;
 		if (isset($config->widget_cache_exclude_modules[$module_srl]))
 		{
 			return;
 		}
-		
+
 		// Return if widget compilation is in "Javascript Mode" for any reason.
 		$oWidgetController = getController('widget');
 		if ($oWidgetController->javascript_mode || $oWidgetController->layout_javascript_mode)
 		{
 			return;
 		}
-		
+
 		// Return if SimpleXML is not available.
 		if (!function_exists('simplexml_load_string'))
 		{
 			return;
 		}
-		
+
 		// Convert widgets into HTML output using Super Cache's own widget cache.
 		$oWidgetController = getController('widget');
 		$content = preg_replace_callback('/<div\b([^>]*?)\bwidget=([^>]*?)><div><div>((<img\b[^>]*?>)*)/i', array($oWidgetController, 'transWidgetBox'), $content);
 		$content = preg_replace_callback('/<img\b(?:[^>]*?)\bwidget="(?:[^>]*?)>/i', array($this, 'procWidgetCache'), $content);
 	}
-	
+
 	/**
 	 * Trigger called at display (after)
 	 */
@@ -763,14 +763,14 @@ class SuperCacheController extends SuperCache
 			{
 				$extra_data = array();
 			}
-			
+
 			// Call a trigger to pre-process the content.
 			$trigger_output = ModuleHandler::triggerCall('supercache.storeFullPageCache', 'before', $content);
 			if (is_object($trigger_output) && method_exists($trigger_output, 'toBool') && !$trigger_output->toBool())
 			{
 				return $trigger_output;
 			}
-			
+
 			// Set the full-page cache.
 			getModel('supercache')->setFullPageCache(
 				$this->_cacheCurrentRequest[0],
@@ -784,11 +784,11 @@ class SuperCacheController extends SuperCache
 			);
 		}
 	}
-	
+
 	/**
 	 * Check the full page cache for the current request,
 	 * and terminate the request with a cached response if available.
-	 * 
+	 *
 	 * @param object $obj
 	 * @param object $config
 	 * @return void
@@ -800,20 +800,20 @@ class SuperCacheController extends SuperCache
 		{
 			return;
 		}
-		
+
 		// Abort if logged in.
 		$logged_info = Context::get('logged_info');
 		if ($logged_info && $logged_info->member_srl)
 		{
 			return;
 		}
-		
+
 		// Abort if XE_VALIDATOR_MESSAGE exists.
 		if ($_SESSION['XE_VALIDATOR_MESSAGE'] || Context::get('XE_VALIDATOR_MESSAGE'))
 		{
 			return;
 		}
-		
+
 		// Abort if the visitor has an excluded cookie.
 		if ($config->full_cache_exclude_cookies)
 		{
@@ -825,12 +825,12 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
-		
+
 		// Abort if the current user agent type is excluded.
 		if (isCrawler() && !isset($config->full_cache['robot']))
 		{
 			return;
-			
+
 		}
 		$device_type = $this->getDeviceType();
 		if ($device_type === 'pc' && !isset($config->full_cache['pc']))
@@ -845,7 +845,7 @@ class SuperCacheController extends SuperCache
 		{
 			return;
 		}
-		
+
 		// Abort if the current domain does not match the default domain.
 		$site_module_info = Context::get('site_module_info');
 		if (!$this->_defaultUrlChecked)
@@ -857,19 +857,19 @@ class SuperCacheController extends SuperCache
 				return;
 			}
 		}
-		
+
 		// Collect more information about the current request.
 		$mid = $obj->mid ?: Context::get('mid');
 		$act = Context::get('act');
 		$document_srl = Context::get('document_srl');
 		$is_secure = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && $_SERVER['HTTPS'] !== 'off');
-		
+
 		// Abort if the current act is excluded.
 		if (isset($config->full_cache_exclude_acts[$act]))
 		{
 			return;
 		}
-		
+
 		// Abort if the current module is excluded.
 		if (!$obj->mid && !$obj->module && !$obj->module_srl)
 		{
@@ -888,13 +888,13 @@ class SuperCacheController extends SuperCache
 		{
 			$module_srl = 0;
 		}
-		
+
 		$module_srl = intval($module_srl);
 		if (isset($config->full_cache_exclude_modules[$module_srl]))
 		{
 			return;
 		}
-		
+
 		// Determine the page type.
 		if ($act && $act !== 'dispBoardContent')
 		{
@@ -912,16 +912,16 @@ class SuperCacheController extends SuperCache
 		{
 			$page_type = 'url';
 		}
-		
+
 		// Abort if the current page type is not selected for caching.
 		if (!isset($config->full_cache_type[$page_type]) && !($page_type === 'url' && $config->full_cache_include_404))
 		{
 			return;
 		}
-		
+
 		// Compile the user agent type.
 		$user_agent_type = $device_type . ($is_secure ? '_secure' : '') . '_' . Context::getLangType();
-		
+
 		// Remove unnecessary request variables.
 		$request_vars = Context::getRequestVars();
 		if (is_object($request_vars))
@@ -929,7 +929,7 @@ class SuperCacheController extends SuperCache
 			$request_vars = get_object_vars($request_vars);
 		}
 		unset($request_vars['mid'], $request_vars['module'], $request_vars['module_srl'], $request_vars['document_srl'], $request_vars['m']);
-		
+
 		// Add separate cookies to request variables.
 		if ($config->full_cache_separate_cookies)
 		{
@@ -941,14 +941,14 @@ class SuperCacheController extends SuperCache
 				}
 			}
 		}
-		
+
 		// Add URL to request variables.
 		if ($page_type === 'url')
 		{
 			$request_vars['_REQUEST_URI'] = $_SERVER['REQUEST_URI'];
 			$page_type = 'other';
 		}
-		
+
 		// Check the cache.
 		$oModel = getModel('supercache');
 		switch ($page_type)
@@ -966,7 +966,7 @@ class SuperCacheController extends SuperCache
 				$cache = $oModel->getFullPageCache(0, 0, $user_agent_type, $request_vars);
 				break;
 		}
-		
+
 		// Replace the CSRF token.
 		if ($cache && class_exists('Rhymix\\Framework\\Session', false) && method_exists('Rhymix\\Framework\\Session', 'getGenericToken'))
 		{
@@ -974,7 +974,7 @@ class SuperCacheController extends SuperCache
 				return $match[1] . \Rhymix\Framework\Session::getGenericToken() . $match[2];
 			}, $cache['content']);
 		}
-		
+
 		// Call a trigger to post-process the content.
 		if ($cache)
 		{
@@ -984,20 +984,20 @@ class SuperCacheController extends SuperCache
 				$cache = false;
 			}
 		}
-		
+
 		// If cached content is available, display it and exit.
 		if ($cache)
 		{
 			// Find out how much time is left until this content expires.
 			$expires = max(0, $cache['expires'] - time());
-			
+
 			// Print X-SuperCache and Cache-Control headers.
 			header('X-SuperCache: HIT, dev=' . $device_type . ', type=' . $page_type . ', expires=' . $expires);
 			if ($this->useCacheControlHeaders($config))
 			{
 				$this->printCacheControlHeaders($expires, $config->full_cache_stampede_protection ? 10 : 0);
 			}
-			
+
 			// Increment the view count if required.
 			if ($page_type === 'document' && $config->full_cache_incr_view_count && isset($cache['extra_data']['view_count']))
 			{
@@ -1007,7 +1007,7 @@ class SuperCacheController extends SuperCache
 					$_SESSION['readed_document'][$document_srl] = true;
 				}
 			}
-			
+
 			// Print the content or a 304 response.
 			if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] && strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) >= $cache['cached'])
 			{
@@ -1030,7 +1030,7 @@ class SuperCacheController extends SuperCache
 			Context::close();
 			exit;
 		}
-		
+
 		// Otherwise, prepare headers to cache the current request.
 		header('X-SuperCache: MISS, dev=' . $device_type . ', type=' . $page_type . ', expires=' . $config->full_cache_duration);
 		if ($this->useCacheControlHeaders($config))
@@ -1039,10 +1039,10 @@ class SuperCacheController extends SuperCache
 		}
 		$this->_cacheStartTimestamp = microtime(true);
 	}
-	
+
 	/**
 	 * Print HTTP status code header.
-	 * 
+	 *
 	 * @param int $http_status_code
 	 * @return void
 	 */
@@ -1061,10 +1061,10 @@ class SuperCacheController extends SuperCache
 			default: return function_exists('http_response_code') ? http_response_code($http_status_code) : header(sprintf('HTTP/1.1 %d Internal Server Error', $http_status_code));
 		}
 	}
-	
+
 	/**
 	 * Print cache control headers.
-	 * 
+	 *
 	 * @param int $expires
 	 * @param int $scatter
 	 * @return void
@@ -1077,10 +1077,10 @@ class SuperCacheController extends SuperCache
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
 		header_remove('Pragma');
 	}
-	
+
 	/**
 	 * Check if cache control headers are enabled for the current request.
-	 * 
+	 *
 	 * @param object $config
 	 * @return bool
 	 */
@@ -1095,11 +1095,11 @@ class SuperCacheController extends SuperCache
 			return false;
 		}
 	}
-	
+
 	/**
 	 * If this is a document view request without a page number,
 	 * fill in the page number to prevent the getDocumentListPage query.
-	 * 
+	 *
 	 * @param object $obj
 	 * @param object $config
 	 * @return void
@@ -1138,20 +1138,20 @@ class SuperCacheController extends SuperCache
 			}
 		}
 	}
-	
+
 	/**
 	 * Get the status of the full-page cache. This method returns true if the current page will be cached.
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function getFullPageCacheStatus()
 	{
 		return $this->_cacheCurrentRequest ? true : false;
 	}
-	
+
 	/**
 	 * Get the device type for full-page cache.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getDeviceType()
@@ -1165,7 +1165,7 @@ class SuperCacheController extends SuperCache
 		{
 			$is_mobile_enabled = (Context::getDBInfo()->use_mobile_view === 'Y');
 		}
-		
+
 		// Check the session for cached data.
 		if (!$is_mobile_enabled && isset($_SESSION['supercache_device_type']))
 		{
@@ -1175,16 +1175,16 @@ class SuperCacheController extends SuperCache
 				return $device_type;
 			}
 		}
-		
+
 		// Detect mobile devices and Android Push App.
 		$is_mobile1 = Mobile::isFromMobilePhone();
 		$is_mobile2 = Mobile::isMobileCheckByAgent();
 		$is_pushapp = (strpos($_SERVER['HTTP_USER_AGENT'], 'XEPUSH') !== false) ? true : false;
 		$is_tablet = ($is_mobile1 || $is_mobile2 || $is_pushapp) ? Mobile::isMobilePadCheckByAgent() : false;
-		
+
 		// Compose the device type string: pc/mo/po/mc + push + tab
 		$device_type = ($is_mobile1 ? 'm' : 'p') . ($is_mobile2 ? 'o' : 'c') . ($is_pushapp ? 'push' : '') . ($is_tablet ? 'tab' : '');
-		
+
 		// Save the device type in the session for future reference.
 		if (!$is_mobile_enabled && (!method_exists('Context', 'getSessionStatus') || Context::getSessionStatus()))
 		{
@@ -1192,10 +1192,10 @@ class SuperCacheController extends SuperCache
 		}
 		return $device_type;
 	}
-	
+
 	/**
 	 * Process widget cache.
-	 * 
+	 *
 	 * @param string $match
 	 * @return string
 	 */
@@ -1221,20 +1221,20 @@ class SuperCacheController extends SuperCache
 				}, rawurldecode(strval($value)));
 			}
 		}
-		
+
 		// If this widget should not be cached, return.
 		if (!$widget_attrs->widget || isset(self::$_skipWidgetNames[$widget_attrs->widget]))
 		{
 			return $match[0];
 		}
-		
+
 		// Get module configuration.
 		$config = $this->getConfig();
 		if (!isset($config->widget_config[$widget_attrs->widget]) || !$config->widget_config[$widget_attrs->widget]['enabled'])
 		{
 			return $match[0];
 		}
-		
+
 		// Get the list of target modules for this widget.
 		$target_modules = array();
 		if ($config->widget_cache_autoinvalidate_document || $config->widget_cache_autoinvalidate_comment)
@@ -1248,7 +1248,7 @@ class SuperCacheController extends SuperCache
 				$target_modules = array_unique($target_modules + array_map('intval', explode(',', $widget_attrs->module_srls)));
 			}
 		}
-		
+
 		// Generate the cache key and duration.
 		$oModel = getModel('supercache');
 		$cache_key = $oModel->getWidgetCacheKey($widget_attrs, $config->widget_config[$widget_attrs->widget]['group'] ? Context::get('logged_info') : false);
@@ -1264,16 +1264,16 @@ class SuperCacheController extends SuperCache
 				$cache_duration = intval(floatval($widget_attrs->widget_cache) * 60) ?: $cache_duration;
 			}
 		}
-		
+
 		// Randomize the cache duration for stampede protection.
 		if ($config->widget_cache_stampede_protection !== false)
 		{
 			$cache_duration = intval(($cache_duration * 0.8) + ($cache_duration * (crc32($cache_key) % 256) / 1024));
 		}
-		
+
 		// Check the cache for previously rendered widget content.
 		$widget_content = $oModel->getWidgetCache($cache_key, $cache_duration);
-		
+
 		// If not found in cache, execute the widget.
 		if ($widget_content === false)
 		{
@@ -1295,10 +1295,10 @@ class SuperCacheController extends SuperCache
 				return '';
 			}
 		}
-		
+
 		// Generate the widget HTML.
 		$inner_styles = sprintf('padding: %dpx %dpx %dpx %dpx !important;', $widget_attrs->widget_padding_top ?? 0, $widget_attrs->widget_padding_right ?? 0, $widget_attrs->widget_padding_bottom ?? 0, $widget_attrs->widget_padding_left ?? 0);
-		$widget_content = sprintf('<div style="*zoom:1;%s">%s</div>', $inner_styles, $widget_content);
+		$widget_content = sprintf('<div style="%s">%s</div>', $inner_styles, $widget_content);
 		if (isset($widget_attrs->widgetstyle) && $widget_attrs->widgetstyle)
 		{
 			$oWidgetController = isset($oWidgetController) ? $oWidgetController : getController('widget');
@@ -1306,14 +1306,14 @@ class SuperCacheController extends SuperCache
 		}
 		$outer_styles = preg_replace('/url\((.+)(\/?)none\)/is', '', $widget_attrs->style);
 		$output = sprintf('<div class="xe-widget-wrapper %s" %sstyle="%s">%s</div>', $widget_attrs->css_class ?? '', $widget_attrs->id ?? '', $outer_styles, $widget_content);
-		
+
 		// Return the result.
 		return $output;
 	}
-	
+
 	/**
 	 * Terminate the current request.
-	 * 
+	 *
 	 * @param string $reason
 	 * @param array $data (optional)
 	 * @return exit
@@ -1331,10 +1331,10 @@ class SuperCacheController extends SuperCache
 		Context::close();
 		exit;
 	}
-	
+
 	/**
 	 * Terminate the current request by printing a plain text message.
-	 * 
+	 *
 	 * @param string $message
 	 * @return exit
 	 */
@@ -1345,10 +1345,10 @@ class SuperCacheController extends SuperCache
 		Context::close();
 		exit;
 	}
-	
+
 	/**
 	 * Terminate the current request by redirecting to another URL.
-	 * 
+	 *
 	 * @param string $url
 	 * @param int $status (optional)
 	 * @return exit
