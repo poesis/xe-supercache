@@ -712,7 +712,7 @@ class SuperCacheController extends SuperCache
 		{
 			return;
 		}
-		if (Context::getResponseMethod() !== 'HTML' || preg_match('/^disp(?:Layout|Page)[A-Z]/', Context::get('act')))
+		if (Context::getResponseMethod() !== 'HTML' || preg_match('/^disp(?:Layout|Page)[A-Z]/', Context::get('act') ?? ''))
 		{
 			return;
 		}
