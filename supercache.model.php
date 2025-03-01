@@ -2,20 +2,20 @@
 
 /**
  * Super Cache module: model class
- * 
+ *
  * Copyright (c) 2016 Kijin Sung <kijin@kijinsung.com>
  * All rights reserved.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
  * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -25,10 +25,10 @@ class SuperCacheModel extends SuperCache
 	 * Subgroup cache keys are stored here.
 	 */
 	protected $_subgroup_keys = array();
-	
+
 	/**
 	 * Get a full page cache entry.
-	 * 
+	 *
 	 * @param int $module_srl
 	 * @param int $document_srl
 	 * @param bool $user_agent_type
@@ -39,7 +39,7 @@ class SuperCacheModel extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Check cache.
 		$cache_key = $this->_getFullPageCacheKey($module_srl, $document_srl, $user_agent_type, $args);
 		$content = $this->getCache($cache_key, $config->full_cache_duration + 60);
@@ -47,7 +47,7 @@ class SuperCacheModel extends SuperCache
 		{
 			return false;
 		}
-		
+
 		// Apply stampede protection.
 		$current_timestamp = time();
 		if ($config->full_cache_stampede_protection !== false && $content['expires'] <= $current_timestamp)
@@ -56,14 +56,14 @@ class SuperCacheModel extends SuperCache
 			$this->setCache($cache_key, $content, 60);
 			return false;
 		}
-		
+
 		// Return the cached content.
 		return $content;
 	}
-	
+
 	/**
 	 * Set a full page cache entry.
-	 * 
+	 *
 	 * @param int $module_srl
 	 * @param int $document_srl
 	 * @param bool $user_agent_type
@@ -78,7 +78,7 @@ class SuperCacheModel extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Organize the content.
 		$content = array(
 			'content' => strval($content),
@@ -88,16 +88,16 @@ class SuperCacheModel extends SuperCache
 			'status' => intval($http_status_code),
 			'elapsed' => number_format($elapsed_time * 1000, 1) . ' ms',
 		);
-		
+
 		// Save to cache.
 		$cache_key = $this->_getFullPageCacheKey($module_srl, $document_srl, $user_agent_type, $args);
 		$extra_duration = ($config->full_cache_stampede_protection !== false) ? 60 : 0;
 		return $this->setCache($cache_key, $content, $config->full_cache_duration + $extra_duration);
 	}
-	
+
 	/**
 	 * Delete a full page cache entry.
-	 * 
+	 *
 	 * @param int $module_srl
 	 * @param int $document_srl
 	 * @return bool
@@ -113,14 +113,14 @@ class SuperCacheModel extends SuperCache
 		{
 			$this->_invalidateSubgroupCacheKey('fullpage_document:' . $document_srl);
 		}
-		
+
 		// We don't have any reason to return anything else here.
 		return true;
 	}
-	
+
 	/**
 	 * Get a search result cache entry.
-	 * 
+	 *
 	 * @param object $args
 	 * @return object|false
 	 */
@@ -135,7 +135,7 @@ class SuperCacheModel extends SuperCache
 		{
 			return false;
 		}
-		
+
 		// Apply stampede protection.
 		$current_timestamp = time();
 		if ($content['expires'] <= $current_timestamp)
@@ -144,7 +144,7 @@ class SuperCacheModel extends SuperCache
 			$this->setCache($cache_key, $content, 60);
 			return false;
 		}
-		
+
 		// Execute the query to reconstruct the document list.
 		$query_args = new stdClass;
 		$query_args->document_srl = $content['document_srls'];
@@ -156,10 +156,10 @@ class SuperCacheModel extends SuperCache
 		{
 			$output->data = array();
 		}
-		
+
 		// Fill in pagination data to emulate XE search results.
 		$this->_fillPaginationData($output, $content['total_count'], $content['list_count'] ?: 20, $args->page_count ?: 10, $args->page ?: 1);
-		
+
 		// Fill in division data to emulate XE search results.
 		if (isset($content['division']) && $content['division'])
 		{
@@ -169,14 +169,14 @@ class SuperCacheModel extends SuperCache
 		{
 			Context::set('last_division', $content['last_division']);
 		}
-		
+
 		// Return the result.
 		return $output;
 	}
-	
+
 	/**
 	 * Set a search result cache entry.
-	 * 
+	 *
 	 * @param object $args
 	 * @param object $result
 	 * @return bool
@@ -185,7 +185,7 @@ class SuperCacheModel extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Organize the content.
 		$content = array(
 			'document_srls' => array(),
@@ -202,15 +202,15 @@ class SuperCacheModel extends SuperCache
 		{
 			$content['document_srls'][] = $document->document_srl;
 		}
-		
+
 		// Save to cache.
 		$cache_key = $this->_getSearchResultCacheKey($args);
 		return $this->setCache($cache_key, $content, $config->search_cache_duration + 60);
 	}
-	
+
 	/**
 	 * Delete a search result cache entry.
-	 * 
+	 *
 	 * @param int $module_srl
 	 * @param bool $is_comment
 	 * @return bool
@@ -229,14 +229,14 @@ class SuperCacheModel extends SuperCache
 				$this->_invalidateSubgroupCacheKey('module_search:' . intval($module_srl));
 			}
 		}
-		
+
 		// We don't have any reason to return anything else here.
 		return true;
 	}
-	
+
 	/**
 	 * Get a widget cache entry.
-	 * 
+	 *
 	 * @param string $cache_key
 	 * @param int $cache_duration
 	 * @return string|false
@@ -245,14 +245,14 @@ class SuperCacheModel extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Check cache.
 		$content = $this->getCache($cache_key, $cache_duration);
 		if (!is_array($content))
 		{
 			return false;
 		}
-		
+
 		// Apply stampede protection.
 		$current_timestamp = time();
 		if ($config->widget_cache_stampede_protection !== false && $content['expires'] <= $current_timestamp)
@@ -261,14 +261,14 @@ class SuperCacheModel extends SuperCache
 			$this->setCache($cache_key, $content, 60);
 			return false;
 		}
-		
+
 		// Return the cached content.
 		return $content['content'];
 	}
-	
+
 	/**
 	 * Set a widget cache entry.
-	 * 
+	 *
 	 * @param string $cache_key
 	 * @param int $cache_duration
 	 * @param string $content
@@ -279,17 +279,17 @@ class SuperCacheModel extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Organize the content.
 		$content = array(
 			'content' => strval($content),
 			'expires' => time() + $cache_duration,
 		);
-		
+
 		// Save widget content to cache.
 		$extra_duration = ($config->widget_cache_stampede_protection !== false) ? 60 : 0;
 		$result = $this->setCache($cache_key, $content, $cache_duration + $extra_duration);
-		
+
 		// Save target modules.
 		$target_key_base = $this->_getSubgroupCacheKey('widget_target');
 		foreach ($target_modules as $target_module_srl)
@@ -302,14 +302,14 @@ class SuperCacheModel extends SuperCache
 				$this->setCache($target_key, $target_list);
 			}
 		}
-		
+
 		// Return the result.
 		return $result;
 	}
-	
+
 	/**
 	 * Invalidate widget cache entries for a target module.
-	 * 
+	 *
 	 * @param int $target_module_srl
 	 * @return bool
 	 */
@@ -317,18 +317,18 @@ class SuperCacheModel extends SuperCache
 	{
 		// Get module configuration.
 		$config = $this->getConfig();
-		
+
 		// Stop if target module_srl is empty.
 		if (!$target_module_srl)
 		{
 			return false;
 		}
-		
+
 		// Get the list of affected cache keys.
 		$target_key = $this->_getSubgroupCacheKey('widget_target') . ':' . $target_module_srl;
 		$target_list = $this->getCache($target_key) ?: array();
 		$target_count = 0;
-		
+
 		// Adjust the expiry date of all affected cache keys.
 		foreach ($target_list as $cache_key => $unused)
 		{
@@ -347,14 +347,14 @@ class SuperCacheModel extends SuperCache
 				$this->deleteCache($cache_key);
 			}
 		}
-		
+
 		// Return true if any keys were invalidated.
 		return $target_count ? true : false;
 	}
-	
+
 	/**
 	 * Get the number of documents in a module.
-	 * 
+	 *
 	 * @param int $module_srl
 	 * @param array $category_srl
 	 * @return int|false
@@ -363,12 +363,12 @@ class SuperCacheModel extends SuperCache
 	{
 		// Organize the module and category info.
 		$config = $this->getConfig();
-		$module_srl = intval($module_srl);
+		$module_srl = is_array($module_srl) ? array_map('intval', $module_srl) : intval($module_srl);
 		if (!is_array($category_srl))
 		{
 			$category_srl = $category_srl ? explode(',', $category_srl) : array();
 		}
-		
+
 		// Check cache.
 		$cache_key = $this->_getDocumentCountCacheKey($module_srl, $category_srl);
 		if (mt_rand(0, $config->paging_cache_auto_refresh) !== 0)
@@ -379,7 +379,7 @@ class SuperCacheModel extends SuperCache
 				return $content['count'];
 			}
 		}
-		
+
 		// Get count from DB and store it in cache.
 		$args = new stdClass;
 		$args->module_srl = $module_srl;
@@ -401,10 +401,10 @@ class SuperCacheModel extends SuperCache
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Get a list of documents.
-	 * 
+	 *
 	 * @param object $args
 	 * @param int $total_count
 	 * @return object
@@ -416,24 +416,24 @@ class SuperCacheModel extends SuperCache
 		$page = intval(max(1, $args->page));
 		unset($args->page_count);
 		unset($args->page);
-		
+
 		// Execute the query.
 		$output = executeQueryArray('supercache.getDocumentList', $args);
 		if (!$output->data)
 		{
 			$output->data = array();
 		}
-		
+
 		// Fill in pagination data to emulate XE search results.
 		$this->_fillPaginationData($output, $total_count, $args->list_count, $page_count, $page);
-		
+
 		// Return the result.
 		return $output;
 	}
-	
+
 	/**
 	 * Update a cached document count.
-	 * 
+	 *
 	 * @param int $module_srl
 	 * @param array $category_srl
 	 * @param int $diff
@@ -444,7 +444,7 @@ class SuperCacheModel extends SuperCache
 		$config = $this->getConfig();
 		$categories = $this->_getAllParentCategories($module_srl, $category_srl);
 		$categories[] = 'all';
-		
+
 		foreach ($categories as $category)
 		{
 			$cache_key = $this->_getDocumentCountCacheKey($module_srl, $category);
@@ -456,10 +456,10 @@ class SuperCacheModel extends SuperCache
 			}
 		}
 	}
-	
+
 	/**
 	 * Update the view count of a cached document.
-	 * 
+	 *
 	 * @param int $document_srl
 	 * @param array $extra_data
 	 * @return bool
@@ -472,7 +472,7 @@ class SuperCacheModel extends SuperCache
 		{
 			return;
 		}
-		
+
 		if ($config->full_cache_incr_view_count_probabilistic)
 		{
 			$probability = max(1, floor(log($extra_data['view_count'], 1.5)));
@@ -482,7 +482,7 @@ class SuperCacheModel extends SuperCache
 		{
 			$incr = 1;
 		}
-		
+
 		if ($incr)
 		{
 			$oDB = DB::getInstance();
@@ -500,10 +500,10 @@ class SuperCacheModel extends SuperCache
 			return $output ? true : false;
 		}
 	}
-	
+
 	/**
 	 * Generate a cache key for the widget cache.
-	 * 
+	 *
 	 * @param object $widget_attr
 	 * @param object $logged_info
 	 * @return string
@@ -524,14 +524,14 @@ class SuperCacheModel extends SuperCache
 			sort($groups);
 			$group_key = sha1(implode('|', $groups));
 		}
-		
+
 		$subgroup_key = $this->_getSubgroupCacheKey('widget');
 		return sprintf('%s:%s:%s:%s', $subgroup_key, $widget_attrs->widget, hash('sha256', serialize($widget_attrs)), $group_key);
 	}
-	
+
 	/**
 	 * Generate a cache key for the full page cache.
-	 * 
+	 *
 	 * @param int $module_srl
 	 * @param int $document_srl
 	 * @param bool $user_agent_type
@@ -544,11 +544,11 @@ class SuperCacheModel extends SuperCache
 		$module_srl = intval($module_srl) ?: 0;
 		$document_srl = intval($document_srl) ?: 0;
 		ksort($args);
-		
+
 		// Generate module and document subgroup keys.
 		$module_key = $this->_getSubgroupCacheKey('fullpage_module:' . $module_srl);
 		$document_key = $document_srl ? $this->_getSubgroupCacheKey('fullpage_document:' . $document_srl) : 'module_index';
-		
+
 		// Generate the arguments key.
 		if (!count($args))
 		{
@@ -562,14 +562,14 @@ class SuperCacheModel extends SuperCache
 		{
 			$argskey = hash('sha256', json_encode($args));
 		}
-		
+
 		// Generate the cache key.
 		return sprintf('%s:%s:%s_%s', $module_key, $document_key, $user_agent_type, $argskey);
 	}
-	
+
 	/**
 	 * Generate a cache key for the search result cache.
-	 * 
+	 *
 	 * @param object $args
 	 * @return string
 	 */
@@ -579,7 +579,7 @@ class SuperCacheModel extends SuperCache
 		$comment_key = ($args->search_target === 'comment') ? '_comment' : '';
 		$module_key = $this->_getSubgroupCacheKey('board_search:' . intval($args->module_srl) . $comment_key);
 		$category_key = 'category_' . intval($args->category_srl);
-		
+
 		// Generate the arguments key.
 		$search_key = hash('sha256', json_encode(array(
 			'search_target' => trim($args->search_target),
@@ -590,14 +590,14 @@ class SuperCacheModel extends SuperCache
 			'page_count' => intval($args->page_count),
 			'isExtraVars' => (bool)($args->isExtraVars),
 		)));
-		
+
 		// Generate the cache key.
 		return sprintf('%s:%s:%s:p%d', $module_key, $category_key, $search_key, max(1, intval($args->page)));
 	}
-	
+
 	/**
 	 * Generate a cache key for the document count cache.
-	 * 
+	 *
 	 * @param int $module_srl
 	 * @param int $category_srl
 	 * @return string
@@ -605,16 +605,18 @@ class SuperCacheModel extends SuperCache
 	protected function _getDocumentCountCacheKey($module_srl, $category_srl)
 	{
 		// Generate module and category subgroup keys.
-		$module_key = $this->_getSubgroupCacheKey('document_count:' . intval($module_srl));
+		$module_srl = is_array($module_srl) ? array_map('intval', $module_srl) : [intval($module_srl)];
+		$module_srl_flattened = implode('+', $module_srl);
+		$module_key = $this->_getSubgroupCacheKey('document_count:' . $module_srl_flattened);
 		$category_key = 'category_' . ($category_srl ? ((is_array($category_srl) && count($category_srl)) ? end($category_srl) : $category_srl) : 'all');
-		
+
 		// Generate the cache key.
 		return sprintf('%s:%s', $module_key, $category_key);
 	}
-	
+
 	/**
 	 * Get subgroup cache key.
-	 * 
+	 *
 	 * @param string $cache_key
 	 * @param bool $subgroup_portion_only (optional)
 	 * @return string
@@ -635,7 +637,7 @@ class SuperCacheModel extends SuperCache
 			}
 			$this->_subgroup_keys[$cache_key] = $subgroup_key;
 		}
-		
+
 		if ($subgroup_portion_only)
 		{
 			return $subgroup_key;
@@ -645,10 +647,10 @@ class SuperCacheModel extends SuperCache
 			return $cache_key . ':' . $subgroup_key;
 		}
 	}
-	
+
 	/**
 	 * Invalidate subgroup cache key.
-	 * 
+	 *
 	 * @param string $cache_key
 	 * @return bool
 	 */
@@ -656,10 +658,10 @@ class SuperCacheModel extends SuperCache
 	{
 		$old_subgroup_key = $this->_getSubgroupCacheKey($cache_key, true);
 		$new_subgroup_key = $old_subgroup_key + 1;
-		
+
 		$this->setCache('subgroups:' . $cache_key, $new_subgroup_key, 0);
 		$this->_subgroup_keys[$cache_key] = $new_subgroup_key;
-		
+
 		$config = $this->getConfig();
 		if ($config->auto_purge_cache_files)
 		{
@@ -668,13 +670,13 @@ class SuperCacheModel extends SuperCache
 				self::$_cache_handler_cache->invalidateSubgroupKey($cache_key, $old_subgroup_key);
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Get all parent categories of a category_srl.
-	 * 
+	 *
 	 * @param int $module_srl
 	 * @param int $category_srl
 	 * @return array
@@ -686,14 +688,18 @@ class SuperCacheModel extends SuperCache
 		{
 			return array();
 		}
-		
+
 		// Abort if the category_srl does not belong to the given module_srl.
+		if (is_array($module_srl))
+		{
+			$module_srl = reset($module_srl);
+		}
 		$categories = getModel('document')->getCategoryList($module_srl);
 		if (!isset($categories[$category_srl]))
 		{
 			return array();
 		}
-		
+
 		// Find all parents.
 		$category = $categories[$category_srl];
 		$result[] = $category->category_srl;
@@ -704,10 +710,10 @@ class SuperCacheModel extends SuperCache
 		}
 		return $result;
 	}
-	
+
 	/**
 	 * Get all child categories of a category_srl.
-	 * 
+	 *
 	 * @param int $module_srl
 	 * @param int $category_srl
 	 * @return array
@@ -719,24 +725,28 @@ class SuperCacheModel extends SuperCache
 		{
 			return array();
 		}
-		
+
 		// Abort if the category_srl does not belong to the given module_srl.
+		if (is_array($module_srl))
+		{
+			$module_srl = reset($module_srl);
+		}
 		$categories = getModel('document')->getCategoryList($module_srl);
 		if (!isset($categories[$category_srl]))
 		{
 			return array();
 		}
-		
+
 		// Find all children.
 		$category = $categories[$category_srl];
 		$result = $category->childs ?: array();
 		$result[] = $category->category_srl;
 		return $result;
 	}
-	
+
 	/**
 	 * Fill in pagination data to a query output.
-	 * 
+	 *
 	 * @param object $output
 	 * @param int $total_count
 	 * @param int $list_count
@@ -750,7 +760,7 @@ class SuperCacheModel extends SuperCache
 		$virtual_number = $total_count - (($page - 1) * $list_count);
 		$virtual_range = count($output->data) ? range($virtual_number, $virtual_number - count($output->data) + 1, -1) : array();
 		$output->data = count($output->data) ? array_combine($virtual_range, $output->data) : array();
-		
+
 		// Fill in pagination fields.
 		$output->total_count = $total_count;
 		$output->total_page = max(1, ceil($total_count / $list_count));

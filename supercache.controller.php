@@ -176,9 +176,16 @@ class SuperCacheController extends SuperCache
 		}
 
 		// Abort if there are any other unusual search options.
+		$args = new \stdClass; $query_id = 'document.getDocumentList'; $use_division = null;
+		$original_module_srl = $obj->module_srl ?? 0;
+		if (is_array($obj->module_srl))
+		{
+			$obj->module_srl = reset($obj->module_srl) ?: 0;
+		}
 		$oDocumentModel = getModel('document');
 		$oDocumentModel->_setSearchOption($obj, $args, $query_id, $use_division);
-		if ($query_id !== 'document.getDocumentList' || $use_division || (is_array($args->module_srl) && count($args->module_srl) > 1))
+		$args->module_srl = $original_module_srl;
+		if ($query_id !== 'document.getDocumentList' || $use_division)
 		{
 			return;
 		}
@@ -190,9 +197,23 @@ class SuperCacheController extends SuperCache
 		}
 
 		// Abort if the module is excluded by configuration.
-		if (!$args->module_srl || isset($config->paging_cache_exclude_modules[$args->module_srl]))
+		if (!$args->module_srl)
 		{
 			return;
+		}
+		if (!is_array($args->module_srl) && isset($config->paging_cache_exclude_modules[$args->module_srl]))
+		{
+			return;
+		}
+		elseif (is_array($args->module_srl))
+		{
+			foreach ($args->module_srl as $module_srl)
+			{
+				if (isset($config->paging_cache_exclude_modules[$module_srl]))
+				{
+					return;
+				}
+			}
 		}
 
 		// Abort if the module/category has fewer documents than the threshold.
