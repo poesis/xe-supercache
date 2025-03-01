@@ -637,38 +637,6 @@ class SuperCacheController extends SuperCache
 			}
 		}
 
-		// Change gzip setting.
-		if (is_object($obj) && $gzip = $config->use_gzip)
-		{
-			if ($gzip !== 'none' && $gzip !== 'default')
-			{
-				if (defined('RX_VERSION') && function_exists('config'))
-				{
-					config('view.use_gzip', true);
-				}
-				elseif (!defined('__OB_GZHANDLER_ENABLE__'))
-				{
-					define('__OB_GZHANDLER_ENABLE__', 1);
-				}
-			}
-
-			switch ($gzip)
-			{
-				case 'except_robots':
-					$obj->gzhandler_enable = isCrawler() ? false : true;
-					break;
-				case 'except_naver':
-					$obj->gzhandler_enable = preg_match('/(yeti|naver)/i', $_SERVER['HTTP_USER_AGENT']) ? false : true;
-					break;
-				case 'none':
-					$obj->gzhandler_enable = false;
-					break;
-				case 'always':
-				default:
-					break;
-			}
-		}
-
 		// Remove Android Push App trigger that causes issue #9 when using the full-page cache.
 		if ($this->_cacheCurrentRequest && $config->full_cache['pushapp'])
 		{
