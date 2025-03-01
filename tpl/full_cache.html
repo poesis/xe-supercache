@@ -9,32 +9,32 @@
 	<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
 		<p>{$XE_VALIDATOR_MESSAGE}</p>
 	</div>
-	
+
 	<div class="supercache_help">
 		{$lang->cmd_supercache_config_full_cache_help}
 	</div>
-	
+
 	<section class="section">
-	
+
 		<h2>{$lang->cmd_supercache_full_cache_basic}</h2>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label"><span class="important_block">★</span> {$lang->cmd_supercache_full_cache_use}</label>
 			<div class="x_controls">
 				<label for="sc_full_cache_pc" class="x_inline">
-					<input name="sc_full_cache[]" id="sc_full_cache_pc" type="checkbox" value="pc" checked="checked"|cond="$sc_config->full_cache['pc']" />
+					<input name="sc_full_cache[]" id="sc_full_cache_pc" type="checkbox" value="pc" checked="checked"|cond="!empty($sc_config->full_cache['pc'])" />
 					{$lang->cmd_supercache_full_cache_use_pc}
 				</label>
 				<label for="sc_full_cache_mobile" class="x_inline">
-					<input name="sc_full_cache[]" id="sc_full_cache_mobile" type="checkbox" value="mobile" checked="checked"|cond="$sc_config->full_cache['mobile']" />
+					<input name="sc_full_cache[]" id="sc_full_cache_mobile" type="checkbox" value="mobile" checked="checked"|cond="!empty($sc_config->full_cache['mobile'])" />
 					{$lang->cmd_supercache_full_cache_use_mobile}
 				</label>
 				<label for="sc_full_cache_pushapp" class="x_inline">
-					<input name="sc_full_cache[]" id="sc_full_cache_pushapp" type="checkbox" value="pushapp" checked="checked"|cond="$sc_config->full_cache['pushapp']" />
+					<input name="sc_full_cache[]" id="sc_full_cache_pushapp" type="checkbox" value="pushapp" checked="checked"|cond="!empty($sc_config->full_cache['pushapp'])" />
 					{$lang->cmd_supercache_full_cache_use_pushapp}
 				</label>
 				<label for="sc_full_cache_robot" class="x_inline">
-					<input name="sc_full_cache[]" id="sc_full_cache_robot" type="checkbox" value="robot" checked="checked"|cond="$sc_config->full_cache['robot']" />
+					<input name="sc_full_cache[]" id="sc_full_cache_robot" type="checkbox" value="robot" checked="checked"|cond="!empty($sc_config->full_cache['robot'])" />
 					{$lang->cmd_supercache_full_cache_use_robot}
 				</label>
 				<p class="x_help-block">
@@ -42,7 +42,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label"><span class="important_block">★</span> {$lang->cmd_supercache_full_cache_type}</label>
 			<div class="x_controls">
@@ -63,7 +63,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label" for="sc_full_cache_duration">{$lang->cmd_supercache_full_cache_duration}</label>
 			<div class="x_controls">
@@ -73,7 +73,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_full_cache_document_action}</label>
 			<div class="x_controls">
@@ -94,7 +94,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_full_cache_comment_action}</label>
 			<div class="x_controls">
@@ -115,13 +115,13 @@
 				</p>
 			</div>
 		</div>
-	
+
 	</section>
-	
+
 	<section class="section">
-	
+
 		<h2>{$lang->cmd_supercache_full_cache_advanced}</h2>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_full_cache_stampede_protection}</label>
 			<div class="x_controls">
@@ -138,7 +138,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_full_cache_delay_trigger}</label>
 			<div class="x_controls">
@@ -155,7 +155,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_full_cache_include_404}</label>
 			<div class="x_controls">
@@ -172,7 +172,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_full_cache_incr_view_count}</label>
 			<div class="x_controls">
@@ -196,7 +196,7 @@
 				</p>
 			</div>
 		</div>
-	
+
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_full_cache_use_headers}</label>
 			<div class="x_controls">
@@ -220,7 +220,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label"><span class="important_block">★</span> {$lang->cmd_supercache_full_cache_exclude_modules}</label>
 			<div class="x_controls">
@@ -236,7 +236,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label" for="sc_full_cache_exclude_acts">{$lang->cmd_supercache_full_cache_exclude_acts}</label>
 			<div class="x_controls">
@@ -246,7 +246,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label" for="sc_full_cache_exclude_cookies">{$lang->cmd_supercache_full_cache_exclude_cookies}</label>
 			<div class="x_controls">
@@ -256,7 +256,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label" for="sc_full_cache_separate_cookies">{$lang->cmd_supercache_full_cache_separate_cookies}</label>
 			<div class="x_controls">
@@ -266,11 +266,11 @@
 				</p>
 			</div>
 		</div>
-		
+
 	</section>
-	
+
 	<div class="btnArea x_clearfix">
 		<button type="submit" class="x_btn x_btn-primary x_pull-right">{$lang->cmd_registration}</button>
 	</div>
-	
+
 </form>

@@ -9,15 +9,15 @@
 	<div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
 		<p>{$XE_VALIDATOR_MESSAGE}</p>
 	</div>
-	
+
 	<div class="supercache_help">
 		{$lang->cmd_supercache_config_widget_cache_help}
 	</div>
-	
+
 	<section class="section">
-		
+
 		<h2>{$lang->cmd_supercache_widget_cache_basic}</h2>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label"><span class="important_block">★</span> {$lang->cmd_supercache_widget_cache_use}</label>
 			<div class="x_controls">
@@ -36,7 +36,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label" for="sc_full_cache_duration">{$lang->cmd_supercache_widget_cache_duration_default}</label>
 			<div class="x_controls">
@@ -46,7 +46,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_full_cache_stampede_protection}</label>
 			<div class="x_controls">
@@ -63,7 +63,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_widget_autoinvalidate_document}</label>
 			<div class="x_controls">
@@ -80,7 +80,7 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_widget_autoinvalidate_comment}</label>
 			<div class="x_controls">
@@ -97,7 +97,7 @@
 				</p>
 			</div>
 		</div>
-	
+
 		<div class="x_control-group">
 			<label class="x_control-label">{$lang->cmd_supercache_widget_cache_exclude_modules}</label>
 			<div class="x_controls">
@@ -113,13 +113,13 @@
 				</p>
 			</div>
 		</div>
-		
+
 	</section>
-	
+
 	<section class="section">
-	
+
 		<h2>{$lang->cmd_supercache_widget_cache_per_widget}</h2>
-		
+
 		<table id="sc_widget_cache_per_cache" class="x_table x_table-striped x_table-hover">
 			<thead>
 				<tr>
@@ -157,7 +157,7 @@
 							</label>
 						</td>
 						<td>
-							<input name="sc_widget_cache_{$widget_info->widget}_duration" id="sc_full_cache_{$widget_info->widget}_duration" type="number" value="{$sc_config->widget_config[$widget_info->widget]['duration']}" style="width:100px" disabled="disabled"|cond="$widget_is_disabled" />
+							<input name="sc_widget_cache_{$widget_info->widget}_duration" id="sc_full_cache_{$widget_info->widget}_duration" type="number" value="{$sc_config->widget_config[$widget_info->widget]['duration'] ?? ''}" style="width:100px" disabled="disabled"|cond="$widget_is_disabled" />
 							&nbsp;
 							<label for="sc_widget_cache_{$widget_info->widget}_force" class="x_inline">
 								<input name="sc_widget_cache_{$widget_info->widget}_force" id="sc_widget_cache_{$widget_info->widget}_force" type="checkbox" value="Y" checked="checked"|cond="!$widget_is_disabled && $sc_config->widget_config[$widget_info->widget]['force']" disabled="disabled"|cond="$widget_is_disabled" />
@@ -168,7 +168,7 @@
 				<!--@endforeach-->
 			</tbody>
 		</table>
-	
+
 		<div class="supercache_help">
 			<ul>
 				<li>{$lang->cmd_supercache_widget_cache_group_help}</li>
@@ -176,11 +176,11 @@
 				<li>{$lang->cmd_supercache_widget_cache_duration_force_help}</li>
 			</ul>
 		</div>
-		
+
 	</section>
-	
+
 	<div class="btnArea x_clearfix">
 		<button type="submit" class="x_btn x_btn-primary x_pull-right">{$lang->cmd_registration}</button>
 	</div>
-	
+
 </form>
