@@ -284,7 +284,7 @@ class SuperCacheController extends SuperCache
 		$config = $this->getConfig();
 
 		// Get the old and new values of module_srl and category_srl.
-		$original = getModel('document')->getDocument($obj->document_srl);
+		$original = getModel('document')->getDocument($obj->document_srl ?? $obj->document_srls[0]);
 		$original_module_srl = intval($original->get('module_srl'));
 		$original_category_srl = intval($original->get('category_srl'));
 		$new_module_srl = intval($obj->module_srl) ?: $original_module_srl;
